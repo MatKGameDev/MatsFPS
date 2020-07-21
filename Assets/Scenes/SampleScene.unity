@@ -1814,8 +1814,8 @@ MonoBehaviour:
   groundMask:
     serializedVersion: 2
     m_Bits: 256
-  dashSpeed: 40
-  dashDuration: 0.12
+  dashSpeed: 30
+  dashDuration: 0.11
   dashCooldown: 1
   accelerationRate: 105
   decelerationRate: 90

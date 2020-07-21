@@ -7,8 +7,8 @@ public class PlayerControl : MonoBehaviour
     public LayerMask groundMask;
 
     [Header("Dashing")]
-    public float dashSpeed = 40f;
-    public float dashDuration = 0.12f;
+    public float dashSpeed = 30f;
+    public float dashDuration = 0.11f;
     public float dashCooldown = 1f;
 
     [Header("General Movement")]
@@ -27,7 +27,8 @@ public class PlayerControl : MonoBehaviour
     const float GROUND_CHECK_RADIUS = 0.5f;
 
     const float GROUNDED_VELOCITY_Y = -2f;
-    const float POST_UPWARDS_DASH_VELOCITY_Y = 4f;
+    const float POST_UPWARDS_DASH_VELOCITY_Y = 4.5f;
+    const float POST_HORIZONTAL_DASH_VELOCITY_Y = 1.5f;
     const float COYOTE_TIME = 0.1f;
     const float SLOPE_RIDE_DISTANCE_LIMIT = 4f; //the max distance above a slope where the player can be considered to be "on" it
     const float SLOPE_RIDE_DOWNWARDS_FORCE_STRENGTH = 20f; //the strength of the downwards force applied to pull the player onto a slope that they're going down
@@ -78,8 +79,7 @@ public class PlayerControl : MonoBehaviour
         m_characterController.slopeLimit = m_velocity.y > 0f ? 90f : m_initialSlopeLimit;
 
         //check if double jump should be available
-        if (m_isGrounded)
-            m_isDoubleJumpAvailabile = true;
+        m_isDoubleJumpAvailabile = m_isGrounded || m_isDoubleJumpAvailabile;
 
         //check if the player is grounded, in which case their downwards velocity should be reset
         if (m_isGrounded && m_velocity.y < 0f)
@@ -220,9 +220,14 @@ public class PlayerControl : MonoBehaviour
 
             m_velocity = m_dashDir * dashSpeed;
 
-            //if dash is finished on this frame and the dash is upwards, reset upwards velocity
+            //if dash is finished on this frame, reset vertical velocity
             if (m_dashDurationCountdown <= 0f)
-                m_velocity.y = POST_UPWARDS_DASH_VELOCITY_Y;
+            {
+                if (m_dashDir == Vector3.up)
+                    m_velocity.y = POST_UPWARDS_DASH_VELOCITY_Y; //add some velocity after an upwards dash to prevent jerkiness
+                else
+                    m_velocity.y = POST_HORIZONTAL_DASH_VELOCITY_Y;
+            }
         }
     }
 
