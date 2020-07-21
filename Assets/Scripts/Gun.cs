@@ -11,12 +11,14 @@ public class Gun : MonoBehaviour
 
     const float BULLET_TRAIL_VISIBLE_DURATION = 0.1f;
 
+    Animator m_animator;
+
     float m_firingCooldownCountdown;
 
     // Start is called before the first frame update
     void Start()
     {
-
+        m_animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -32,6 +34,8 @@ public class Gun : MonoBehaviour
     {
         if (m_firingCooldownCountdown > 0.0f)
             return;
+
+        m_animator.Play("PistolShoot");
 
         m_firingCooldownCountdown = firingCooldown;
 
