@@ -8,7 +8,7 @@ public class PlayerControl : MonoBehaviour
 
     [Header("Dashing")]
     public float dashSpeed = 30f;
-    public float dashDuration = 0.11f;
+    public float dashDuration = 0.12f;
     public float dashCooldown = 1f;
 
     [Header("General Movement")]

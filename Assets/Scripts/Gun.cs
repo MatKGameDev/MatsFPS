@@ -71,6 +71,8 @@ public class Gun : MonoBehaviour
         lr.SetPosition(0, a_startPos);
         lr.SetPosition(1, a_endPos);
 
+        myLine.transform.parent = this.transform; //set trail's parent as the gun that created the trail
+
         GameObject.Destroy(myLine, BULLET_TRAIL_VISIBLE_DURATION);
     }
 }
