@@ -24,13 +24,13 @@ public class PlayerControl : MonoBehaviour
 
     public float dashCooldownCountdown { get; private set; }
 
-    const float GROUND_CHECK_RADIUS = 0.5f;
+    const float GROUND_CHECK_RADIUS = 0.53f;
 
     const float GROUNDED_VELOCITY_Y = -2f;
     const float POST_UPWARDS_DASH_VELOCITY_Y = 4.5f;
     const float POST_HORIZONTAL_DASH_VELOCITY_Y = 1.5f;
     const float COYOTE_TIME = 0.1f;
-    const float SLOPE_RIDE_DISTANCE_LIMIT = 4f; //the max distance above a slope where the player can be considered to be "on" it
+    const float SLOPE_RIDE_DISTANCE_LIMIT = 5f; //the max distance above a slope where the player can be considered to be "on" it
     const float SLOPE_RIDE_DOWNWARDS_FORCE_STRENGTH = 20f; //the strength of the downwards force applied to pull the player onto a slope that they're going down
 
     CharacterController m_characterController;
