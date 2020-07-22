@@ -24,7 +24,7 @@ public class PlayerControl : MonoBehaviour
 
     public float dashCooldownCountdown { get; private set; }
 
-    const float GROUND_CHECK_RADIUS = 0.53f;
+    const float GROUND_CHECK_RADIUS = 0.5f;
 
     const float GROUNDED_VELOCITY_Y = -2f;
     const float POST_UPWARDS_DASH_VELOCITY_Y = 4.5f;
@@ -241,7 +241,7 @@ public class PlayerControl : MonoBehaviour
         //glue the player to the slope if they're moving down one (fixes bouncing when going down slopes)
         if (!newIsGrounded && wasGrounded && m_velocity.y < 0f)
         {
-            Vector3 pointAtBottomOfPlayer = transform.position - new Vector3(0f, m_characterController.height / 2f, 0f);
+            Vector3 pointAtBottomOfPlayer = transform.position - (Vector3.down * m_characterController.height / 2f);
 
             RaycastHit hit;
             if (Physics.Raycast(pointAtBottomOfPlayer, Vector3.down, out hit, SLOPE_RIDE_DISTANCE_LIMIT))
