@@ -1,24 +1,34 @@
-﻿using UnityEngine;
+﻿using UnityEditor.UIElements;
+using UnityEngine;
 
 public class Gun : MonoBehaviour
 {
-    public float damagePerBullet;
-    public float range;
+    [Header("Gun")]
     public float firingCooldown;
-
-    public Camera playerCamera;
+    public Camera cameraToFireFrom;
     public Transform muzzleTransform;
 
-    const float BULLET_TRAIL_VISIBLE_DURATION = 0.1f;
+    [Header("Bullet")]
+    public float damagePerBullet;
+    public float range;
+    public LayerMask layersToIgnore;
+
+    [Header("Bullet Trail")]
+    public LayerMask bulletTrailLayerMask;
+    public float bulletTrailDurationVisible = 0.1f;
 
     Animator m_animator;
 
     float m_firingCooldownCountdown;
 
+    int m_bulletTrailLayerNum;
+
     // Start is called before the first frame update
     void Start()
     {
         m_animator = GetComponent<Animator>();
+
+        m_bulletTrailLayerNum = (int)Mathf.Log(bulletTrailLayerMask.value, 2);
     }
 
     // Update is called once per frame
@@ -40,7 +50,7 @@ public class Gun : MonoBehaviour
         m_firingCooldownCountdown = firingCooldown;
 
         RaycastHit hit;
-        if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, range))
+        if (Physics.Raycast(cameraToFireFrom.transform.position, cameraToFireFrom.transform.forward, out hit, range, ~layersToIgnore))
         {
             //if the hit was super close, the trail would look weird so don't draw it
             if (Vector3.Distance(muzzleTransform.position, hit.point) > 0.5f)
@@ -52,7 +62,7 @@ public class Gun : MonoBehaviour
         }
         else //no hit
         {
-            Vector3 bulletEndPos = playerCamera.transform.position + (playerCamera.transform.forward * range);
+            Vector3 bulletEndPos = cameraToFireFrom.transform.position + (cameraToFireFrom.transform.forward * range);
             DrawBulletTrail(muzzleTransform.position, bulletEndPos);
         }
     }
@@ -69,7 +79,7 @@ public class Gun : MonoBehaviour
 
         lr.material = new Material(Shader.Find("Unlit/Texture"));
 
-        lr.startWidth = 0.05f;
+        lr.startWidth = 0.01f;
         lr.endWidth   = 0.05f;
 
         lr.SetPosition(0, a_startPos);
@@ -77,6 +87,8 @@ public class Gun : MonoBehaviour
 
         myLine.transform.parent = this.transform; //set trail's parent as the gun that created the trail
 
-        GameObject.Destroy(myLine, BULLET_TRAIL_VISIBLE_DURATION);
+        myLine.layer = m_bulletTrailLayerNum;
+
+        GameObject.Destroy(myLine, bulletTrailDurationVisible);
     }
 }
