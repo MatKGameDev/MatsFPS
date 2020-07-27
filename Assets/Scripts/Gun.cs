@@ -28,7 +28,7 @@ public class Gun : MonoBehaviour
     {
         m_animator = GetComponent<Animator>();
 
-        m_bulletTrailLayerNum = (int)Mathf.Log(bulletTrailLayerMask.value, 2);
+        m_bulletTrailLayerNum = (int)Mathf.Log(bulletTrailLayerMask.value, 2); //determine layer based on layermask
     }
 
     // Update is called once per frame

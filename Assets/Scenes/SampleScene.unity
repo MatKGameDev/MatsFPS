@@ -2009,13 +2009,13 @@ MonoBehaviour:
   dashSpeed: 30
   dashDuration: 0.12
   dashCooldown: 1
-  accelerationRate: 105
+  accelerationRate: 70
   decelerationRate: 90
-  maxBasicMovementSpeed: 17
+  maxBasicMovementSpeed: 16
   jumpHeight: 2.5
   doubleJumpHeight: 2
-  gravityStrength: 40
-  terminalVelocity: 40
+  gravityStrength: 48
+  terminalVelocity: 55
 --- !u!23 &634626531
 MeshRenderer:
   m_ObjectHideFlags: 0

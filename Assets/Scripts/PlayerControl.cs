@@ -12,15 +12,15 @@ public class PlayerControl : MonoBehaviour
     public float dashCooldown = 1f;
 
     [Header("General Movement")]
-    public float accelerationRate = 105f;
+    public float accelerationRate = 70f;
     public float decelerationRate = 90f;
-    public float maxBasicMovementSpeed = 17f;
+    public float maxBasicMovementSpeed = 16f;
 
     [Header("Aerial Movement")]
     public float jumpHeight = 2.5f;
     public float doubleJumpHeight = 2f;
-    public float gravityStrength = 40f;
-    public float terminalVelocity = 40f;
+    public float gravityStrength = 48f;
+    public float terminalVelocity = 55f;
 
     public float dashCooldownCountdown { get; private set; }
 
