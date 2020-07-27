@@ -14,8 +14,9 @@ public class Gun : MonoBehaviour
     public LayerMask layersToIgnore;
 
     [Header("Bullet Trail")]
+    public LineRenderer bulletTrail;
     public LayerMask bulletTrailLayerMask;
-    public float bulletTrailDurationVisible = 0.1f;
+    public float bulletTrailDurationVisible = 0.15f;
 
     Animator m_animator;
 
@@ -69,26 +70,15 @@ public class Gun : MonoBehaviour
 
     void DrawBulletTrail(Vector3 a_startPos, Vector3 a_endPos)
     {
-        GameObject myLine = new GameObject();
-        myLine.name = "BulletTrail";
+        GameObject bulletTrailGO = Instantiate(bulletTrail.gameObject, a_startPos, Quaternion.identity);
 
-        myLine.transform.position = a_startPos;
+        LineRenderer bulletTrailLR = bulletTrailGO.GetComponent<LineRenderer>();
 
-        myLine.AddComponent<LineRenderer>();
-        LineRenderer lr = myLine.GetComponent<LineRenderer>();
+        bulletTrailLR.SetPosition(0, a_startPos);
+        bulletTrailLR.SetPosition(1, a_endPos);
 
-        lr.material = new Material(Shader.Find("Unlit/Texture"));
+        bulletTrailGO.layer = m_bulletTrailLayerNum;
 
-        lr.startWidth = 0.01f;
-        lr.endWidth   = 0.05f;
-
-        lr.SetPosition(0, a_startPos);
-        lr.SetPosition(1, a_endPos);
-
-        myLine.transform.parent = this.transform; //set trail's parent as the gun that created the trail
-
-        myLine.layer = m_bulletTrailLayerNum;
-
-        GameObject.Destroy(myLine, bulletTrailDurationVisible);
+        GameObject.Destroy(bulletTrailGO, bulletTrailDurationVisible);
     }
 }
