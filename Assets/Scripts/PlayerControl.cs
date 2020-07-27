@@ -17,8 +17,8 @@ public class PlayerControl : MonoBehaviour
     public float maxBasicMovementSpeed = 16f;
 
     [Header("Aerial Movement")]
-    public float jumpHeight = 2.5f;
-    public float doubleJumpHeight = 2f;
+    public float jumpHeight = 2.3f;
+    public float doubleJumpHeight = 1.8f;
     public float gravityStrength = 48f;
     public float terminalVelocity = 55f;
 

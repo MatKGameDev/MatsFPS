@@ -4,25 +4,22 @@ using UnityEngine;
 
 public class WeaponSway : MonoBehaviour
 {
-    public Vector3 playerRestingVelocity;
+    public float smoothingStrength;
 
     [Header("Look-Based Positional Sway")]
     public float swayStrengthHorizontal;
     public float swayStrengthVertical;
     public float maxSwayAmount;
-    public float smoothingStrength;
 
     [Header("Movement-Based Positional Sway")]
     public float positionSwayStrengthHorizontal;
     public float positionSwayStrengthVertical;
     public float maxPositionSwayAmount;
-    public float positionSmoothingStrength;
 
     [Header("Movement-Based Rotational Sway")]
     public float tiltSwayStrengthHorizontal;
     public float tiltSwayStrengthVertical;
     public float maxTiltSwayAmount;
-    public float tiltSmoothingStrength;
 
     PlayerControl m_player;
 
@@ -50,7 +47,7 @@ public class WeaponSway : MonoBehaviour
 
     Vector3 CalculateRealPlayerUnitVelocity()
     {
-        Vector3 realPlayerLocalVelocity = m_player.transform.InverseTransformDirection(m_player.GetVelocity());
+        Vector3 realPlayerLocalVelocity = m_player.transform.InverseTransformDirection(m_player.GetVelocity()); //get relative velocity from the inverse transform direction
 
         //since the player's grounded velocity may not be zero, we need to account for it
         if (m_player.IsGrounded())
@@ -59,11 +56,11 @@ public class WeaponSway : MonoBehaviour
         return Vector3.Normalize(realPlayerLocalVelocity);
     }
 
-    void ApplyPositionalSway(Vector3 a_playerUnityVelocity)
+    void ApplyPositionalSway(Vector3 a_playerUnitVelocity)
     {
         //calculate the magnitude of the player movement-based sway
-        float moveSwayX = a_playerUnityVelocity.x * positionSwayStrengthHorizontal * -1f;
-        float moveSwayY = a_playerUnityVelocity.y * positionSwayStrengthVertical   * -1f;
+        float moveSwayX = a_playerUnitVelocity.x * positionSwayStrengthHorizontal * -1f;
+        float moveSwayY = a_playerUnitVelocity.y * positionSwayStrengthVertical   * -1f;
 
         //calculate the magnitude of the player look-based sway
         float lookSwayX = Input.GetAxis("Mouse X") * swayStrengthHorizontal * -1f;
@@ -85,9 +82,16 @@ public class WeaponSway : MonoBehaviour
             Time.deltaTime * smoothingStrength);
     }
 
-    void ApplyRotationalSway(Vector3 a_playerUnityVelocity)
+    void ApplyRotationalSway(Vector3 a_playerUnitVelocity)
     {
+        float tiltY = a_playerUnitVelocity.x * tiltSwayStrengthHorizontal;
+        float tiltX = a_playerUnitVelocity.y * tiltSwayStrengthVertical;
 
+        Quaternion newRot = Quaternion.Euler(new Vector3(tiltY, 0f, tiltX)) * initialRot;
 
+        transform.localRotation = Quaternion.Slerp(
+            transform.localRotation,
+            newRot,
+            Time.deltaTime * smoothingStrength);
     }
 }

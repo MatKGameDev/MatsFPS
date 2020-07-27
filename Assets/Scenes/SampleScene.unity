@@ -2012,8 +2012,8 @@ MonoBehaviour:
   accelerationRate: 70
   decelerationRate: 90
   maxBasicMovementSpeed: 16
-  jumpHeight: 2.5
-  doubleJumpHeight: 2
+  jumpHeight: 2.3
+  doubleJumpHeight: 1.8
   gravityStrength: 48
   terminalVelocity: 55
 --- !u!23 &634626531
@@ -3455,14 +3455,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69a742d7fd1297649b7ae83fccdbe070, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  smoothingStrength: 7
   swayStrengthHorizontal: 0.25
   swayStrengthVertical: 0.25
   maxSwayAmount: 0.4
-  smoothingStrength: 6
-  tiltSwayStrengthHorizontal: 0
-  tiltSwayStrengthVertical: 0
-  maxTiltSwayAmount: 0
-  tiltSmoothingStrength: 0
+  positionSwayStrengthHorizontal: 0.12
+  positionSwayStrengthVertical: 0.13
+  maxPositionSwayAmount: 0.25
+  tiltSwayStrengthHorizontal: 5
+  tiltSwayStrengthVertical: 7
+  maxTiltSwayAmount: 12
 --- !u!1 &1138786330
 GameObject:
   m_ObjectHideFlags: 0
