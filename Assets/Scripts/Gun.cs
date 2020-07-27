@@ -45,7 +45,7 @@ public class Gun : MonoBehaviour
         if (m_firingCooldownCountdown > 0.0f)
             return;
 
-        m_animator.Play("PistolShoot");
+        m_animator.Play("Fire");
 
         m_firingCooldownCountdown = firingCooldown;
 

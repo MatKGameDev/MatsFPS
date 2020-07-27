@@ -28,17 +28,17 @@ public class PlayerControl : MonoBehaviour
 
     const float GROUNDED_VELOCITY_Y = -2f;
     const float POST_UPWARDS_DASH_VELOCITY_Y = 4.5f;
-    const float POST_HORIZONTAL_DASH_VELOCITY_Y = 1.5f;
+    const float POST_HORIZONTAL_DASH_VELOCITY_Y = 1f;
     const float COYOTE_TIME = 0.1f;
     const float SLOPE_RIDE_DISTANCE_LIMIT = 5f; //the max distance above a slope where the player can be considered to be "on" it
     const float SLOPE_RIDE_DOWNWARDS_FORCE_STRENGTH = 20f; //the strength of the downwards force applied to pull the player onto a slope that they're going down
 
-    CharacterController m_characterController;
-    float m_initialSlopeLimit;
-
     Vector3 m_velocity;
 
     Vector3 m_dashDir;
+
+    CharacterController m_characterController;
+    float m_initialSlopeLimit;
 
     float m_dashDurationCountdown;
 
@@ -46,6 +46,21 @@ public class PlayerControl : MonoBehaviour
 
     bool m_isGrounded;
     bool m_isDoubleJumpAvailabile;
+
+    public Vector3 GetVelocity()
+    {
+        return m_velocity;
+    }
+
+    public bool IsGrounded()
+    {
+        return m_isGrounded;
+    }
+
+    public float GetGroundedVelocityY()
+    {
+        return GROUNDED_VELOCITY_Y;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -78,8 +93,9 @@ public class PlayerControl : MonoBehaviour
         //if the player is moving upwards, increase slope limit so they dont get caught on objects
         m_characterController.slopeLimit = m_velocity.y > 0f ? 90f : m_initialSlopeLimit;
 
-        //check if double jump should be available
         m_isDoubleJumpAvailabile = m_isGrounded || m_isDoubleJumpAvailabile;
+
+        m_velocity.y -= gravityStrength * Time.deltaTime; //apply gravity
 
         //check if the player is grounded, in which case their downwards velocity should be reset
         if (m_isGrounded && m_velocity.y < 0f)
@@ -89,9 +105,7 @@ public class PlayerControl : MonoBehaviour
 
         PerformDashLogic(moveDir);
 
-        //apply gravity and clamp velocity if it's more than the terminal velocity
-        m_velocity.y -= gravityStrength * Time.deltaTime;
-        m_velocity.y  = Mathf.Max(m_velocity.y, -terminalVelocity);
+        m_velocity.y = Mathf.Max(m_velocity.y, -terminalVelocity); //clamp velocity if it's more than the terminal velocity
 
         //move the character based on the velocity after horizontal and vertical movement is applied
         m_characterController.Move(m_velocity * Time.deltaTime);

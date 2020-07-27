@@ -3420,6 +3420,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1124658675}
+  - component: {fileID: 1124658676}
   m_Layer: 14
   m_Name: PistolModelRoot
   m_TagString: Untagged
@@ -3442,6 +3443,26 @@ Transform:
   m_Father: {fileID: 800566832}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1124658676
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1124658674}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69a742d7fd1297649b7ae83fccdbe070, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  swayStrengthHorizontal: 0.25
+  swayStrengthVertical: 0.25
+  maxSwayAmount: 0.4
+  smoothingStrength: 6
+  tiltSwayStrengthHorizontal: 0
+  tiltSwayStrengthVertical: 0
+  maxTiltSwayAmount: 0
+  tiltSmoothingStrength: 0
 --- !u!1 &1138786330
 GameObject:
   m_ObjectHideFlags: 0
