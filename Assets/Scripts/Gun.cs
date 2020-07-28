@@ -1,22 +1,35 @@
-﻿using UnityEngine;
+﻿using UnityEditor.UIElements;
+using UnityEngine;
 
 public class Gun : MonoBehaviour
 {
-    public float damagePerBullet;
-    public float range;
+    [Header("Gun")]
     public float firingCooldown;
-
-    public Camera playerCamera;
+    public Camera cameraToFireFrom;
     public Transform muzzleTransform;
 
-    const float BULLET_TRAIL_VISIBLE_DURATION = 0.1f;
+    [Header("Bullet")]
+    public float damagePerBullet;
+    public float range;
+    public LayerMask layersToIgnore;
+
+    [Header("Bullet Trail")]
+    public LineRenderer bulletTrail;
+    public LayerMask bulletTrailLayerMask;
+    public float bulletTrailDurationVisible = 0.15f;
+
+    Animator m_animator;
 
     float m_firingCooldownCountdown;
+
+    int m_bulletTrailLayerNum;
 
     // Start is called before the first frame update
     void Start()
     {
+        m_animator = GetComponent<Animator>();
 
+        m_bulletTrailLayerNum = (int)Mathf.Log(bulletTrailLayerMask.value, 2); //determine layer based on layermask
     }
 
     // Update is called once per frame
@@ -33,10 +46,12 @@ public class Gun : MonoBehaviour
         if (m_firingCooldownCountdown > 0.0f)
             return;
 
+        m_animator.Play("Fire");
+
         m_firingCooldownCountdown = firingCooldown;
 
         RaycastHit hit;
-        if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, range))
+        if (Physics.Raycast(cameraToFireFrom.transform.position, cameraToFireFrom.transform.forward, out hit, range, ~layersToIgnore))
         {
             //if the hit was super close, the trail would look weird so don't draw it
             if (Vector3.Distance(muzzleTransform.position, hit.point) > 0.5f)
@@ -48,29 +63,22 @@ public class Gun : MonoBehaviour
         }
         else //no hit
         {
-            Vector3 bulletEndPos = playerCamera.transform.position + (playerCamera.transform.forward * range);
+            Vector3 bulletEndPos = cameraToFireFrom.transform.position + (cameraToFireFrom.transform.forward * range);
             DrawBulletTrail(muzzleTransform.position, bulletEndPos);
         }
     }
 
     void DrawBulletTrail(Vector3 a_startPos, Vector3 a_endPos)
     {
-        GameObject myLine = new GameObject();
-        myLine.name = "BulletTrail";
+        GameObject bulletTrailGO = Instantiate(bulletTrail.gameObject, a_startPos, Quaternion.identity);
 
-        myLine.transform.position = a_startPos;
+        LineRenderer bulletTrailLR = bulletTrailGO.GetComponent<LineRenderer>();
 
-        myLine.AddComponent<LineRenderer>();
-        LineRenderer lr = myLine.GetComponent<LineRenderer>();
+        bulletTrailLR.SetPosition(0, a_startPos);
+        bulletTrailLR.SetPosition(1, a_endPos);
 
-        lr.material = new Material(Shader.Find("Unlit/Texture"));
+        bulletTrailGO.layer = m_bulletTrailLayerNum;
 
-        lr.startWidth = 0.05f;
-        lr.endWidth   = 0.05f;
-
-        lr.SetPosition(0, a_startPos);
-        lr.SetPosition(1, a_endPos);
-
-        GameObject.Destroy(myLine, BULLET_TRAIL_VISIBLE_DURATION);
+        GameObject.Destroy(bulletTrailGO, bulletTrailDurationVisible);
     }
 }

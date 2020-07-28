@@ -7,37 +7,38 @@ public class PlayerControl : MonoBehaviour
     public LayerMask groundMask;
 
     [Header("Dashing")]
-    public float dashSpeed = 40f;
+    public float dashSpeed = 30f;
     public float dashDuration = 0.12f;
     public float dashCooldown = 1f;
 
     [Header("General Movement")]
-    public float accelerationRate = 105f;
+    public float accelerationRate = 70f;
     public float decelerationRate = 90f;
-    public float maxBasicMovementSpeed = 17f;
+    public float maxBasicMovementSpeed = 16f;
 
     [Header("Aerial Movement")]
-    public float jumpHeight = 2.5f;
-    public float doubleJumpHeight = 2f;
-    public float gravityStrength = 40f;
-    public float terminalVelocity = 40f;
+    public float jumpHeight = 2.3f;
+    public float doubleJumpHeight = 1.8f;
+    public float gravityStrength = 48f;
+    public float terminalVelocity = 55f;
 
     public float dashCooldownCountdown { get; private set; }
 
     const float GROUND_CHECK_RADIUS = 0.5f;
 
     const float GROUNDED_VELOCITY_Y = -2f;
-    const float POST_UPWARDS_DASH_VELOCITY_Y = 4f;
+    const float POST_UPWARDS_DASH_VELOCITY_Y = 4.5f;
+    const float POST_HORIZONTAL_DASH_VELOCITY_Y = 1f;
     const float COYOTE_TIME = 0.1f;
-    const float SLOPE_RIDE_DISTANCE_LIMIT = 4f; //the max distance above a slope where the player can be considered to be "on" it
+    const float SLOPE_RIDE_DISTANCE_LIMIT = 5f; //the max distance above a slope where the player can be considered to be "on" it
     const float SLOPE_RIDE_DOWNWARDS_FORCE_STRENGTH = 20f; //the strength of the downwards force applied to pull the player onto a slope that they're going down
-
-    CharacterController m_characterController;
-    float m_initialSlopeLimit;
 
     Vector3 m_velocity;
 
     Vector3 m_dashDir;
+
+    CharacterController m_characterController;
+    float m_initialSlopeLimit;
 
     float m_dashDurationCountdown;
 
@@ -45,6 +46,21 @@ public class PlayerControl : MonoBehaviour
 
     bool m_isGrounded;
     bool m_isDoubleJumpAvailabile;
+
+    public Vector3 GetVelocity()
+    {
+        return m_velocity;
+    }
+
+    public bool IsGrounded()
+    {
+        return m_isGrounded;
+    }
+
+    public float GetGroundedVelocityY()
+    {
+        return GROUNDED_VELOCITY_Y;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -77,9 +93,9 @@ public class PlayerControl : MonoBehaviour
         //if the player is moving upwards, increase slope limit so they dont get caught on objects
         m_characterController.slopeLimit = m_velocity.y > 0f ? 90f : m_initialSlopeLimit;
 
-        //check if double jump should be available
-        if (m_isGrounded)
-            m_isDoubleJumpAvailabile = true;
+        m_isDoubleJumpAvailabile = m_isGrounded || m_isDoubleJumpAvailabile;
+
+        m_velocity.y -= gravityStrength * Time.deltaTime; //apply gravity
 
         //check if the player is grounded, in which case their downwards velocity should be reset
         if (m_isGrounded && m_velocity.y < 0f)
@@ -89,9 +105,7 @@ public class PlayerControl : MonoBehaviour
 
         PerformDashLogic(moveDir);
 
-        //apply gravity and clamp velocity if it's more than the terminal velocity
-        m_velocity.y -= gravityStrength * Time.deltaTime;
-        m_velocity.y  = Mathf.Max(m_velocity.y, -terminalVelocity);
+        m_velocity.y = Mathf.Max(m_velocity.y, -terminalVelocity); //clamp velocity if it's more than the terminal velocity
 
         //move the character based on the velocity after horizontal and vertical movement is applied
         m_characterController.Move(m_velocity * Time.deltaTime);
@@ -220,9 +234,14 @@ public class PlayerControl : MonoBehaviour
 
             m_velocity = m_dashDir * dashSpeed;
 
-            //if dash is finished on this frame and the dash is upwards, reset upwards velocity
+            //if dash is finished on this frame, reset vertical velocity
             if (m_dashDurationCountdown <= 0f)
-                m_velocity.y = POST_UPWARDS_DASH_VELOCITY_Y;
+            {
+                if (m_dashDir == Vector3.up)
+                    m_velocity.y = POST_UPWARDS_DASH_VELOCITY_Y; //add some velocity after an upwards dash to prevent jerkiness
+                else
+                    m_velocity.y = POST_HORIZONTAL_DASH_VELOCITY_Y;
+            }
         }
     }
 
@@ -236,7 +255,7 @@ public class PlayerControl : MonoBehaviour
         //glue the player to the slope if they're moving down one (fixes bouncing when going down slopes)
         if (!newIsGrounded && wasGrounded && m_velocity.y < 0f)
         {
-            Vector3 pointAtBottomOfPlayer = transform.position - new Vector3(0f, m_characterController.height / 2f, 0f);
+            Vector3 pointAtBottomOfPlayer = transform.position - (Vector3.down * m_characterController.height / 2f);
 
             RaycastHit hit;
             if (Physics.Raycast(pointAtBottomOfPlayer, Vector3.down, out hit, SLOPE_RIDE_DISTANCE_LIMIT))

@@ -20,10 +20,9 @@ public class Health : MonoBehaviour
         currentHealth -= a_damageAmount;
         currentHealth = Mathf.Clamp(currentHealth, 0f, maxHealth);
 
-        if (onDamaged != null)
-            onDamaged.Invoke(a_damageAmount);
+        onDamaged?.Invoke(a_damageAmount);
 
-        if (currentHealth <= 0f && onDie != null)
-            onDie.Invoke();
+        if (currentHealth <= 0f)
+            onDie?.Invoke();
     }
 }
