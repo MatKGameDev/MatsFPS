@@ -3,24 +3,24 @@
 public class PlayerControl : MonoBehaviour
 {
     [Header("Ground Check")]
-    public Transform groundCheck;
-    public LayerMask groundMask;
+    [SerializeField] private Transform groundCheck;
+    [SerializeField] private LayerMask groundMask;
 
     [Header("Dashing")]
-    public float dashSpeed = 30f;
-    public float dashDuration = 0.12f;
-    public float dashCooldown = 1f;
+    [SerializeField] private float dashSpeed = 30f;
+    [SerializeField] private float dashDuration = 0.12f;
+    [SerializeField] private float dashCooldown = 1f;
 
     [Header("General Movement")]
-    public float accelerationRate = 70f;
-    public float decelerationRate = 90f;
-    public float maxBasicMovementSpeed = 16f;
+    [SerializeField] private float accelerationRate = 70f;
+    [SerializeField] private float decelerationRate = 90f;
+    [SerializeField] private float maxBasicMovementSpeed = 16f;
 
     [Header("Aerial Movement")]
-    public float jumpHeight = 2.3f;
-    public float doubleJumpHeight = 1.8f;
-    public float gravityStrength = 48f;
-    public float terminalVelocity = 55f;
+    [SerializeField] private float jumpHeight = 2.3f;
+    [SerializeField] private float doubleJumpHeight = 1.8f;
+    [SerializeField] private float gravityStrength = 48f;
+    [SerializeField] private float terminalVelocity = 55f;
 
     public float dashCooldownCountdown { get; private set; }
 

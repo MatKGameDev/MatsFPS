@@ -1003,6 +1003,58 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d1a9bb6cd65035544ba29a515e431ce7, type: 3}
+--- !u!1 &293202073
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 293202074}
+  - component: {fileID: 293202075}
+  m_Layer: 0
+  m_Name: PistolFPP
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &293202074
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 293202073}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.13, y: 0.523, z: -0.15}
+  m_LocalScale: {x: 0.04433797, y: 0.04433797, z: 0.04433797}
+  m_Children:
+  - {fileID: 1124658675}
+  - {fileID: 591823273}
+  m_Father: {fileID: 800566832}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &293202075
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 293202073}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: d12be350433baf241a0439eacfb9c09b, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1001 &296138508
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1446,17 +1498,17 @@ PrefabInstance:
     - target: {fileID: -4216859302048453862, guid: 70bc14062ea87e94d9e351dd1a97dc2c,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 70bc14062ea87e94d9e351dd1a97dc2c,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 70bc14062ea87e94d9e351dd1a97dc2c,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 70bc14062ea87e94d9e351dd1a97dc2c,
         type: 3}
@@ -1858,7 +1910,7 @@ GameObject:
   m_Component:
   - component: {fileID: 591823273}
   m_Layer: 14
-  m_Name: Muzzle
+  m_Name: MuzzleFPP
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1872,10 +1924,10 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 591823272}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.076, y: 0.246, z: 0.019}
-  m_LocalScale: {x: 0.03, y: 0.03, z: 0.03}
+  m_LocalPosition: {x: -1.081, y: 0.255, z: 0.016}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_Children: []
-  m_Father: {fileID: 800566832}
+  m_Father: {fileID: 293202074}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &630489829
@@ -1966,7 +2018,7 @@ GameObject:
   - component: {fileID: 634626529}
   - component: {fileID: 634626530}
   m_Layer: 0
-  m_Name: Player 1
+  m_Name: Player1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2625,7 +2677,7 @@ GameObject:
   - component: {fileID: 800566832}
   - component: {fileID: 800566833}
   - component: {fileID: 800566834}
-  m_Layer: 14
+  m_Layer: 0
   m_Name: Pistol
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2640,11 +2692,10 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 800566831}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.13, y: 0.523, z: -0.15}
-  m_LocalScale: {x: 0.04433797, y: 0.04433797, z: 0.04433797}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 1124658675}
-  - {fileID: 591823273}
+  - {fileID: 293202074}
   m_Father: {fileID: 517552652}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2662,7 +2713,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   firingCooldown: 0.5
   cameraToFireFrom: {fileID: 1163014447}
-  muzzleTransform: {fileID: 591823273}
+  muzzleTransformFPP: {fileID: 591823273}
   damagePerBullet: 10
   range: 100
   layersToIgnore:
@@ -2674,6 +2725,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 16384
   bulletTrailDurationVisible: 0.15
+  animatorFPP: {fileID: 293202075}
+  animatorTPP: {fileID: 0}
 --- !u!95 &800566834
 Animator:
   serializedVersion: 3
@@ -2682,7 +2735,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 800566831}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: d12be350433baf241a0439eacfb9c09b, type: 2}
   m_CullingMode: 0
@@ -3423,7 +3476,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1124658675}
   - component: {fileID: 1124658676}
-  m_Layer: 14
+  m_Layer: 0
   m_Name: PistolModelRoot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3442,7 +3495,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1306417289}
-  m_Father: {fileID: 800566832}
+  m_Father: {fileID: 293202074}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1124658676
@@ -5091,7 +5144,7 @@ GameObject:
   - component: {fileID: 1687258586}
   - component: {fileID: 1687258583}
   m_Layer: 0
-  m_Name: Player Camera
+  m_Name: PlayerCamera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

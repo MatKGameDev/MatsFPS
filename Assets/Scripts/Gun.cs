@@ -4,21 +4,23 @@ using UnityEngine;
 public class Gun : MonoBehaviour
 {
     [Header("Gun")]
-    public float firingCooldown;
-    public Camera cameraToFireFrom;
-    public Transform muzzleTransform;
+    [SerializeField] private float     firingCooldown;
+    [SerializeField] private Camera    cameraToFireFrom;
+    [SerializeField] private Transform muzzleTransformFPP;
 
     [Header("Bullet")]
-    public float damagePerBullet;
-    public float range;
-    public LayerMask layersToIgnore;
+    [SerializeField] private float     damagePerBullet;
+    [SerializeField] private float     range;
+    [SerializeField] private LayerMask layersToIgnore;
 
     [Header("Bullet Trail")]
-    public LineRenderer bulletTrail;
-    public LayerMask bulletTrailLayerMask;
-    public float bulletTrailDurationVisible = 0.15f;
+    [SerializeField] private LineRenderer bulletTrail;
+    [SerializeField] private LayerMask    bulletTrailLayerMask;
+    [SerializeField] private float        bulletTrailDurationVisible = 0.15f;
 
-    Animator m_animator;
+    [Header("Animation")]
+    [SerializeField] private Animator animatorFPP;
+    [SerializeField] private Animator animatorTPP;
 
     float m_firingCooldownCountdown;
 
@@ -27,8 +29,6 @@ public class Gun : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        m_animator = GetComponent<Animator>();
-
         m_bulletTrailLayerNum = (int)Mathf.Log(bulletTrailLayerMask.value, 2); //determine layer based on layermask
     }
 
@@ -46,16 +46,15 @@ public class Gun : MonoBehaviour
         if (m_firingCooldownCountdown > 0.0f)
             return;
 
-        m_animator.Play("Fire");
+        animatorFPP.Play("Fire");
 
         m_firingCooldownCountdown = firingCooldown;
 
+        Vector3 bulletTrailEndPos;
         RaycastHit hit;
         if (Physics.Raycast(cameraToFireFrom.transform.position, cameraToFireFrom.transform.forward, out hit, range, ~layersToIgnore))
         {
-            //if the hit was super close, the trail would look weird so don't draw it
-            if (Vector3.Distance(muzzleTransform.position, hit.point) > 0.5f)
-                DrawBulletTrail(muzzleTransform.position, hit.point); //draw bullet trail
+            bulletTrailEndPos = hit.point;
 
             Health objectHitHealth;
             if (hit.transform.TryGetComponent<Health>(out objectHitHealth))
@@ -63,9 +62,13 @@ public class Gun : MonoBehaviour
         }
         else //no hit
         {
-            Vector3 bulletEndPos = cameraToFireFrom.transform.position + (cameraToFireFrom.transform.forward * range);
-            DrawBulletTrail(muzzleTransform.position, bulletEndPos);
+            bulletTrailEndPos = cameraToFireFrom.transform.position + (cameraToFireFrom.transform.forward * range);
         }
+
+        //check if the bullet trail prefab exists
+        //also if the hit was super close, the trail would look weird so don't draw it
+        if (bulletTrail || Vector3.Distance(muzzleTransformFPP.position, hit.point) > 0.5f)
+            DrawBulletTrail(muzzleTransformFPP.position, bulletTrailEndPos);
     }
 
     void DrawBulletTrail(Vector3 a_startPos, Vector3 a_endPos)
