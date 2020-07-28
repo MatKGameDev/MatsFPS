@@ -86,8 +86,9 @@ public class WeaponSway : MonoBehaviour
     {
         float tiltY = a_playerUnitVelocity.x * tiltSwayStrengthHorizontal;
         float tiltX = a_playerUnitVelocity.y * tiltSwayStrengthVertical;
+        float tiltZ = a_playerUnitVelocity.z * tiltSwayStrengthHorizontal * 0.5f;
 
-        Quaternion newRot = Quaternion.Euler(new Vector3(tiltY, 0f, tiltX)) * initialRot;
+        Quaternion newRot = Quaternion.Euler(new Vector3(tiltY, 0f, tiltX + tiltZ)) * initialRot;
 
         transform.localRotation = Quaternion.Slerp(
             transform.localRotation,
