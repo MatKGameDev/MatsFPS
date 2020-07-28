@@ -2668,10 +2668,12 @@ MonoBehaviour:
   layersToIgnore:
     serializedVersion: 2
     m_Bits: 114688
+  bulletTrail: {fileID: 6411677855791286828, guid: fbde01ccfc94f63449b5483ce0a1974d,
+    type: 3}
   bulletTrailLayerMask:
     serializedVersion: 2
-    m_Bits: 8192
-  bulletTrailDurationVisible: 0.1
+    m_Bits: 16384
+  bulletTrailDurationVisible: 0.15
 --- !u!95 &800566834
 Animator:
   serializedVersion: 3
