@@ -5,6 +5,7 @@ using UnityEngine;
 public class LineFade : MonoBehaviour
 {
     [SerializeField] private float fadeSpeed = 10f;
+    [SerializeField] private Color color;
 
     LineRenderer m_lineRenderer;
 
@@ -17,8 +18,8 @@ public class LineFade : MonoBehaviour
 
         Gradient gradient = new Gradient();
         gradient.SetKeys(
-            new GradientColorKey[] { new GradientColorKey(Color.blue, 0f), new GradientColorKey(Color.blue, 0.5f), new GradientColorKey(Color.blue, 1f) },
-            new GradientAlphaKey[] { new GradientAlphaKey(1f,         0f), new GradientAlphaKey(1f,         0.5f), new GradientAlphaKey(1f,         1f) }
+            new GradientColorKey[] { new GradientColorKey(color, 0f), new GradientColorKey(color, 0.5f), new GradientColorKey(color, 1f) },
+            new GradientAlphaKey[] { new GradientAlphaKey(1f,    0f), new GradientAlphaKey(1f,    0.5f), new GradientAlphaKey(1f,    1f) }
         );
         m_lineRenderer.colorGradient = gradient;
     }
@@ -34,7 +35,7 @@ public class LineFade : MonoBehaviour
 
         Gradient gradient = new Gradient();
         gradient.SetKeys(
-            new GradientColorKey[] { new GradientColorKey(Color.blue,     0f), new GradientColorKey(Color.blue,   0.5f), new GradientColorKey(Color.blue,   1f) },
+            new GradientColorKey[] { new GradientColorKey(color,          0f), new GradientColorKey(color,        0.5f), new GradientColorKey(color,        1f) },
             new GradientAlphaKey[] { new GradientAlphaKey(lineStartAlpha, 0f), new GradientAlphaKey(lineMidAlpha, 0.5f), new GradientAlphaKey(lineEndAlpha, 1f) }
         );
         m_lineRenderer.colorGradient = gradient;
