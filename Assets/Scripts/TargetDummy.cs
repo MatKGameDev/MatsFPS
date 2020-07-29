@@ -12,7 +12,7 @@ public class TargetDummy : MonoBehaviour
     Health m_health;
 
     const float LOW_HEALTH_THRESHOLD = 10f;
-    const float RESPAWN_TIME = 1f;
+    const float RESPAWN_TIME         = 1f;
 
     MeshRenderer m_MeshRenderer;
 

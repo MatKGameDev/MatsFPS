@@ -61,6 +61,7 @@ public class WeaponHitscan : MonoBehaviour
             return;
 
         animatorFPP.Play("Fire");
+        animatorTPP.Play("Fire");
 
         m_firingCooldownCountdown = firingCooldown;
 

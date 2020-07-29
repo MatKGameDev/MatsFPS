@@ -7,30 +7,32 @@ public class PlayerControl : MonoBehaviour
     [SerializeField] private LayerMask groundMask;
 
     [Header("Dashing")]
-    [SerializeField] private float dashSpeed = 30f;
+    [SerializeField] private float dashSpeed    = 30f;
     [SerializeField] private float dashDuration = 0.12f;
     [SerializeField] private float dashCooldown = 1f;
 
     [Header("General Movement")]
-    [SerializeField] private float accelerationRate = 70f;
-    [SerializeField] private float decelerationRate = 90f;
+    [SerializeField] private float accelerationRate      = 70f;
+    [SerializeField] private float decelerationRate      = 90f;
     [SerializeField] private float maxBasicMovementSpeed = 16f;
 
     [Header("Aerial Movement")]
-    [SerializeField] private float jumpHeight = 2.3f;
+    [SerializeField] private float jumpHeight       = 2.3f;
     [SerializeField] private float doubleJumpHeight = 1.8f;
-    [SerializeField] private float gravityStrength = 48f;
+    [SerializeField] private float gravityStrength  = 48f;
     [SerializeField] private float terminalVelocity = 55f;
 
     public float dashCooldownCountdown { get; private set; }
 
     const float GROUND_CHECK_RADIUS = 0.5f;
 
-    const float GROUNDED_VELOCITY_Y = -2f;
-    const float POST_UPWARDS_DASH_VELOCITY_Y = 4.5f;
+    const float GROUNDED_VELOCITY_Y             = -2f;
+    const float POST_UPWARDS_DASH_VELOCITY_Y    = 4.5f;
     const float POST_HORIZONTAL_DASH_VELOCITY_Y = 1f;
+
     const float COYOTE_TIME = 0.1f;
-    const float SLOPE_RIDE_DISTANCE_LIMIT = 5f; //the max distance above a slope where the player can be considered to be "on" it
+
+    const float SLOPE_RIDE_DISTANCE_LIMIT           = 5f;  //the max distance above a slope where the player can be considered to be "on" it
     const float SLOPE_RIDE_DOWNWARDS_FORCE_STRENGTH = 20f; //the strength of the downwards force applied to pull the player onto a slope that they're going down
 
     Vector3 m_velocity;
@@ -38,14 +40,13 @@ public class PlayerControl : MonoBehaviour
     Vector3 m_dashDir;
 
     CharacterController m_characterController;
-    float m_initialSlopeLimit;
+    float               m_initialSlopeLimit;
 
     float m_dashDurationCountdown;
 
     float m_lastTimeGrounded;
-
-    bool m_isGrounded;
-    bool m_isDoubleJumpAvailabile;
+    bool  m_isGrounded;
+    bool  m_isDoubleJumpAvailabile;
 
     public Vector3 GetVelocity()
     {
