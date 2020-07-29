@@ -842,6 +842,7 @@ GameObject:
   - component: {fileID: 237945402}
   - component: {fileID: 237945401}
   - component: {fileID: 237945400}
+  - component: {fileID: 237945403}
   m_Layer: 16
   m_Name: Head
   m_TagString: Untagged
@@ -923,6 +924,18 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 237945398}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &237945403
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 237945398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62d7933d393847f46bb42e0beb129b4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &282702544 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7025785209274129676, guid: d1a9bb6cd65035544ba29a515e431ce7,
@@ -2016,6 +2029,7 @@ GameObject:
   - component: {fileID: 634626532}
   - component: {fileID: 634626529}
   - component: {fileID: 634626530}
+  - component: {fileID: 634626531}
   m_Layer: 0
   m_Name: Player1
   m_TagString: Untagged
@@ -2067,6 +2081,20 @@ MonoBehaviour:
   doubleJumpHeight: 1.8
   gravityStrength: 48
   terminalVelocity: 55
+--- !u!114 &634626531
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 634626528}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 015c12caeab550a408d631d4a5e4d28c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  currentHealth: 0
 --- !u!33 &634626532
 MeshFilter:
   m_ObjectHideFlags: 0
