@@ -18,10 +18,10 @@ TagManager:
   - 
   - 
   - 
-  - Universal First Person Objects
-  - Player 1 First Person Objects
-  - Player 1 Third Person Objects
-  - Player  1 Body
+  - Player 1 Specific Renderables
+  - Player 1 Excluded Renderables
+  - Player 1 Weapon
+  - Player 1 Body
   - 
   - 
   - 

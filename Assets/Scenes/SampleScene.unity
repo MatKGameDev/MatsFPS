@@ -1013,7 +1013,7 @@ GameObject:
   m_Component:
   - component: {fileID: 293202074}
   - component: {fileID: 293202075}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: PistolFPP
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1563,7 +1563,7 @@ PrefabInstance:
     - target: {fileID: -927199367670048503, guid: 70bc14062ea87e94d9e351dd1a97dc2c,
         type: 3}
       propertyPath: m_Layer
-      value: 14
+      value: 15
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 70bc14062ea87e94d9e351dd1a97dc2c, type: 3}
@@ -1742,7 +1742,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 517552652}
-  m_Layer: 14
+  m_Layer: 0
   m_Name: WeaponHolder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1909,7 +1909,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 591823273}
-  m_Layer: 14
+  m_Layer: 15
   m_Name: MuzzleFPP
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2014,7 +2014,6 @@ GameObject:
   m_Component:
   - component: {fileID: 634626533}
   - component: {fileID: 634626532}
-  - component: {fileID: 634626531}
   - component: {fileID: 634626529}
   - component: {fileID: 634626530}
   m_Layer: 0
@@ -2068,45 +2067,6 @@ MonoBehaviour:
   doubleJumpHeight: 1.8
   gravityStrength: 48
   terminalVelocity: 55
---- !u!23 &634626531
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 634626528}
-  m_Enabled: 0
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: 640fb6d40b35c0a458efc435fdef3ff2, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
 --- !u!33 &634626532
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -2676,7 +2636,6 @@ GameObject:
   m_Component:
   - component: {fileID: 800566832}
   - component: {fileID: 800566833}
-  - component: {fileID: 800566834}
   m_Layer: 0
   m_Name: Pistol
   m_TagString: Untagged
@@ -2712,40 +2671,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   firingCooldown: 0.5
-  cameraToFireFrom: {fileID: 1163014447}
   muzzleTransformFPP: {fileID: 591823273}
+  muzzleTransformTPP: {fileID: 0}
   damagePerBullet: 10
+  headshotMultiplier: 2
   range: 100
   layersToIgnore:
     serializedVersion: 2
-    m_Bits: 114688
-  bulletTrail: {fileID: 6411677855791286828, guid: fbde01ccfc94f63449b5483ce0a1974d,
+    m_Bits: 122880
+  bulletTrailLifetime: 0.7
+  bulletTrailFPP: {fileID: 6411677855791286828, guid: fbde01ccfc94f63449b5483ce0a1974d,
     type: 3}
-  bulletTrailLayerMask:
+  bulletTrailLayerMaskFPP:
+    serializedVersion: 2
+    m_Bits: 8192
+  bulletTrailTPP: {fileID: 0}
+  bulletTrailLayerMaskTPP:
     serializedVersion: 2
     m_Bits: 16384
-  bulletTrailDurationVisible: 0.15
   animatorFPP: {fileID: 293202075}
   animatorTPP: {fileID: 0}
---- !u!95 &800566834
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 800566831}
-  m_Enabled: 0
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: d12be350433baf241a0439eacfb9c09b, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  mainCamera: {fileID: 1687258584}
+  weaponCamera: {fileID: 1163014447}
 --- !u!1001 &806583626
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3476,7 +3423,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1124658675}
   - component: {fileID: 1124658676}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: PistolModelRoot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3917,13 +3864,13 @@ Camera:
     height: 1
   near clip plane: 0.01
   far clip plane: 1000
-  field of view: 35.983395
+  field of view: 36.01311
   orthographic: 0
   orthographic size: 5
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 24576
+    m_Bits: 32768
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -5197,13 +5144,13 @@ Camera:
     height: 1
   near clip plane: 0.1
   far clip plane: 1000
-  field of view: 67.67275
+  field of view: 67.71953
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 311
+    m_Bits: 8503
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -5644,7 +5591,7 @@ GameObject:
   - component: {fileID: 1945854557}
   - component: {fileID: 1945854556}
   - component: {fileID: 1945854555}
-  m_Layer: 15
+  m_Layer: 14
   m_Name: Eyes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
