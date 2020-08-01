@@ -23,20 +23,20 @@ TagManager:
   - Player 1 Weapon
   - Player 1 Body
   - 
+  - Player 2 Specific Renderables
+  - Player 2 Excluded Renderables
+  - Player 2 Weapon
+  - Player 2 Body
   - 
+  - Player 3 Specific Renderables
+  - Player 3 Excluded Renderables
+  - Player 3 Weapon
+  - Player 3 Body
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Player 4 Specific Renderables
+  - Player 4 Excluded Renderables
+  - Player 4 Weapon
+  - Player 4 Body
   m_SortingLayers:
   - name: Default
     uniqueID: 0
