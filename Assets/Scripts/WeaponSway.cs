@@ -7,30 +7,30 @@ public class WeaponSway : MonoBehaviour
     public float smoothingStrength;
 
     [Header("Look-Based Positional Sway")]
-    public float swayStrengthHorizontal;
-    public float swayStrengthVertical;
-    public float maxSwayAmount;
+    [SerializeField] private float swayStrengthHorizontal;
+    [SerializeField] private float swayStrengthVertical;
+    [SerializeField] private float maxSwayAmount;
 
     [Header("Movement-Based Positional Sway")]
-    public float positionSwayStrengthHorizontal;
-    public float positionSwayStrengthVertical;
-    public float maxPositionSwayAmount;
+    [SerializeField] private float positionSwayStrengthHorizontal;
+    [SerializeField] private float positionSwayStrengthVertical;
+    [SerializeField] private float maxPositionSwayAmount;
 
     [Header("Movement-Based Rotational Sway")]
-    public float tiltSwayStrengthHorizontal;
-    public float tiltSwayStrengthVertical;
-    public float maxTiltSwayAmount;
+    [SerializeField] private float tiltSwayStrengthHorizontal;
+    [SerializeField] private float tiltSwayStrengthVertical;
+    [SerializeField] private float maxTiltSwayAmount;
 
     PlayerControl m_player;
 
-    Vector3 initialPos;
-    Quaternion initialRot;
+    Vector3    m_initialPos;
+    Quaternion m_initialRot;
 
     // Start is called before the first frame update
     void Start()
     {
-        initialPos = transform.localPosition;
-        initialRot = transform.localRotation;
+        m_initialPos = transform.localPosition;
+        m_initialRot = transform.localRotation;
 
         GameObject playerObject = MyHelper.FindFirstParentWithComponent(this.gameObject, typeof(PlayerControl));
         m_player = playerObject.GetComponent<PlayerControl>();
@@ -73,7 +73,7 @@ public class WeaponSway : MonoBehaviour
         lookSwayX = Mathf.Clamp(lookSwayX, -maxSwayAmount, maxSwayAmount);
         lookSwayY = Mathf.Clamp(lookSwayY, -maxSwayAmount, maxSwayAmount);
 
-        Vector3 newPos = new Vector3(0f, lookSwayY + moveSwayY, lookSwayX + moveSwayX) + initialPos;
+        Vector3 newPos = new Vector3(0f, lookSwayY + moveSwayY, lookSwayX + moveSwayX) + m_initialPos;
 
         //apply sway with smoothing
         transform.localPosition = Vector3.Lerp(
@@ -88,7 +88,7 @@ public class WeaponSway : MonoBehaviour
         float tiltX = a_playerUnitVelocity.y * tiltSwayStrengthVertical;
         float tiltZ = a_playerUnitVelocity.z * tiltSwayStrengthHorizontal * 0.5f;
 
-        Quaternion newRot = Quaternion.Euler(new Vector3(tiltY, 0f, tiltX + tiltZ)) * initialRot;
+        Quaternion newRot = Quaternion.Euler(new Vector3(tiltY, 0f, tiltX + tiltZ)) * m_initialRot;
 
         transform.localRotation = Quaternion.Slerp(
             transform.localRotation,

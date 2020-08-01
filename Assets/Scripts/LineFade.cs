@@ -5,28 +5,39 @@ using UnityEngine;
 public class LineFade : MonoBehaviour
 {
     [SerializeField] private float fadeSpeed = 10f;
+    [SerializeField] private Color color;
 
     LineRenderer m_lineRenderer;
 
-    Color m_startColor;
-    Color m_endColor;
+    float m_interpolationParam = 0f;
 
     // Start is called before the first frame update
     void Start()
     {
         m_lineRenderer = GetComponent<LineRenderer>();
 
-        m_startColor = m_lineRenderer.startColor;
-        m_endColor   = m_lineRenderer.endColor;
+        Gradient gradient = new Gradient();
+        gradient.SetKeys(
+            new GradientColorKey[] { new GradientColorKey(color, 0f), new GradientColorKey(color, 0.5f), new GradientColorKey(color, 1f) },
+            new GradientAlphaKey[] { new GradientAlphaKey(1f,    0f), new GradientAlphaKey(1f,    0.5f), new GradientAlphaKey(1f,    1f) }
+        );
+        m_lineRenderer.colorGradient = gradient;
     }
 
     // Update is called once per frame
     void Update()
     {
-        m_startColor.a = Mathf.Lerp(m_startColor.a, 0f,           Time.deltaTime * fadeSpeed);
-        m_endColor.a   = Mathf.Lerp(0f,             m_endColor.a, Time.deltaTime * fadeSpeed);
+        m_interpolationParam += fadeSpeed * Time.deltaTime;
 
-        m_lineRenderer.startColor = m_startColor;
-        m_lineRenderer.endColor   = m_endColor;
+        float lineStartAlpha = Mathf.Lerp(1f, 0f, m_interpolationParam * 4f);
+        float lineMidAlpha   = Mathf.Lerp(1f, 0f, m_interpolationParam * 2f);
+        float lineEndAlpha   = Mathf.Lerp(1f, 0f, m_interpolationParam);
+
+        Gradient gradient = new Gradient();
+        gradient.SetKeys(
+            new GradientColorKey[] { new GradientColorKey(color,          0f), new GradientColorKey(color,        0.5f), new GradientColorKey(color,        1f) },
+            new GradientAlphaKey[] { new GradientAlphaKey(lineStartAlpha, 0f), new GradientAlphaKey(lineMidAlpha, 0.5f), new GradientAlphaKey(lineEndAlpha, 1f) }
+        );
+        m_lineRenderer.colorGradient = gradient;
     }
 }

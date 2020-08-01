@@ -1,8 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class MyHelper : MonoBehaviour
+public class MyHelper
 {
     public static GameObject FindFirstParentWithComponent(GameObject a_childObject, System.Type a_componentType)
     {

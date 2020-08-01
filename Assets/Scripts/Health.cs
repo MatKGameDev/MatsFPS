@@ -7,7 +7,7 @@ public class Health : MonoBehaviour
     public float currentHealth;
 
     public UnityAction<float> onDamaged;
-    public UnityAction onDie;
+    public UnityAction        onDie;
 
     // Start is called before the first frame update
     void Start()
