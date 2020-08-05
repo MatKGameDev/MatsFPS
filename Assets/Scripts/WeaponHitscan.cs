@@ -97,9 +97,7 @@ public class WeaponHitscan : MonoBehaviour
         //try to find a health component
         if (!a_hitObject.TryGetComponent<Health>(out objectHitHealth))
         {
-            GameObject objectWithHealth = MyHelper.FindFirstParentWithComponent(a_hitObject, typeof(Health)); //go up the hierarchy and see if any parent has a health component
-            if (objectWithHealth)
-                objectHitHealth = objectWithHealth.GetComponent<Health>();
+            objectHitHealth = GetComponentInParent<Health>(); //try to get the component from parent
         }
 
         //if the object hit has health, deal damage

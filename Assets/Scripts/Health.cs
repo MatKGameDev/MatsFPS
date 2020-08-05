@@ -4,7 +4,7 @@ using UnityEngine.Events;
 public class Health : MonoBehaviour
 {
     public float maxHealth;
-    public float currentHealth;
+    [HideInInspector] public float currentHealth;
 
     public UnityAction<float> onDamaged;
     public UnityAction        onDie;

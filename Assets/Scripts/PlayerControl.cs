@@ -1,11 +1,8 @@
 ﻿using UnityEngine;
+using Bolt;
 
-public class PlayerControl : MonoBehaviour
+public class PlayerControl : Bolt.EntityBehaviour<IPlayerStateFPS>
 {
-    [Header("Ground Check")]
-    [SerializeField] private Transform groundCheck;
-    [SerializeField] private LayerMask groundMask;
-
     [Header("Dashing")]
     [SerializeField] private float dashSpeed    = 30f;
     [SerializeField] private float dashDuration = 0.12f;
@@ -21,6 +18,14 @@ public class PlayerControl : MonoBehaviour
     [SerializeField] private float doubleJumpHeight = 1.8f;
     [SerializeField] private float gravityStrength  = 48f;
     [SerializeField] private float terminalVelocity = 55f;
+
+    [Header("Ground Check")]
+    [SerializeField] private Transform groundCheck;
+    [SerializeField] private LayerMask groundMask;
+
+    [Header("Camera")]
+    [SerializeField] private Camera mainCamera;
+
 
     public float dashCooldownCountdown { get; private set; }
 
@@ -63,17 +68,23 @@ public class PlayerControl : MonoBehaviour
         return GROUNDED_VELOCITY_Y;
     }
 
-    // Start is called before the first frame update
-    void Start()
+    public override void Attached()
     {
+        state.SetTransforms(state.PlayerTransform, transform);
+
         m_characterController = GetComponent<CharacterController>();
         m_initialSlopeLimit   = m_characterController.slopeLimit;
 
         m_isDoubleJumpAvailabile = true;
+
+        if (entity.IsOwner)
+        {
+            mainCamera .gameObject.SetActive(true);
+            groundCheck.gameObject.SetActive(true);
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void SimulateOwner()
     {
         PerformGroundCheck();
 
@@ -96,7 +107,7 @@ public class PlayerControl : MonoBehaviour
 
         m_isDoubleJumpAvailabile = m_isGrounded || m_isDoubleJumpAvailabile;
 
-        m_velocity.y -= gravityStrength * Time.deltaTime; //apply gravity
+        m_velocity.y -= gravityStrength * BoltNetwork.FrameDeltaTime; //apply gravity
 
         //check if the player is grounded, in which case their downwards velocity should be reset
         if (m_isGrounded && m_velocity.y < 0f)
@@ -109,7 +120,7 @@ public class PlayerControl : MonoBehaviour
         m_velocity.y = Mathf.Max(m_velocity.y, -terminalVelocity); //clamp velocity if it's more than the terminal velocity
 
         //move the character based on the velocity after horizontal and vertical movement is applied
-        m_characterController.Move(m_velocity * Time.deltaTime);
+        m_characterController.Move(m_velocity * BoltNetwork.FrameDeltaTime);
 
         //after standard movement stuff is done, check if the player should be glued to a slope
         PerformOnSlopeLogic();
@@ -149,13 +160,13 @@ public class PlayerControl : MonoBehaviour
             a_moveDir = Vector3.Normalize(a_moveDir);
 
         //apply basic movement
-        m_velocity += a_moveDir * accelerationRate * Time.deltaTime;
+        m_velocity += a_moveDir * accelerationRate * BoltNetwork.FrameDeltaTime;
     }
 
     void ApplyDeceleration(int a_verticalAxis, int a_horizontalAxis)
     {
         //apply deceleration if the axis isn't being moved on
-        float   frameIndependantDeceleration = decelerationRate * Time.deltaTime;
+        float   frameIndependantDeceleration = decelerationRate * BoltNetwork.FrameDeltaTime;
         Vector3 localVelocity                = transform.InverseTransformDirection(m_velocity);
 
         if (a_verticalAxis == 0)
@@ -226,12 +237,12 @@ public class PlayerControl : MonoBehaviour
         }
 
         //reduce dash cooldown timer
-        dashCooldownCountdown -= Time.deltaTime;
+        dashCooldownCountdown -= BoltNetwork.FrameDeltaTime;
 
         //check if player is dashing
         if (m_dashDurationCountdown > 0f)
         {
-            m_dashDurationCountdown -= Time.deltaTime;
+            m_dashDurationCountdown -= BoltNetwork.FrameDeltaTime;
 
             m_velocity = m_dashDir * dashSpeed;
 
@@ -260,7 +271,7 @@ public class PlayerControl : MonoBehaviour
 
             RaycastHit hit;
             if (Physics.Raycast(pointAtBottomOfPlayer, Vector3.down, out hit, SLOPE_RIDE_DISTANCE_LIMIT))
-                m_characterController.Move(Vector3.down * SLOPE_RIDE_DOWNWARDS_FORCE_STRENGTH * Time.deltaTime);
+                m_characterController.Move(Vector3.down * SLOPE_RIDE_DOWNWARDS_FORCE_STRENGTH * BoltNetwork.FrameDeltaTime);
         }
     }
 }

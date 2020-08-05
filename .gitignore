@@ -62,6 +62,7 @@ sysinfo.txt
 crashlytics-build.properties
 
 /Art/*
+/Bolt_DebugStart_Build/*
 /Assets/samples/*
 /Assets/Photon/*
 /Assets/_TerrainAutoUpgrade/*

@@ -24,7 +24,7 @@ public class MainMenu : Bolt.GlobalEventListener
 
             BoltMatchmaking.CreateSession(
                 sessionID: matchName,
-                sceneToLoad: "MainMenu"
+                sceneToLoad: "Gameplay"
                 );
         }
     }

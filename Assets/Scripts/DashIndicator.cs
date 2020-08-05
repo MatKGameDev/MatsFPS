@@ -17,14 +17,24 @@ public class DashIndicator : MonoBehaviour
     void Start()
     {
         m_image = GetComponent<Image>();
+
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (player.dashCooldownCountdown < 0f)
-            m_image.sprite = activeSprite;
-        else
-            m_image.sprite = notActiveSprite;
+        if (!player)
+        {
+            player = FindObjectOfType<PlayerControl>();
+        }
+
+        if (player)
+        {
+            if (player.dashCooldownCountdown < 0f)
+                m_image.sprite = activeSprite;
+            else
+                m_image.sprite = notActiveSprite;
+        }
     }
 }
