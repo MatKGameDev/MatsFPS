@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class CameraControl : MonoBehaviour
+public class CameraControl : Bolt.EntityBehaviour<IPlayerStateFPS>
 {
     public float mouseSensitivity;
 
@@ -10,16 +10,17 @@ public class CameraControl : MonoBehaviour
 
     private float m_VerticalRotation = 0f;
 
-    void Start()
+    public override void Attached()
     {
+        state.SetTransforms(state.CameraControlTransform, transform);
         //Cursor.lockState = CursorLockMode.Locked;
         //Cursor.visible   = false;
     }
 
-    void Update()
+    public override void SimulateOwner()
     {
-        float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
-        float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
+        float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * BoltNetwork.FrameDeltaTime;
+        float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * BoltNetwork.FrameDeltaTime;
 
         m_VerticalRotation -= mouseY;
         m_VerticalRotation =  Mathf.Clamp(m_VerticalRotation, -80f, 80f);

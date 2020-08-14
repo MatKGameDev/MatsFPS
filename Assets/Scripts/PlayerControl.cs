@@ -77,11 +77,8 @@ public class PlayerControl : Bolt.EntityBehaviour<IPlayerStateFPS>
 
         m_isDoubleJumpAvailabile = true;
 
-        if (entity.IsOwner)
-        {
-            mainCamera .gameObject.SetActive(true);
-            groundCheck.gameObject.SetActive(true);
-        }
+        mainCamera .gameObject.SetActive(entity.IsOwner);
+        groundCheck.gameObject.SetActive(entity.IsOwner);
     }
 
     public override void SimulateOwner()

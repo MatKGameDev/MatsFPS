@@ -5,15 +5,33 @@ using Boo.Lang;
 using UnityEditor;
 
 [BoltGlobalBehaviour]
-public class NewBehaviourScript : GlobalEventListener
+public class NetworkCallbacks : GlobalEventListener
 {
     List<string> m_logMessages = new List<string>();
+
+    int numPlayersConnected = 0;
 
     public override void SceneLoadLocalDone(string scene)
     {
         var spawnPos = new Vector3(Random.Range(-10f, 10f), 1.7f, -3f);
 
-        BoltNetwork.Instantiate(BoltPrefabs.Player1, spawnPos, Quaternion.identity);
+        if (BoltNetwork.IsServer)
+            BoltNetwork.Instantiate(BoltPrefabs.Player1, spawnPos, Quaternion.identity);
+        else
+            BoltNetwork.Instantiate(BoltPrefabs.Player2, spawnPos, Quaternion.identity);
+
+        //switch (numPlayersConnected)
+        //{
+        //    case 0:
+        //        BoltNetwork.Instantiate(BoltPrefabs.Player1, spawnPos, Quaternion.identity);
+        //        break;
+
+        //    case 1:
+        //        BoltNetwork.Instantiate(BoltPrefabs.Player2, spawnPos, Quaternion.identity);
+        //        break;
+        //}
+        
+        //numPlayersConnected++;
     }
 
     public override void OnEvent(LogEvent evt)

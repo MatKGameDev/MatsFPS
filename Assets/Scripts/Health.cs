@@ -9,17 +9,13 @@ public class Health : MonoBehaviour
     public UnityAction<float> onDamaged;
     public UnityAction        onDie;
 
-    // Start is called before the first frame update
-    void Start()
+    public void Awake()
     {
         currentHealth = maxHealth;
     }
 
     public void TakeDamage(float a_damageAmount)
     {
-        currentHealth -= a_damageAmount;
-        currentHealth = Mathf.Clamp(currentHealth, 0f, maxHealth);
-
         onDamaged?.Invoke(a_damageAmount);
 
         if (currentHealth <= 0f)
