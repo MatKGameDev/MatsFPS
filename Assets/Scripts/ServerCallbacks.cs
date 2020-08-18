@@ -3,20 +3,26 @@ using System.Collections.Generic;
 using UnityEngine;
 using Bolt;
 
-[BoltGlobalBehaviour(BoltNetworkModes.Server)]
+[BoltGlobalBehaviour(BoltNetworkModes.Server, "Gameplay")]
 public class ServerCallbacks : Bolt.GlobalEventListener
 {
-    public override void Connected(BoltConnection connection)
+    void Awake()
     {
-        var log = LogEvent.Create();
-        log.Message = string.Format("{0} connected", connection.RemoteEndPoint);
-        log.Send();
+        NetworkedPlayerRegistry.CreateServerPlayer();
     }
 
-    public override void Disconnected(BoltConnection connection)
+    public override void Connected(BoltConnection connection)
     {
-        var log = LogEvent.Create();
-        log.Message = string.Format("{0} disconnected", connection.RemoteEndPoint);
-        log.Send();
+        NetworkedPlayerRegistry.CreateClientPlayer(connection);
+    }
+
+    public override void SceneLoadLocalDone(string map)
+    {
+        NetworkedPlayerRegistry.ServerPlayer.Spawn();
+    }
+
+    public override void SceneLoadRemoteDone(BoltConnection connection)
+    {
+        NetworkedPlayerRegistry.GetNetworkedPlayer(connection).Spawn();
     }
 }

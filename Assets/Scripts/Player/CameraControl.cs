@@ -17,7 +17,7 @@ public class CameraControl : Bolt.EntityBehaviour<IPlayerStateFPS>
         //Cursor.visible   = false;
     }
 
-    public override void SimulateOwner()
+    public override void SimulateController()
     {
         float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * BoltNetwork.FrameDeltaTime;
         float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * BoltNetwork.FrameDeltaTime;

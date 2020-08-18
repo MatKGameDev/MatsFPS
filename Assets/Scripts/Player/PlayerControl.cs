@@ -68,6 +68,12 @@ public class PlayerControl : Bolt.EntityBehaviour<IPlayerStateFPS>
         return GROUNDED_VELOCITY_Y;
     }
 
+    public void OnControlGained()
+    {
+        mainCamera .gameObject.SetActive(true);
+        groundCheck.gameObject.SetActive(true);
+    }
+
     public override void Attached()
     {
         state.SetTransforms(state.PlayerTransform, transform);
@@ -76,12 +82,9 @@ public class PlayerControl : Bolt.EntityBehaviour<IPlayerStateFPS>
         m_initialSlopeLimit   = m_characterController.slopeLimit;
 
         m_isDoubleJumpAvailabile = true;
-
-        mainCamera .gameObject.SetActive(entity.IsOwner);
-        groundCheck.gameObject.SetActive(entity.IsOwner);
     }
 
-    public override void SimulateOwner()
+    public override void SimulateController()
     {
         PerformGroundCheck();
 
