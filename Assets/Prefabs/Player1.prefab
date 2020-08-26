@@ -907,6 +907,7 @@ GameObject:
   - component: {fileID: 1246928344315789047}
   - component: {fileID: 1246928344315789042}
   - component: {fileID: 1543083651674412076}
+  - component: {fileID: 6107893106306371107}
   - component: {fileID: 1246928344315789041}
   - component: {fileID: 1246928344315789040}
   - component: {fileID: 1792459229809222300}
@@ -974,6 +975,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerNum: 1
+--- !u!114 &6107893106306371107
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1246928344315789043}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec3150bf006b66643a7a592c89d53ccb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cameraController: {fileID: 131931433393424004}
 --- !u!114 &1246928344315789041
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1092,7 +1106,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mouseSensitivity: 270
   playerTransform: {fileID: 1246928344315789046}
-  playerOffsetY: 0.72
 --- !u!1001 &1246928342827031595
 PrefabInstance:
   m_ObjectHideFlags: 0

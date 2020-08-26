@@ -21,7 +21,7 @@ public class WeaponSway : MonoBehaviour
     [SerializeField] private float tiltSwayStrengthVertical;
     [SerializeField] private float maxTiltSwayAmount;
 
-    PlayerControl m_player;
+    PlayerMotor m_player;
 
     Vector3    m_initialPos;
     Quaternion m_initialRot;
@@ -32,8 +32,8 @@ public class WeaponSway : MonoBehaviour
         m_initialPos = transform.localPosition;
         m_initialRot = transform.localRotation;
 
-        GameObject playerObject = MyHelper.FindFirstParentWithComponent(this.gameObject, typeof(PlayerControl));
-        m_player = playerObject.GetComponent<PlayerControl>();
+        GameObject playerObject = MyHelper.FindFirstParentWithComponent(this.gameObject, typeof(PlayerMotor));
+        m_player = playerObject.GetComponent<PlayerMotor>();
     }
 
     // Update is called once per frame
@@ -49,7 +49,7 @@ public class WeaponSway : MonoBehaviour
     {
         Vector3 realPlayerLocalVelocity = m_player.transform.InverseTransformDirection(m_player.GetVelocity()); //get relative velocity from the inverse transform direction
 
-        //since the player's grounded velocity may not be zero, we need to account for it
+        //since the player's grounded y velocity may not be zero, we need to account for it
         if (m_player.IsGrounded())
             realPlayerLocalVelocity.y -= m_player.GetGroundedVelocityY();
 

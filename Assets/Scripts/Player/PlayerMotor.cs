@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using Bolt;
+using System;
 
-public class PlayerControl : Bolt.EntityBehaviour<IPlayerStateFPS>
+public class PlayerMotor : MonoBehaviour
 {
     [Header("Dashing")]
     [SerializeField] private float dashSpeed    = 30f;
@@ -26,6 +27,15 @@ public class PlayerControl : Bolt.EntityBehaviour<IPlayerStateFPS>
     [Header("Camera")]
     [SerializeField] private Camera mainCamera;
 
+    public struct MotorState
+    {
+        public Vector3 position;
+        public Vector3 velocity;
+        public bool    isGrounded;
+        public bool    isDoubleJumpAvailable;
+        public float   dashDurationCountdown;
+        public float   dashCooldownCountdown;
+    }
 
     public float dashCooldownCountdown { get; private set; }
 
@@ -39,6 +49,8 @@ public class PlayerControl : Bolt.EntityBehaviour<IPlayerStateFPS>
 
     const float SLOPE_RIDE_DISTANCE_LIMIT           = 5f;  //the max distance above a slope where the player can be considered to be "on" it
     const float SLOPE_RIDE_DOWNWARDS_FORCE_STRENGTH = 20f; //the strength of the downwards force applied to pull the player onto a slope that they're going down
+
+    MotorState m_motorState;
 
     Vector3 m_velocity;
 
@@ -74,25 +86,60 @@ public class PlayerControl : Bolt.EntityBehaviour<IPlayerStateFPS>
         groundCheck.gameObject.SetActive(true);
     }
 
-    public override void Attached()
+    void Awake()
     {
-        state.SetTransforms(state.PlayerTransform, transform);
-
         m_characterController = GetComponent<CharacterController>();
         m_initialSlopeLimit   = m_characterController.slopeLimit;
 
         m_isDoubleJumpAvailabile = true;
+
+        m_motorState = new MotorState();
+        m_motorState.position = transform.localPosition;
     }
 
-    public override void SimulateController()
+    public void SetState(Vector3 a_position, Vector3 a_velocity, bool a_isGrounded, bool a_isDoubleJumpAvailable, float a_dashDurationCountdown, float a_dashCooldownCountdown)
     {
+        //assign new state
+        m_motorState.position              = a_position;
+        m_motorState.velocity              = a_velocity;
+        m_motorState.isGrounded            = a_isGrounded;
+        m_motorState.isDoubleJumpAvailable = a_isDoubleJumpAvailable;
+        m_motorState.dashDurationCountdown = a_dashDurationCountdown;
+        m_motorState.dashCooldownCountdown = a_dashCooldownCountdown;
+
+        //assign local position
+        m_characterController.Move(a_position - transform.localPosition);
+    }
+
+    public MotorState Move(bool a_forward, bool a_backward, bool a_left, bool a_right, bool a_jump, bool a_dash, float a_yaw)
+    {
+        m_velocity               = m_motorState.velocity;
+        m_isGrounded             = m_motorState.isGrounded;
+        m_isDoubleJumpAvailabile = m_motorState.isDoubleJumpAvailable;
+        m_dashDurationCountdown  = m_motorState.dashDurationCountdown;
+        dashCooldownCountdown    = m_motorState.dashCooldownCountdown;
+
+        transform.localRotation = Quaternion.Euler(0, a_yaw, 0);
+
         PerformGroundCheck();
 
-        int     verticalAxis;
-        int     horizontalAxis;
-        Vector3 moveDir;
+        int verticalAxis = 0;
+        verticalAxis += Convert.ToInt32(a_forward);
+        verticalAxis -= Convert.ToInt32(a_backward);
 
-        ProcessBasicMovement(out verticalAxis, out horizontalAxis, out moveDir);
+        int horizontalAxis = 0;
+        horizontalAxis += Convert.ToInt32(a_right);
+        horizontalAxis -= Convert.ToInt32(a_left);
+
+        //calculate movement direction
+        Vector3 moveDir = transform.right   * horizontalAxis
+                        + transform.forward * verticalAxis;
+
+        //normalize movement
+        if (moveDir.sqrMagnitude > 1f)
+            moveDir = Vector3.Normalize(moveDir);
+
+        ProcessBasicMovement(verticalAxis, horizontalAxis, moveDir);
 
         ApplyDeceleration(verticalAxis, horizontalAxis);
 
@@ -113,9 +160,9 @@ public class PlayerControl : Bolt.EntityBehaviour<IPlayerStateFPS>
         if (m_isGrounded && m_velocity.y < 0f)
             m_velocity.y = GROUNDED_VELOCITY_Y; //don't set it to 0 else the player might float above the ground a bit
 
-        PerformJumpLogic();
+        PerformJumpLogic(a_jump);
 
-        PerformDashLogic(moveDir);
+        PerformDashLogic(a_dash, moveDir);
 
         m_velocity.y = Mathf.Max(m_velocity.y, -terminalVelocity); //clamp velocity if it's more than the terminal velocity
 
@@ -124,6 +171,15 @@ public class PlayerControl : Bolt.EntityBehaviour<IPlayerStateFPS>
 
         //after standard movement stuff is done, check if the player should be glued to a slope
         PerformOnSlopeLogic();
+
+        m_motorState.position              = transform.localPosition;
+        m_motorState.isGrounded            = m_isGrounded;
+        m_motorState.velocity              = m_velocity;
+        m_motorState.isDoubleJumpAvailable = m_isDoubleJumpAvailabile;
+        m_motorState.dashDurationCountdown = m_dashDurationCountdown;
+        m_motorState.dashCooldownCountdown = dashCooldownCountdown;
+
+        return m_motorState;
     }
 
     void PerformGroundCheck()
@@ -135,30 +191,8 @@ public class PlayerControl : Bolt.EntityBehaviour<IPlayerStateFPS>
             m_lastTimeGrounded = Time.time;
     }
 
-    void ProcessBasicMovement(out int a_verticalAxis, out int a_horizontalAxis, out Vector3 a_moveDir)
+    void ProcessBasicMovement(int a_verticalAxis, int a_horizontalAxis, Vector3 a_moveDir)
     {
-        //movement direction
-        a_horizontalAxis = 0;
-        a_verticalAxis   = 0;
-
-        if (Input.GetKey(KeyCode.W))
-            a_verticalAxis += 1;
-        if (Input.GetKey(KeyCode.S))
-            a_verticalAxis -= 1;
-
-        if (Input.GetKey(KeyCode.D))
-            a_horizontalAxis += 1;
-        if (Input.GetKey(KeyCode.A))
-            a_horizontalAxis -= 1;
-
-        //calculate movement direction
-        a_moveDir = transform.right   * a_horizontalAxis
-                  + transform.forward * a_verticalAxis;
-
-        //normalize movement
-        if (a_moveDir.sqrMagnitude > 1f)
-            a_moveDir = Vector3.Normalize(a_moveDir);
-
         //apply basic movement
         m_velocity += a_moveDir * accelerationRate * BoltNetwork.FrameDeltaTime;
     }
@@ -186,9 +220,9 @@ public class PlayerControl : Bolt.EntityBehaviour<IPlayerStateFPS>
         }
     }
 
-    void PerformJumpLogic()
+    void PerformJumpLogic(bool a_shouldJump)
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (a_shouldJump)
         {
             //first jump
             if (m_lastTimeGrounded + COYOTE_TIME >= Time.time)
@@ -215,9 +249,9 @@ public class PlayerControl : Bolt.EntityBehaviour<IPlayerStateFPS>
         }
     }
 
-    void PerformDashLogic(Vector3 a_moveDir)
+    void PerformDashLogic(bool a_shouldDash, Vector3 a_moveDir)
     {
-        if (Input.GetKeyDown(KeyCode.LeftShift))
+        if (a_shouldDash)
         {
             if (dashCooldownCountdown < 0f)
             {

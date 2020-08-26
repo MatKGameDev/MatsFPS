@@ -1,31 +1,31 @@
 ﻿using UnityEngine;
 
-public class CameraControl : Bolt.EntityBehaviour<IPlayerStateFPS>
+public class CameraControl : MonoBehaviour
 {
     public float mouseSensitivity;
 
     public Transform playerTransform;
 
-    public float playerOffsetY;
-
-    private float m_VerticalRotation = 0f;
-
-    public override void Attached()
+    void Awake()
     {
-        state.SetTransforms(state.CameraControlTransform, transform);
         //Cursor.lockState = CursorLockMode.Locked;
         //Cursor.visible   = false;
     }
 
-    public override void SimulateController()
+    public void UpdateMouseInput(float a_axisX, float a_axisY, ref float a_yaw, ref float a_pitch)
     {
-        float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * BoltNetwork.FrameDeltaTime;
-        float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * BoltNetwork.FrameDeltaTime;
+        float mouseX = a_axisX * mouseSensitivity * BoltNetwork.FrameDeltaTime;
+        float mouseY = a_axisY * mouseSensitivity * BoltNetwork.FrameDeltaTime;
 
-        m_VerticalRotation -= mouseY;
-        m_VerticalRotation =  Mathf.Clamp(m_VerticalRotation, -80f, 80f);
+        a_yaw += mouseX;
+        a_yaw %= 360f;
 
-        transform.localRotation = Quaternion.Euler(m_VerticalRotation, 0f, 0f); //rotate the camera vertically
-        playerTransform.Rotate(Vector3.up * mouseX); //rotate the player horizontally
+        a_pitch -= mouseY;
+        a_pitch =  Mathf.Clamp(a_pitch, -80f, 80f);
+    }
+
+    public void UpdateRotation(float a_pitch)
+    {
+        transform.localRotation = Quaternion.Euler(a_pitch, 0f, 0f); //rotate the camera vertically
     }
 }
