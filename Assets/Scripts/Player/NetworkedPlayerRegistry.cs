@@ -75,4 +75,10 @@ public static class NetworkedPlayerRegistry
 
         return (NetworkedPlayer)connection.UserData;
     }
+
+    public static void DestroyNetworkedPlayer(BoltConnection connection)
+    {
+        NetworkedPlayer player = GetNetworkedPlayer(connection);
+        player.DestroyPlayer();
+    }
 }

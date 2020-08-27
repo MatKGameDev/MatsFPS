@@ -35,4 +35,10 @@ public class NetworkedPlayer
             }
         }
     }
+
+    public void DestroyPlayer()
+    {
+        if (character)
+            BoltNetwork.Destroy(character);
+    }
 }
