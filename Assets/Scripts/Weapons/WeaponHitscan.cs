@@ -33,36 +33,28 @@ public class WeaponHitscan : MonoBehaviour
 
     const float MIN_DISTANCE_FOR_BULLET_TRAIL = 0.5f;
 
-    float m_firingCooldownCountdown;
+    float m_lastTimeFired;
 
     int m_bulletTrailLayerNumFPP;
     int m_bulletTrailLayerNumTPP;
 
-    // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         m_bulletTrailLayerNumFPP = (int)Mathf.Log(bulletTrailLayerMaskFPP.value, 2); //determine layer based on layermask
         m_bulletTrailLayerNumTPP = (int)Mathf.Log(bulletTrailLayerMaskTPP.value, 2); //determine layer based on layermask
+
+        m_lastTimeFired = -100f;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void FireWeapon()
     {
-        m_firingCooldownCountdown -= Time.deltaTime;
-
-        if (Input.GetMouseButton(0)) //left click
-            FireWeapon();
-    }
-
-    void FireWeapon()
-    {
-        if (m_firingCooldownCountdown > 0.0f)
+        if (m_lastTimeFired + firingCooldown > Time.time)
             return;
+
+        m_lastTimeFired = Time.time;
 
         animatorFPP.Play("Fire");
         animatorTPP.Play("Fire");
-
-        m_firingCooldownCountdown = firingCooldown;
 
         Vector3 bulletTrailEndPos;
         RaycastHit hit;
@@ -92,23 +84,46 @@ public class WeaponHitscan : MonoBehaviour
 
     void ProcessWeaponHit(GameObject a_hitObject)
     {
-        Health objectHitHealth;
+        Player hitPlayer = null;
 
-        //try to find a health component
-        if (!a_hitObject.TryGetComponent<Health>(out objectHitHealth))
+        //try to find a player component
+        if (!a_hitObject.TryGetComponent<Player>(out hitPlayer))
         {
-            objectHitHealth = GetComponentInParent<Health>(); //try to get the component from parent
+            hitPlayer = a_hitObject.GetComponentInParent<Player>(); //try to get the component from parent
         }
 
-        //if the object hit has health, deal damage
-        if (objectHitHealth)
+        //if the object hit has a player component, deal damage
+        if (hitPlayer)
         {
             float damageToInflict = damagePerBullet;
             //check for headshot
             if (a_hitObject.TryGetComponent<Head>(out var playerHead))
                 damageToInflict *= headshotMultiplier;
 
+            //send player hit event
+            var playerHitEvt = PlayerHitEvent.Create(Bolt.GlobalTargets.OnlyServer ,Bolt.ReliabilityModes.ReliableOrdered);
+
+            playerHitEvt.PlayerHitNum    = hitPlayer.playerNum;
+            playerHitEvt.DamageToInflict = damageToInflict;
+            playerHitEvt.Send();
+
+            return;
+        }
+
+        Health objectHitHealth;
+
+        //try to find a health component
+        if (a_hitObject.TryGetComponent<Health>(out objectHitHealth))
+        {
+            float damageToInflict = damagePerBullet;
+
+            //check for headshot
+            if (a_hitObject.TryGetComponent<Head>(out var head))
+                damageToInflict *= headshotMultiplier;
+
             objectHitHealth.TakeDamage(damageToInflict);
+
+            return;
         }
     }
 

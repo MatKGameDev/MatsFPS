@@ -8,12 +8,16 @@ public class PlayerController : Bolt.EntityEventListener<IPlayerStateFPS>
     [SerializeField]
     CameraControl cameraController;
 
+    [SerializeField]
+    WeaponHitscan activeWeapon;
+
     bool m_forward;
     bool m_backward;
     bool m_left;
     bool m_right;
     bool m_jump;
     bool m_dash;
+    bool m_fire;
 
     float m_yaw;
     float m_pitch;
@@ -34,22 +38,24 @@ public class PlayerController : Bolt.EntityEventListener<IPlayerStateFPS>
     // Update is called once per frame
     void Update()
     {
-        PollKeys();
-        PollMouse();
+        PollKeysAndButtons();
+        PollMousePos();
     }
 
-	void PollKeys()
+	void PollKeysAndButtons()
 	{
 		m_forward  = Input.GetKey(KeyCode.W);
 		m_backward = Input.GetKey(KeyCode.S);
 		m_left     = Input.GetKey(KeyCode.A);
 		m_right    = Input.GetKey(KeyCode.D);
 
-		m_jump = m_jump || Input.GetKeyDown(KeyCode.Space);
+        m_fire = Input.GetMouseButton(0); //left click
+
+        m_jump = m_jump || Input.GetKeyDown(KeyCode.Space);
 		m_dash = m_dash || Input.GetKeyDown(KeyCode.LeftShift);
 	}
 
-    void PollMouse()
+    void PollMousePos()
     {
         float axisX = Input.GetAxisRaw("Mouse X");
         float axisY = Input.GetAxisRaw("Mouse Y");
@@ -67,6 +73,7 @@ public class PlayerController : Bolt.EntityEventListener<IPlayerStateFPS>
 		input.Right    = m_right;
 		input.Jump     = m_jump;
 		input.Dash     = m_dash;
+        input.Fire     = m_fire;
         input.Yaw      = m_yaw;
         input.Pitch    = m_pitch;
 
@@ -101,6 +108,14 @@ public class PlayerController : Bolt.EntityEventListener<IPlayerStateFPS>
             cmd.Result.IsDoubleJumpAvailable = motorState.isDoubleJumpAvailable;
             cmd.Result.DashDurationCountdown = motorState.dashDurationCountdown;
             cmd.Result.DashCooldownCountdown = motorState.dashCooldownCountdown;
+
+            if (cmd.IsFirstExecution)
+            {
+                if (cmd.Input.Fire && entity.HasControl) //only fire if we're the one controlling this entity
+                {
+                    activeWeapon.FireWeapon();
+                }
+            }
         }
     }
 }

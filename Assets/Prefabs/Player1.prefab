@@ -563,7 +563,7 @@ Transform:
   m_GameObject: {fileID: 1246928343506028558}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: -0.24199995, z: 0}
-  m_LocalScale: {x: 0.75000006, y: 0.7581051, z: 0.75000006}
+  m_LocalScale: {x: 0.9, y: 0.7581051, z: 0.9}
   m_Children: []
   m_Father: {fileID: 1246928344315789046}
   m_RootOrder: 1
@@ -657,8 +657,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1246928343600962853}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.6280001, z: 0}
-  m_LocalScale: {x: 0.5189459, y: 0.5189459, z: 0.5189459}
+  m_LocalPosition: {x: 0, y: 0.652, z: 0}
+  m_LocalScale: {x: 0.6718016, y: 0.6718016, z: 0.6718016}
   m_Children: []
   m_Father: {fileID: 1246928344315789046}
   m_RootOrder: 0
@@ -844,12 +844,12 @@ MonoBehaviour:
   firingCooldown: 0.5
   muzzleTransformFPP: {fileID: 1246928344224358074}
   muzzleTransformTPP: {fileID: 1246928344040350055}
-  damagePerBullet: 10
+  damagePerBullet: 13
   headshotMultiplier: 2
   range: 100
   layersToIgnore:
     serializedVersion: 2
-    m_Bits: 122880
+    m_Bits: 1939726336
   bulletTrailLifetime: 0.7
   bulletTrailFPP: {fileID: 6411677855791286828, guid: fbde01ccfc94f63449b5483ce0a1974d,
     type: 3}
@@ -909,9 +909,8 @@ GameObject:
   - component: {fileID: 1543083651674412076}
   - component: {fileID: 6107893106306371107}
   - component: {fileID: 1246928344315789041}
-  - component: {fileID: 1246928344315789040}
   - component: {fileID: 1792459229809222300}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Player1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -975,6 +974,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerNum: 1
+  maxHealth: 100
 --- !u!114 &6107893106306371107
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -988,6 +988,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraController: {fileID: 131931433393424004}
+  activeWeapon: {fileID: 1246928344145654050}
 --- !u!114 &1246928344315789041
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1015,20 +1016,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   mainCamera: {fileID: 1246928343220935371}
---- !u!114 &1246928344315789040
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1246928344315789043}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 015c12caeab550a408d631d4a5e4d28c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxHealth: 100
-  currentHealth: 0
 --- !u!114 &1792459229809222300
 MonoBehaviour:
   m_ObjectHideFlags: 0

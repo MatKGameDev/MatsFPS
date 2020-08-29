@@ -187,6 +187,8 @@ public class PlayerMotor : MonoBehaviour
         //grounded check
         m_isGrounded = Physics.CheckSphere(groundCheck.position, GROUND_CHECK_RADIUS, groundMask);
 
+        m_isGrounded = m_isGrounded || m_characterController.isGrounded;
+
         if (m_isGrounded)
             m_lastTimeGrounded = Time.time;
     }

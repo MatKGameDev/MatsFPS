@@ -462,9 +462,8 @@ GameObject:
   - component: {fileID: 8844161768099934371}
   - component: {fileID: 2768433677421564086}
   - component: {fileID: 3201449854512057421}
-  - component: {fileID: 3201449854512057420}
   - component: {fileID: 2720234899528355872}
-  m_Layer: 0
+  m_Layer: 19
   m_Name: Player2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -528,6 +527,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerNum: 2
+  maxHealth: 100
 --- !u!114 &2768433677421564086
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -541,6 +541,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraController: {fileID: 4392304750540600376}
+  activeWeapon: {fileID: 3201449854673798046}
 --- !u!114 &3201449854512057421
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -568,20 +569,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   mainCamera: {fileID: 3201449853450774647}
---- !u!114 &3201449854512057420
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3201449854512057423}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 015c12caeab550a408d631d4a5e4d28c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxHealth: 100
-  currentHealth: 0
 --- !u!114 &2720234899528355872
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -694,7 +681,7 @@ MonoBehaviour:
   range: 100
   layersToIgnore:
     serializedVersion: 2
-    m_Bits: 122880
+    m_Bits: 1941757952
   bulletTrailLifetime: 0.7
   bulletTrailFPP: {fileID: 6411677855791286828, guid: fbde01ccfc94f63449b5483ce0a1974d,
     type: 3}
@@ -799,8 +786,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3201449855236419481}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.6280001, z: 0}
-  m_LocalScale: {x: 0.5189459, y: 0.5189459, z: 0.5189459}
+  m_LocalPosition: {x: 0, y: 0.652, z: 0}
+  m_LocalScale: {x: 0.6718016, y: 0.6718016, z: 0.6718016}
   m_Children: []
   m_Father: {fileID: 3201449854512057418}
   m_RootOrder: 0
@@ -905,7 +892,7 @@ Transform:
   m_GameObject: {fileID: 3201449855313459890}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: -0.24199995, z: 0}
-  m_LocalScale: {x: 0.75000006, y: 0.7581051, z: 0.75000006}
+  m_LocalScale: {x: 0.9, y: 0.7581051, z: 0.9}
   m_Children: []
   m_Father: {fileID: 3201449854512057418}
   m_RootOrder: 1

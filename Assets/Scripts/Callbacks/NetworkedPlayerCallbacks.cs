@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using Bolt;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
 [BoltGlobalBehaviour("Gameplay")]
 public class NetworkedPlayerCallbacks : Bolt.GlobalEventListener
@@ -22,5 +24,35 @@ public class NetworkedPlayerCallbacks : Bolt.GlobalEventListener
     public override void Disconnected(BoltConnection connection)
     {
         NetworkedPlayerRegistry.DestroyNetworkedPlayer(connection);
+        Debug.Log("DISCONNECTED");
+    }
+
+    public override void BoltShutdownBegin(AddCallback registerDoneCallback)
+    {
+        registerDoneCallback(() =>
+        {
+            SceneManager.LoadScene("MainMenu");
+        });
+    }
+
+    public override void OnEvent(PlayerHitEvent evt)
+    {
+        Player hitPlayer = null;
+
+        //find the player that was hit
+        var networkedPlayers = NetworkedPlayerRegistry.AllPlayers;
+        foreach (NetworkedPlayer networkedPlayer in networkedPlayers)
+        {
+            Player player = networkedPlayer.character.GetComponent<Player>();
+
+            if (evt.PlayerHitNum == player.playerNum)
+            {
+                hitPlayer = player;
+                break;
+            }
+        }
+
+        if (hitPlayer)
+            hitPlayer.TakeDamage(evt.DamageToInflict);
     }
 }

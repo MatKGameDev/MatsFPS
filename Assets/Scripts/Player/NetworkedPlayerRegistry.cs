@@ -79,6 +79,10 @@ public static class NetworkedPlayerRegistry
     public static void DestroyNetworkedPlayer(BoltConnection connection)
     {
         NetworkedPlayer player = GetNetworkedPlayer(connection);
-        player.DestroyPlayer();
+
+        if (player != null)
+            player.DestroyPlayer();
+
+        playersList.Remove(player);
     }
 }
