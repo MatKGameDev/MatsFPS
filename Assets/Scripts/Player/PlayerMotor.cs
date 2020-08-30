@@ -25,7 +25,7 @@ public class PlayerMotor : MonoBehaviour
     [SerializeField] private LayerMask groundMask;
 
     [Header("Camera")]
-    [SerializeField] private Camera mainCamera;
+    public Camera mainCamera;
 
     public struct MotorState
     {
@@ -139,7 +139,7 @@ public class PlayerMotor : MonoBehaviour
         if (moveDir.sqrMagnitude > 1f)
             moveDir = Vector3.Normalize(moveDir);
 
-        ProcessBasicMovement(verticalAxis, horizontalAxis, moveDir);
+        ApplyBasicMovement(moveDir);
 
         ApplyDeceleration(verticalAxis, horizontalAxis);
 
@@ -186,25 +186,23 @@ public class PlayerMotor : MonoBehaviour
     {
         //grounded check
         m_isGrounded = Physics.CheckSphere(groundCheck.position, GROUND_CHECK_RADIUS, groundMask);
-
         m_isGrounded = m_isGrounded || m_characterController.isGrounded;
 
         if (m_isGrounded)
             m_lastTimeGrounded = Time.time;
     }
 
-    void ProcessBasicMovement(int a_verticalAxis, int a_horizontalAxis, Vector3 a_moveDir)
+    void ApplyBasicMovement(Vector3 a_moveDir)
     {
-        //apply basic movement
         m_velocity += a_moveDir * accelerationRate * BoltNetwork.FrameDeltaTime;
     }
 
     void ApplyDeceleration(int a_verticalAxis, int a_horizontalAxis)
     {
-        //apply deceleration if the axis isn't being moved on
         float   frameIndependantDeceleration = decelerationRate * BoltNetwork.FrameDeltaTime;
         Vector3 localVelocity                = transform.InverseTransformDirection(m_velocity);
 
+        //apply deceleration if the axis isn't being moved on
         if (a_verticalAxis == 0)
         {
             if (Mathf.Abs(localVelocity.z) > frameIndependantDeceleration)

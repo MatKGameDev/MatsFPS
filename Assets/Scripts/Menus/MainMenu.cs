@@ -3,9 +3,16 @@ using Bolt;
 using UnityEngine;
 using UdpKit;
 using System;
+using UnityEngine.SceneManagement;
 
 public class MainMenu : Bolt.GlobalEventListener
 {
+    private void Start()
+    {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible   = true;
+    }
+
     public void StartServer()
     {
         BoltLauncher.StartServer();
@@ -42,5 +49,10 @@ public class MainMenu : Bolt.GlobalEventListener
                 BoltMatchmaking.JoinSession(photonSession);
             }
         }
+    }
+
+    public void LoadSettingsScene()
+    {
+        SceneManager.LoadScene("SettingsMenu");
     }
 }

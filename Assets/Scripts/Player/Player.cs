@@ -14,6 +14,13 @@ public class Player : Bolt.EntityEventListener<IPlayerStateFPS>
     {
         if (entity.IsOwner)
             state.Health = maxHealth;
+
+        state.AddCallback("Health", HealthCallback);
+    }
+
+    void HealthCallback()
+    {
+        GameUI.instance.SetHealth(state.Health);
     }
 
     public void TakeDamage(float a_damageAmount)

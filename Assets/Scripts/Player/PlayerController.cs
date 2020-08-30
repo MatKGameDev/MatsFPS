@@ -5,8 +5,7 @@ using UnityEngine.Animations;
 
 public class PlayerController : Bolt.EntityEventListener<IPlayerStateFPS>
 {
-    [SerializeField]
-    CameraControl cameraController;
+    public CameraControl cameraController;
 
     [SerializeField]
     WeaponHitscan activeWeapon;
@@ -40,6 +39,9 @@ public class PlayerController : Bolt.EntityEventListener<IPlayerStateFPS>
     {
         PollKeysAndButtons();
         PollMousePos();
+
+        if (entity.HasControl && Input.GetKeyDown(KeyCode.Escape))
+            BoltNetwork.Shutdown();
     }
 
 	void PollKeysAndButtons()
@@ -111,9 +113,13 @@ public class PlayerController : Bolt.EntityEventListener<IPlayerStateFPS>
 
             if (cmd.IsFirstExecution)
             {
-                if (cmd.Input.Fire && entity.HasControl) //only fire if we're the one controlling this entity
+                //check if we're the one controlling this entity
+                if (entity.HasControl)
                 {
-                    activeWeapon.FireWeapon();
+                    if (cmd.Input.Fire)
+                        activeWeapon.FireWeapon();
+
+
                 }
             }
         }

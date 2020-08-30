@@ -16,6 +16,12 @@ public class NetworkedPlayerCallbacks : Bolt.GlobalEventListener
         {
             playerMotor.OnControlGained();
 
+            CameraControl cameraControl    = entity.GetComponent<PlayerController>().cameraController;
+            cameraControl.mouseSensitivity = UserSettings.mouseSensitivity;
+
+            Camera playerCamera      = playerMotor.mainCamera;
+            playerCamera.fieldOfView = Camera.HorizontalToVerticalFieldOfView(UserSettings.fieldOfView, playerCamera.aspect);
+
             GameUI.Instantiate();
             GameUI.instance.SetPlayer(playerMotor);
         }
