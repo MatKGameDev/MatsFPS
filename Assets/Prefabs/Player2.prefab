@@ -193,7 +193,7 @@ Transform:
   m_GameObject: {fileID: 3201449853804744694}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0.13999999, z: 0.348}
-  m_LocalScale: {x: 0.2923385, y: 0.072846696, z: 0.073311165}
+  m_LocalScale: {x: 0.390038, y: 0.072846696, z: 0.073311165}
   m_Children: []
   m_Father: {fileID: 6605214723098028061}
   m_RootOrder: 1
@@ -676,7 +676,7 @@ MonoBehaviour:
   firingCooldown: 0.5
   muzzleTransformFPP: {fileID: 3201449854622493702}
   muzzleTransformTPP: {fileID: 3201449854802858971}
-  damagePerBullet: 10
+  damagePerBullet: 13
   headshotMultiplier: 2
   range: 100
   layersToIgnore:
@@ -787,7 +787,7 @@ Transform:
   m_GameObject: {fileID: 3201449855236419481}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0.652, z: 0}
-  m_LocalScale: {x: 0.6718016, y: 0.6718016, z: 0.6718016}
+  m_LocalScale: {x: 0.7524178, y: 0.7524178, z: 0.7524178}
   m_Children: []
   m_Father: {fileID: 3201449854512057418}
   m_RootOrder: 0
@@ -891,8 +891,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3201449855313459890}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.24199995, z: 0}
-  m_LocalScale: {x: 0.9, y: 0.7581051, z: 0.9}
+  m_LocalPosition: {x: 0, y: -0.235, z: 0}
+  m_LocalScale: {x: 1, y: 0.78, z: 1}
   m_Children: []
   m_Father: {fileID: 3201449854512057418}
   m_RootOrder: 1
