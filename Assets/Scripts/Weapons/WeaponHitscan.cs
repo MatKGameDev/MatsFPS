@@ -3,33 +3,37 @@
 public class WeaponHitscan : MonoBehaviour
 {
     [Header("Gun")]
-    [SerializeField] private float firingCooldown;
+    [SerializeField] float firingCooldown;
 
-    [SerializeField] private Transform muzzleTransformFPP;
-    [SerializeField] private Transform muzzleTransformTPP;
+    [SerializeField] Transform muzzleTransformFPP;
+    [SerializeField] Transform muzzleTransformTPP;
 
     [Header("Bullet")]
-    [SerializeField] private float     damagePerBullet;
-    [SerializeField] private float     headshotMultiplier;
-    [SerializeField] private float     range;
-    [SerializeField] private LayerMask layersToIgnore;
+    [SerializeField] float     damagePerBullet;
+    [SerializeField] float     headshotMultiplier;
+    [SerializeField] float     range;
+    [SerializeField] LayerMask layersToIgnore;
 
     [Header("Bullet Trail")]
-    [SerializeField] private float        bulletTrailLifetime;
+    [SerializeField] LineRenderer bulletTrailFPP;
+    [SerializeField] LayerMask    bulletTrailLayerMaskFPP;
 
-    [SerializeField] private LineRenderer bulletTrailFPP;
-    [SerializeField] private LayerMask    bulletTrailLayerMaskFPP;
-
-    [SerializeField] private LineRenderer bulletTrailTPP;
-    [SerializeField] private LayerMask    bulletTrailLayerMaskTPP;
+    [SerializeField] LineRenderer bulletTrailTPP;
+    [SerializeField] LayerMask    bulletTrailLayerMaskTPP;
 
     [Header("Animation")]
-    [SerializeField] private Animator animatorFPP;
-    [SerializeField] private Animator animatorTPP;
+    [SerializeField] Animator animatorFPP;
+    [SerializeField] Animator animatorTPP;
+
+    [Header("Sound")]
+    [SerializeField] AudioSource audioSource;
+    [SerializeField] AudioClip   firingSound;
 
     [Header("Cameras")]
-    [SerializeField] private Camera mainCamera;
-    [SerializeField] private Camera weaponCamera;
+    [SerializeField] Camera mainCamera;
+    [SerializeField] Camera weaponCamera;
+
+    static float s_bulletTrailLifetime = 0.7f;
 
     const float MIN_DISTANCE_FOR_BULLET_TRAIL = 0.5f;
 
@@ -46,12 +50,14 @@ public class WeaponHitscan : MonoBehaviour
         m_lastTimeFired = -100f;
     }
 
-    public void FireWeapon()
+    public void FireWeapon(BoltEntity a_playerFiringEntity)
     {
         if (m_lastTimeFired + firingCooldown > Time.time)
             return;
 
         m_lastTimeFired = Time.time;
+        
+        audioSource.PlayOneShot(firingSound);
 
         animatorFPP.Play("Fire");
         animatorTPP.Play("Fire");
@@ -75,11 +81,15 @@ public class WeaponHitscan : MonoBehaviour
         //spawn first person bullet trail
         //if the hit was super close, the trail would look weird so don't draw it
         if (bulletTrailFPP && Vector3.Distance(muzzleTransformFPP.position, bulletTrailEndPos) > MIN_DISTANCE_FOR_BULLET_TRAIL)
-            DrawBulletTrail(muzzleWorldPosFPP, bulletTrailEndPos, bulletTrailFPP, m_bulletTrailLayerNumFPP);
+            DrawBulletTrail(muzzleWorldPosFPP, bulletTrailEndPos, bulletTrailFPP.gameObject, m_bulletTrailLayerNumFPP);
+
+        var bulletTrailPrefabIdTPP = bulletTrailTPP.gameObject.GetComponent<BoltEntity>().ModifySettings().prefabId;
+
+        SendBulletFiredEvent(a_playerFiringEntity, muzzleTransformTPP.position, bulletTrailEndPos, bulletTrailPrefabIdTPP);
 
         //spawn third person bullet trail
-        if (bulletTrailTPP)
-            DrawBulletTrail(muzzleTransformTPP.position, bulletTrailEndPos, bulletTrailTPP, m_bulletTrailLayerNumTPP);
+        //if (bulletTrailTPP)
+            //DrawBulletTrail(muzzleTransformTPP.position, bulletTrailEndPos, bulletTrailTPP.gameObject, m_bulletTrailLayerNumTPP);
     }
 
     void ProcessWeaponHit(GameObject a_hitObject)
@@ -127,20 +137,32 @@ public class WeaponHitscan : MonoBehaviour
         }
     }
 
-    void DrawBulletTrail(Vector3 a_startPos, Vector3 a_endPos, LineRenderer a_bulletTrailLR, int a_bulletTrailLayer)
+    void SendBulletFiredEvent(BoltEntity a_playerFiringEntity, Vector3 a_startPos, Vector3 a_endPos, Bolt.PrefabId a_bulletTrailPrefabId)
     {
-        GameObject bulletTrailGO = Instantiate(a_bulletTrailLR.gameObject, a_startPos, Quaternion.identity);
+        var myEvent = PlayerHitscanFiredEvent.Create(a_playerFiringEntity, Bolt.EntityTargets.EveryoneExceptController);
 
-        LineRenderer bulletTrailLR = bulletTrailGO.GetComponent<LineRenderer>();
+        myEvent.BulletStartPos      = a_startPos;
+        myEvent.BulletEndPos        = a_endPos;
+        myEvent.BulletTrailPrefabId = a_bulletTrailPrefabId;
+        myEvent.FiringSoundName     = firingSound.name;
 
-        bulletTrailLR.positionCount = 3;
+        myEvent.Send();
+    }
 
-        bulletTrailLR.SetPosition(0, a_startPos);
-        bulletTrailLR.SetPosition(1, a_startPos + ((a_endPos - a_startPos) / 2f)); //halfway point
-        bulletTrailLR.SetPosition(2, a_endPos);
+    public static void DrawBulletTrail(Vector3 a_startPos, Vector3 a_endPos, GameObject a_bulletTrailGO, int a_bulletTrailLayer = 0)
+    {
+        GameObject newBulletTrailGO = Instantiate(a_bulletTrailGO, a_startPos, Quaternion.identity);
 
-        bulletTrailGO.layer = a_bulletTrailLayer;
+        LineRenderer newBulletTrailLR = newBulletTrailGO.GetComponent<LineRenderer>();
 
-        GameObject.Destroy(bulletTrailGO, bulletTrailLifetime);
+        newBulletTrailLR.positionCount = 3;
+
+        newBulletTrailLR.SetPosition(0, a_startPos);
+        newBulletTrailLR.SetPosition(1, a_startPos + ((a_endPos - a_startPos) / 2f)); //halfway point
+        newBulletTrailLR.SetPosition(2, a_endPos);
+
+        newBulletTrailGO.layer = a_bulletTrailLayer;
+
+        GameObject.Destroy(newBulletTrailGO, s_bulletTrailLifetime);
     }
 }

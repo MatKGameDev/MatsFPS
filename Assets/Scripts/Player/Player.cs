@@ -8,12 +8,23 @@ public class Player : Bolt.EntityEventListener<IPlayerStateFPS>
     public int   playerNum;
     public float maxHealth;
 
+    public GameObject mainAudioSourcePrefab;
+
     const float RESPAWN_TIME = 1f;
+
+    AudioSource m_dispondableAudioSource;
 
     public override void Attached()
     {
         if (entity.IsOwner)
+        {
             state.Health = maxHealth;
+        }
+
+        GameObject audioSourceGO = GameObject.Instantiate(mainAudioSourcePrefab);
+        audioSourceGO.name       = "DispondableAudioSource";
+
+        m_dispondableAudioSource = audioSourceGO.GetComponent<AudioSource>();
 
         state.AddCallback("Health", HealthCallback);
     }
@@ -52,5 +63,19 @@ public class Player : Bolt.EntityEventListener<IPlayerStateFPS>
     {
         transform.position = new Vector3(0f, 1.7f, -3f);
         state.Health = maxHealth;
+    }
+
+    public override void OnEvent(PlayerHitscanFiredEvent evt)
+    {
+        var bulletTrail = BoltNetwork.Instantiate(evt.BulletTrailPrefabId);
+        WeaponHitscan.DrawBulletTrail(evt.BulletStartPos, evt.BulletEndPos, bulletTrail.gameObject);
+
+        BoltNetwork.Destroy(bulletTrail);
+
+        //firing sound effect
+        m_dispondableAudioSource.transform.position = evt.BulletStartPos;
+
+        AudioClip clip = (AudioClip)Resources.Load("SoundFX/" + evt.FiringSoundName);
+        m_dispondableAudioSource.PlayOneShot(clip);
     }
 }

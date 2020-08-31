@@ -3,7 +3,7 @@
 public static class NetworkedPlayerRegistry
 {
     // keeps a list of all the players
-    static List<NetworkedPlayer> playersList = new List<NetworkedPlayer>();
+    static List<NetworkedPlayer> s_playersList = new List<NetworkedPlayer>();
 
     // create a player for a connection
     // note: connection can be null
@@ -26,7 +26,7 @@ public static class NetworkedPlayerRegistry
         }
 
         // add to list of all players
-        playersList.Add(player);
+        s_playersList.Add(player);
 
         return player;
     }
@@ -36,19 +36,19 @@ public static class NetworkedPlayerRegistry
     // to modify the player list from the outside.
     public static IEnumerable<NetworkedPlayer> AllPlayers
     {
-        get { return playersList; }
+        get { return s_playersList; }
     }
 
     public static int GetNumPlayers
     {
-        get { return playersList.Count; }
+        get { return s_playersList.Count; }
     }
 
     // finds the server player by checking the
     // .IsServer property for every player object.
     public static NetworkedPlayer ServerPlayer
     {
-        get { return playersList.Find(player => player.IsServer); }
+        get { return s_playersList.Find(player => player.IsServer); }
     }
 
     // utility function which creates a server player
@@ -83,6 +83,6 @@ public static class NetworkedPlayerRegistry
         if (player != null)
             player.DestroyPlayer();
 
-        playersList.Remove(player);
+        s_playersList.Remove(player);
     }
 }

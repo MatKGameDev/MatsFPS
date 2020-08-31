@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6734734274686332438}
   - component: {fileID: 7701126366412166756}
   - component: {fileID: 5797648698700797618}
+  - component: {fileID: 770113146580411939}
   m_Layer: 0
   m_Name: BulletTrailTPP
   m_TagString: Untagged
@@ -151,5 +152,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea28c4c2f7c6e194d9184fdd201a4de5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fadeSpeed: 1.5
+  fadeSpeed: 5
   color: {r: 0.85098046, g: 0.12941177, b: 0.11764707, a: 0}
+--- !u!114 &770113146580411939
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6361649301708958116}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -36112512, guid: 5b00bf8b25851d440940a40ec23344f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _sceneGuid: 
+  _serializerGuid: 41f05c2f-a828-498a-9b86-33821f44a327
+  _prefabId: 1
+  _updateRate: 1
+  _autoFreezeProxyFrames: 0
+  _clientPredicted: 1
+  _allowInstantiateOnClient: 1
+  _persistThroughSceneLoads: 0
+  _sceneObjectDestroyOnDetach: 1
+  _sceneObjectAutoAttach: 1
+  _alwaysProxy: 0
+  _detachOnDisable: 1
+  _allowFirstReplicationWhenFrozen: 0
+  _autoRemoveChildEntities: 0
+  _entityBehaviourQueryOption: 0
+  _entityPriorityCalculatorQueryOption: 1
+  _entityReplicationFilterQueryOption: 1

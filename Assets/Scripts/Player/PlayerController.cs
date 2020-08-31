@@ -117,7 +117,7 @@ public class PlayerController : Bolt.EntityEventListener<IPlayerStateFPS>
                 if (entity.HasControl)
                 {
                     if (cmd.Input.Fire)
-                        activeWeapon.FireWeapon();
+                        activeWeapon.FireWeapon(entity);
 
 
                 }
