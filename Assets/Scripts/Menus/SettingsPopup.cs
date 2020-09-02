@@ -27,7 +27,7 @@ public class SettingsPopup : BoltSingletonPrefab<SettingsPopup>
 
         SetFieldOfView(UserSettings.fieldOfView);
 
-        SetFullscreen(UserSettings.isFullscreen);
+        SetFullscreen(Screen.fullScreen);
     }
 
     void Update()
@@ -53,7 +53,7 @@ public class SettingsPopup : BoltSingletonPrefab<SettingsPopup>
 
     public void SetFullscreen(bool a_newFullscreen)
     {
-        UserSettings.isFullscreen = a_newFullscreen;
+        UserSettings.isFullScreen = a_newFullscreen;
         fullscreenToggle.isOn     = a_newFullscreen;
 
         Screen.fullScreen = a_newFullscreen;

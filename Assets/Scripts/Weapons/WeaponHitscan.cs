@@ -28,6 +28,9 @@ public class WeaponHitscan : MonoBehaviour
     [Header("Sound")]
     [SerializeField] AudioSource audioSource;
     [SerializeField] AudioClip   firingSound;
+    [SerializeField] AudioClip   bodyHitSound;
+    [SerializeField] AudioClip   headshotSound;
+
 
     [Header("Cameras")]
     [SerializeField] Camera mainCamera;
@@ -57,7 +60,7 @@ public class WeaponHitscan : MonoBehaviour
 
         m_lastTimeFired = Time.time;
         
-        audioSource.PlayOneShot(firingSound);
+        audioSource.PlayOneShot(firingSound, 0.8f);
 
         animatorFPP.Play("Fire");
         animatorTPP.Play("Fire");
@@ -108,7 +111,17 @@ public class WeaponHitscan : MonoBehaviour
             float damageToInflict = damagePerBullet;
             //check for headshot
             if (a_hitObject.TryGetComponent<Head>(out var playerHead))
+            {
                 damageToInflict *= headshotMultiplier;
+
+                GameUI.instance.ActivateHitmarker(GameUI.HitmarkerType.headshot);
+                audioSource.PlayOneShot(headshotSound, 0.3f);
+            }
+            else
+            {
+                GameUI.instance.ActivateHitmarker(GameUI.HitmarkerType.regular);
+                audioSource.PlayOneShot(bodyHitSound, 1f);
+            }
 
             //send player hit event
             var playerHitEvt = PlayerHitEvent.Create(Bolt.GlobalTargets.OnlyServer ,Bolt.ReliabilityModes.ReliableOrdered);

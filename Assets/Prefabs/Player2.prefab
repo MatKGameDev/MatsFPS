@@ -79,7 +79,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 3201449853983612034}
-  - {fileID: 4406098145742829217}
+  - {fileID: 1929824153803678608}
   m_Father: {fileID: 6605214723098028061}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -676,12 +676,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7adf09cb293d7a4da17eab2bd7e2a5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  firingCooldown: 0.5
+  firingCooldown: 0.65
   muzzleTransformFPP: {fileID: 3201449854622493702}
   muzzleTransformTPP: {fileID: 3201449854802858971}
-  damagePerBullet: 13
+  damagePerBullet: 19
   headshotMultiplier: 2
-  range: 100
+  range: 200
   layersToIgnore:
     serializedVersion: 2
     m_Bits: 1941757952
@@ -697,8 +697,10 @@ MonoBehaviour:
     m_Bits: 524288
   animatorFPP: {fileID: 3201449855390090548}
   animatorTPP: {fileID: 3201449855496774248}
-  audioSource: {fileID: 5174408018139343622}
-  firingSound: {fileID: 8300000, guid: 3697b568a2f238e448f511c86fe7dcb2, type: 3}
+  audioSource: {fileID: 1929824153803677701}
+  firingSound: {fileID: 8300000, guid: 1df26bee71935934594c6e6faaa0d0ae, type: 3}
+  bodyHitSound: {fileID: 8300000, guid: 8a43260e05407a743bdfe7e07e0f0820, type: 3}
+  headshotSound: {fileID: 8300000, guid: c871b0fb33860fd4c9b9c1d9c8ca7ac0, type: 3}
   mainCamera: {fileID: 3201449853450774647}
   weaponCamera: {fileID: 3201449853983612032}
 --- !u!1 &3201449854802858972
@@ -1059,7 +1061,7 @@ Animator:
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 0ff71f17d9031e7489d181286362e767, type: 2}
   m_CullingMode: 0
-  m_UpdateMode: 0
+  m_UpdateMode: 1
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_WarningMessage: 
@@ -1164,15 +1166,50 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6703375475987647835, guid: 61e2dfd78b5358e4692c7c0d6a44bbf7,
+        type: 3}
+      propertyPath: rolloffCustomCurve.m_Curve.Array.data[1].time
+      value: 0.083858386
+      objectReference: {fileID: 0}
+    - target: {fileID: 6703375475987647835, guid: 61e2dfd78b5358e4692c7c0d6a44bbf7,
+        type: 3}
+      propertyPath: rolloffCustomCurve.m_Curve.Array.data[1].value
+      value: 0.3205679
+      objectReference: {fileID: 0}
+    - target: {fileID: 6703375475987647835, guid: 61e2dfd78b5358e4692c7c0d6a44bbf7,
+        type: 3}
+      propertyPath: rolloffCustomCurve.m_Curve.Array.data[2].time
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6703375475987647835, guid: 61e2dfd78b5358e4692c7c0d6a44bbf7,
+        type: 3}
+      propertyPath: rolloffCustomCurve.m_Curve.Array.data[2].value
+      value: 0.044418335
+      objectReference: {fileID: 0}
+    - target: {fileID: 6703375475987647835, guid: 61e2dfd78b5358e4692c7c0d6a44bbf7,
+        type: 3}
+      propertyPath: rolloffCustomCurve.m_Curve.Array.data[2].inSlope
+      value: -0.21634999
+      objectReference: {fileID: 0}
+    - target: {fileID: 6703375475987647835, guid: 61e2dfd78b5358e4692c7c0d6a44bbf7,
+        type: 3}
+      propertyPath: rolloffCustomCurve.m_Curve.Array.data[2].outSlope
+      value: -0.21634999
+      objectReference: {fileID: 0}
+    - target: {fileID: 6703375475987647835, guid: 61e2dfd78b5358e4692c7c0d6a44bbf7,
+        type: 3}
+      propertyPath: rolloffCustomCurve.m_Curve.Array.data[2].inWeight
+      value: 0.2598891
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 61e2dfd78b5358e4692c7c0d6a44bbf7, type: 3}
---- !u!4 &4406098145742829217 stripped
+--- !u!4 &1929824153803678608 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2877103331781497084, guid: 61e2dfd78b5358e4692c7c0d6a44bbf7,
     type: 3}
   m_PrefabInstance: {fileID: 1929824153803679325}
   m_PrefabAsset: {fileID: 0}
---- !u!82 &5174408018139343622 stripped
+--- !u!82 &1929824153803677701 stripped
 AudioSource:
   m_CorrespondingSourceObject: {fileID: 6703375475987647835, guid: 61e2dfd78b5358e4692c7c0d6a44bbf7,
     type: 3}
