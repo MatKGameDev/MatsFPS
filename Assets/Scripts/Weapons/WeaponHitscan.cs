@@ -60,7 +60,7 @@ public class WeaponHitscan : MonoBehaviour
 
         m_lastTimeFired = Time.time;
         
-        audioSource.PlayOneShot(firingSound, 0.8f);
+        audioSource.PlayOneShot(firingSound, 0.5f);
 
         animatorFPP.Play("Fire");
         animatorTPP.Play("Fire");
@@ -115,7 +115,7 @@ public class WeaponHitscan : MonoBehaviour
                 damageToInflict *= headshotMultiplier;
 
                 GameUI.instance.ActivateHitmarker(GameUI.HitmarkerType.headshot);
-                audioSource.PlayOneShot(headshotSound, 0.3f);
+                audioSource.PlayOneShot(headshotSound, 0.25f);
             }
             else
             {
@@ -124,7 +124,7 @@ public class WeaponHitscan : MonoBehaviour
             }
 
             //send player hit event
-            var playerHitEvt = PlayerHitEvent.Create(Bolt.GlobalTargets.OnlyServer ,Bolt.ReliabilityModes.ReliableOrdered);
+            var playerHitEvt = PlayerHitEvent.Create(Bolt.GlobalTargets.Everyone, Bolt.ReliabilityModes.ReliableOrdered);
 
             playerHitEvt.PlayerHitNum    = hitPlayer.playerNum;
             playerHitEvt.DamageToInflict = damageToInflict;

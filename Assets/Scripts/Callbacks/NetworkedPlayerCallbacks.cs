@@ -41,7 +41,7 @@ public class NetworkedPlayerCallbacks : Bolt.GlobalEventListener
         });
     }
 
-    public override void OnEvent(PlayerHitEvent evt)
+    public override void OnEvent(PlayerHitEvent evnt)
     {
         Player hitPlayer = null;
 
@@ -51,7 +51,7 @@ public class NetworkedPlayerCallbacks : Bolt.GlobalEventListener
         {
             Player player = networkedPlayer.character.GetComponent<Player>();
 
-            if (evt.PlayerHitNum == player.playerNum)
+            if (evnt.PlayerHitNum == player.playerNum)
             {
                 hitPlayer = player;
                 break;
@@ -59,6 +59,6 @@ public class NetworkedPlayerCallbacks : Bolt.GlobalEventListener
         }
 
         if (hitPlayer)
-            hitPlayer.TakeDamage(evt.DamageToInflict);
+            hitPlayer.TakeDamage(evnt.DamageToInflict);
     }
 }

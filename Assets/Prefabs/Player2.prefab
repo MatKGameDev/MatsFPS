@@ -79,7 +79,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 3201449853983612034}
-  - {fileID: 1929824153803678608}
+  - {fileID: 1929824153803678609}
   m_Father: {fileID: 6605214723098028061}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -531,6 +531,9 @@ MonoBehaviour:
   maxHealth: 100
   mainAudioSourcePrefab: {fileID: 1220382884693590767, guid: 61e2dfd78b5358e4692c7c0d6a44bbf7,
     type: 3}
+  onHitVignetteSmoothness: 0.9
+  onHitVignetteColor: {r: 0.3207547, g: 0, b: 0, a: 1}
+  onHitVignetteFadeSpeed: 1
 --- !u!114 &2768433677421564086
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -697,7 +700,7 @@ MonoBehaviour:
     m_Bits: 524288
   animatorFPP: {fileID: 3201449855390090548}
   animatorTPP: {fileID: 3201449855496774248}
-  audioSource: {fileID: 1929824153803677701}
+  audioSource: {fileID: 1929824153803677700}
   firingSound: {fileID: 8300000, guid: 1df26bee71935934594c6e6faaa0d0ae, type: 3}
   bodyHitSound: {fileID: 8300000, guid: 8a43260e05407a743bdfe7e07e0f0820, type: 3}
   headshotSound: {fileID: 8300000, guid: c871b0fb33860fd4c9b9c1d9c8ca7ac0, type: 3}
@@ -1203,13 +1206,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 61e2dfd78b5358e4692c7c0d6a44bbf7, type: 3}
---- !u!4 &1929824153803678608 stripped
+--- !u!4 &1929824153803678609 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2877103331781497084, guid: 61e2dfd78b5358e4692c7c0d6a44bbf7,
     type: 3}
   m_PrefabInstance: {fileID: 1929824153803679325}
   m_PrefabAsset: {fileID: 0}
---- !u!82 &1929824153803677701 stripped
+--- !u!82 &1929824153803677700 stripped
 AudioSource:
   m_CorrespondingSourceObject: {fileID: 6703375475987647835, guid: 61e2dfd78b5358e4692c7c0d6a44bbf7,
     type: 3}

@@ -151,5 +151,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea28c4c2f7c6e194d9184fdd201a4de5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fadeSpeed: 1.5
+  fadeSpeed: 3
   color: {r: 0.10980393, g: 0.27058825, b: 0.8000001, a: 0}
