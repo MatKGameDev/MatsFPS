@@ -8,8 +8,8 @@ public class CameraControl : MonoBehaviour
 
     void Awake()
     {
-        //Cursor.lockState = CursorLockMode.Locked;
-        //Cursor.visible   = false;
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible   = false;
     }
 
     public void UpdateMouseInput(float a_axisX, float a_axisY, ref float a_yaw, ref float a_pitch)
