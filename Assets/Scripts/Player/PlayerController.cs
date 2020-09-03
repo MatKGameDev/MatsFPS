@@ -21,6 +21,10 @@ public class PlayerController : Bolt.EntityEventListener<IPlayerStateFPS>
     float m_yaw;
     float m_pitch;
 
+    bool m_escape;
+    bool m_tabDown;
+    bool m_tabUp;
+
     PlayerMotor m_playerMotor;
 
     void Awake()
@@ -39,9 +43,6 @@ public class PlayerController : Bolt.EntityEventListener<IPlayerStateFPS>
     {
         PollKeysAndButtons();
         PollMousePos();
-
-        if (entity.HasControl && Input.GetKeyDown(KeyCode.Escape))
-            BoltNetwork.Shutdown();
     }
 
 	void PollKeysAndButtons()
@@ -55,7 +56,11 @@ public class PlayerController : Bolt.EntityEventListener<IPlayerStateFPS>
 
         m_jump = m_jump || Input.GetKeyDown(KeyCode.Space);
 		m_dash = m_dash || Input.GetKeyDown(KeyCode.LeftShift);
-	}
+
+        m_escape  = m_escape  || Input.GetKeyDown(KeyCode.Escape);
+        m_tabDown = m_tabDown || Input.GetKeyDown(KeyCode.Tab);
+        m_tabUp   = m_tabUp   || Input.GetKeyUp(KeyCode.Tab);
+    }
 
     void PollMousePos()
     {
@@ -81,9 +86,21 @@ public class PlayerController : Bolt.EntityEventListener<IPlayerStateFPS>
 
 		entity.QueueInput(input);
 
+        if (m_escape)
+            BoltNetwork.Shutdown();
+
+        if (m_tabDown)
+            GameUI.instance.EnableScoreboard();
+        else if (m_tabUp)
+            GameUI.instance.DisableScoreboard();
+
         //reset one shot inputs
         m_jump = false;
         m_dash = false;
+
+        m_escape  = false;
+        m_tabDown = false;
+        m_tabUp   = false;
 	}
 
     public override void ExecuteCommand(Bolt.Command command, bool resetState)

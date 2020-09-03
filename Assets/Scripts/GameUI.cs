@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UIElements;
+using Bolt;
 
 public class GameUI : BoltSingletonPrefab<GameUI>
 {
@@ -13,14 +13,29 @@ public class GameUI : BoltSingletonPrefab<GameUI>
         headshot
     }
 
+    [Header("Dash")]
     public DashIndicator dashIndicator;
 
+    [Header("Health")]
     public TMP_Text healthDisplay;
 
+    [Header("Ping")]
+    public GameObject pingDisplayParent;
+    public TMP_Text   pingDisplay;
+
+    [Header("Score")]
+    public GameObject scoreDisplayParent;
+    public TMP_Text   playerScoreDisplay;
+    public TMP_Text   enemyScoreDisplay;
+
+    [Header("Hitmarker")]
     public GameObject hitmarkerWhite;
     public GameObject hitmarkerRed;
 
     [SerializeField] float hitmarkerDurationActive;
+
+    int playerScore;
+    int enemyScore;
 
     public void SetPlayer(PlayerMotor a_player)
     {
@@ -31,6 +46,43 @@ public class GameUI : BoltSingletonPrefab<GameUI>
     {
         int healthDisplayValue = Mathf.CeilToInt(a_newHealth);
         healthDisplay.text     = healthDisplayValue.ToString();
+    }
+
+    public void EnableScoreboard()
+    {
+        pingDisplayParent .SetActive(true);
+        scoreDisplayParent.SetActive(true);
+
+        playerScoreDisplay.text = playerScore.ToString();
+        enemyScoreDisplay .text = enemyScore .ToString();
+    }
+
+    public void DisableScoreboard()
+    {
+        pingDisplayParent .SetActive(false);
+        scoreDisplayParent.SetActive(false);
+    }
+
+    public void SetPlayerScore(int a_newScore)
+    {
+        playerScore = a_newScore;
+
+        if (playerScoreDisplay.IsActive())
+            playerScoreDisplay.text = playerScore.ToString();
+    }
+
+    public void SetEnemyScore(int a_newScore)
+    {
+        enemyScore = a_newScore;
+
+        if (enemyScoreDisplay.IsActive())
+            enemyScoreDisplay.text = enemyScore.ToString();
+    }
+
+    public void SetPing(float a_ping)
+    {
+        if (pingDisplay.IsActive())
+            pingDisplay.text = a_ping.ToString() + " ms";
     }
 
     public void ActivateHitmarker(HitmarkerType a_type)

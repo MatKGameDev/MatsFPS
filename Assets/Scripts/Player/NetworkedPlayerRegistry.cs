@@ -3,7 +3,7 @@
 public static class NetworkedPlayerRegistry
 {
     // keeps a list of all the players
-    static List<NetworkedPlayer> s_playersList = new List<NetworkedPlayer>();
+    static List<NetworkedPlayer> s_networkedPlayerList = new List<NetworkedPlayer>();
 
     // create a player for a connection
     // note: connection can be null
@@ -26,7 +26,7 @@ public static class NetworkedPlayerRegistry
         }
 
         // add to list of all players
-        s_playersList.Add(player);
+        s_networkedPlayerList.Add(player);
 
         return player;
     }
@@ -36,19 +36,19 @@ public static class NetworkedPlayerRegistry
     // to modify the player list from the outside.
     public static IEnumerable<NetworkedPlayer> AllPlayers
     {
-        get { return s_playersList; }
+        get { return s_networkedPlayerList; }
     }
 
     public static int GetNumPlayers
     {
-        get { return s_playersList.Count; }
+        get { return s_networkedPlayerList.Count; }
     }
 
     // finds the server player by checking the
     // .IsServer property for every player object.
     public static NetworkedPlayer ServerPlayer
     {
-        get { return s_playersList.Find(player => player.IsServer); }
+        get { return s_networkedPlayerList.Find(player => player.IsServer); }
     }
 
     // utility function which creates a server player
@@ -58,31 +58,47 @@ public static class NetworkedPlayerRegistry
     }
 
     // utility that creates a client player object.
-    public static NetworkedPlayer CreateClientPlayer(BoltConnection connection)
+    public static NetworkedPlayer CreateClientPlayer(BoltConnection a_connection)
     {
-        return CreatePlayer(connection);
+        return CreatePlayer(a_connection);
     }
 
     // utility function which lets us pass in a
     // BoltConnection object (even a null) and have
     // it return the proper player object for it.
-    public static NetworkedPlayer GetNetworkedPlayer(BoltConnection connection)
+    public static NetworkedPlayer GetNetworkedPlayer(BoltConnection a_connection)
     {
-        if (connection == null)
+        if (a_connection == null)
         {
             return ServerPlayer;
         }
 
-        return (NetworkedPlayer)connection.UserData;
+        return (NetworkedPlayer)a_connection.UserData;
     }
 
-    public static void DestroyNetworkedPlayer(BoltConnection connection)
+    public static void DestroyNetworkedPlayer(BoltConnection a_connection)
     {
-        NetworkedPlayer player = GetNetworkedPlayer(connection);
+        NetworkedPlayer player = GetNetworkedPlayer(a_connection);
 
         if (player != null)
             player.DestroyPlayer();
 
-        s_playersList.Remove(player);
+        s_networkedPlayerList.Remove(player);
+    }
+
+    public static Player GetPlayerFromPlayerNum(int a_playerNum)
+    {
+        foreach (NetworkedPlayer networkedPlayer in s_networkedPlayerList)
+        {
+            Player player = networkedPlayer.character.GetComponent<Player>();
+
+            if (!player)
+                continue;
+
+            if (a_playerNum == player.playerNum)
+                return player;
+        }
+
+        return null;
     }
 }

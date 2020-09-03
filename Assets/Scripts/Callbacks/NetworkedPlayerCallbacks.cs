@@ -43,22 +43,25 @@ public class NetworkedPlayerCallbacks : Bolt.GlobalEventListener
 
     public override void OnEvent(PlayerHitEvent evnt)
     {
-        Player hitPlayer = null;
-
-        //find the player that was hit
-        var networkedPlayers = NetworkedPlayerRegistry.AllPlayers;
-        foreach (NetworkedPlayer networkedPlayer in networkedPlayers)
-        {
-            Player player = networkedPlayer.character.GetComponent<Player>();
-
-            if (evnt.PlayerHitNum == player.playerNum)
-            {
-                hitPlayer = player;
-                break;
-            }
-        }
+        Player hitPlayer = NetworkedPlayerRegistry.GetPlayerFromPlayerNum(evnt.PlayerHitNum);        
 
         if (hitPlayer)
             hitPlayer.TakeDamage(evnt.DamageToInflict);
+    }
+
+    public override void OnEvent(PlayerDiedEvent evnt)
+    {
+        foreach (NetworkedPlayer networkedPlayer in NetworkedPlayerRegistry.AllPlayers)
+        {
+            Player player = networkedPlayer.character.GetComponent<Player>();
+
+            if (!player)
+                continue;
+
+            if (evnt.DeadPlayerNum == player.playerNum)
+                player.OnDie();
+            else
+                player.OnEnemyKilled();
+        }
     }
 }

@@ -42,7 +42,9 @@ public class Player : Bolt.EntityEventListener<IPlayerStateFPS>
 
         m_dispondableAudioSource = audioSourceGO.GetComponent<AudioSource>();
 
-        state.AddCallback("Health", HealthCallback);
+        state.AddCallback("Health",      HealthCallback);
+        state.AddCallback("PlayerScore", PlayerScoreCallback);
+        state.AddCallback("EnemyScore",  EnemyScoreCallback);
 
         postProcessVolume = FindObjectOfType<Volume>();
         if (!postProcessVolume)
@@ -56,6 +58,12 @@ public class Player : Bolt.EntityEventListener<IPlayerStateFPS>
 
     public override void SimulateController()
     {
+        if (BoltNetwork.IsConnected && BoltNetwork.IsClient)
+        { 
+            int pingToDisplay = Mathf.RoundToInt(BoltNetwork.Server.PingNetwork * 1000f);
+            GameUI.instance.SetPing(pingToDisplay);
+        }
+
         if (vignetteFadeParam < 1f)
         {
             vignetteFadeParam += onHitVignetteFadeSpeed * BoltNetwork.FrameDeltaTime;
@@ -68,9 +76,19 @@ public class Player : Bolt.EntityEventListener<IPlayerStateFPS>
     void HealthCallback()
     {
         if (entity.HasControl)
-        {
             GameUI.instance.SetHealth(state.Health);
-        }
+    }
+
+    void PlayerScoreCallback()
+    {
+        if (entity.HasControl)
+            GameUI.instance.SetPlayerScore(state.PlayerScore);
+    }
+
+    void EnemyScoreCallback()
+    {
+        if (entity.HasControl)
+            GameUI.instance.SetEnemyScore(state.EnemyScore);
     }
 
     public void TakeDamage(float a_damageAmount)
@@ -83,7 +101,11 @@ public class Player : Bolt.EntityEventListener<IPlayerStateFPS>
         damagedEvent.Send();
 
         if (state.Health <= 0f)
-            OnDie();
+        {
+            var diedEvent           = PlayerDiedEvent.Create(GlobalTargets.Everyone, ReliabilityModes.ReliableOrdered);
+            diedEvent.DeadPlayerNum = playerNum;
+            diedEvent.Send();
+        }
     }
 
     void OnDamaged(float a_damageAmount)
@@ -91,15 +113,22 @@ public class Player : Bolt.EntityEventListener<IPlayerStateFPS>
         if (entity.HasControl)
         {
             vignette.smoothness.value = onHitVignetteSmoothness;
-            vignette.color.value = onHitVignetteColor;
+            vignette.color     .value = onHitVignetteColor;
 
             vignetteFadeParam = 0f;
         }
     }
 
-    void OnDie()
+    public void OnDie()
     {
+        state.EnemyScore++;
+
         RespawnPlayer();
+    }
+
+    public void OnEnemyKilled()
+    {
+        state.PlayerScore++;
     }
 
     void RespawnPlayer()
