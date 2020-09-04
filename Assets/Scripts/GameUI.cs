@@ -37,6 +37,11 @@ public class GameUI : BoltSingletonPrefab<GameUI>
     int playerScore;
     int enemyScore;
 
+    public bool IsScoreboardOpen()
+    {
+        return scoreDisplayParent.activeSelf;
+    }
+
     public void SetPlayer(PlayerMotor a_player)
     {
         dashIndicator.SetPlayer(a_player);

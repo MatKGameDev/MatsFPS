@@ -7,10 +7,11 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : Bolt.GlobalEventListener
 {
+    public Canvas mainCanvas;
+
     private void Start()
     {
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible   = true;
+        GameState.instance.CurrentState = GameState.State.mainMenu;
     }
 
     public void StartServer()
@@ -51,8 +52,21 @@ public class MainMenu : Bolt.GlobalEventListener
         }
     }
 
-    public void LoadSettingsScene()
+    public void ShowSettings()
     {
-        SceneManager.LoadScene("SettingsMenu");
+        GameState.instance.CurrentState = GameState.State.mainSettings;
+
+        mainCanvas.enabled = false;
+
+        SettingsPopup.instance.Show();
+    }
+
+    public void ShowMainMenu()
+    {
+        UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(null); //reset in case settings button was previously selected
+
+        SettingsPopup.instance.Hide();
+
+        mainCanvas.enabled = true;
     }
 }

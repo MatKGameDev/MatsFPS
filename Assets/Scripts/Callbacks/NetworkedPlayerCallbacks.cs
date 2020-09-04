@@ -14,6 +14,8 @@ public class NetworkedPlayerCallbacks : Bolt.GlobalEventListener
     {
         if (entity.TryGetComponent<PlayerMotor>(out var playerMotor))
         {
+            GameState.instance.CurrentState = GameState.State.gameplay;
+
             playerMotor.OnControlGained();
 
             CameraControl cameraControl    = entity.GetComponent<PlayerController>().cameraController;
