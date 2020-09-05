@@ -15,6 +15,7 @@ public class Player : Bolt.EntityEventListener<IPlayerStateFPS>
     public GameObject mainAudioSourcePrefab;
 
     [Header("On Hit Effect")]
+    [SerializeField] [Range(0, 1)] float onHitVignetteIntensity;
     [SerializeField] [Range(0, 1)] float onHitVignetteSmoothness;
     [SerializeField] Color onHitVignetteColor;
     [SerializeField] float onHitVignetteFadeSpeed;
@@ -26,6 +27,7 @@ public class Player : Bolt.EntityEventListener<IPlayerStateFPS>
     Volume   postProcessVolume;
     Vignette vignette;
 
+    float vignetteInitialIntensity;
     float vignetteInitialSmoothness;
     Color vignetteInitialColor;
     float vignetteFadeParam = 1f;
@@ -52,6 +54,7 @@ public class Player : Bolt.EntityEventListener<IPlayerStateFPS>
 
         postProcessVolume.profile.TryGet(out vignette);
 
+        vignetteInitialIntensity  = vignette.intensity.value;
         vignetteInitialSmoothness = vignette.smoothness.value;
         vignetteInitialColor      = vignette.color.value;
     }
@@ -68,6 +71,7 @@ public class Player : Bolt.EntityEventListener<IPlayerStateFPS>
         {
             vignetteFadeParam += onHitVignetteFadeSpeed * BoltNetwork.FrameDeltaTime;
 
+            vignette.intensity .value = Mathf.Lerp(onHitVignetteIntensity,  vignetteInitialIntensity,  vignetteFadeParam);
             vignette.smoothness.value = Mathf.Lerp(onHitVignetteSmoothness, vignetteInitialSmoothness, vignetteFadeParam);
             vignette.color     .value = Color.Lerp(onHitVignetteColor,      vignetteInitialColor,      vignetteFadeParam);
         }
@@ -112,6 +116,7 @@ public class Player : Bolt.EntityEventListener<IPlayerStateFPS>
     {
         if (entity.HasControl)
         {
+            vignette.intensity .value = onHitVignetteIntensity;
             vignette.smoothness.value = onHitVignetteSmoothness;
             vignette.color     .value = onHitVignetteColor;
 

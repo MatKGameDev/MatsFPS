@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3010231763317155815}
   - component: {fileID: 3132015892867954413}
   - component: {fileID: 3101490713547312495}
-  m_Layer: 15
+  m_Layer: 0
   m_Name: MuzzleFlashFPP
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25,9 +25,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3011718115002440485}
-  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: -0.096, y: 0.03, z: -0}
-  m_LocalScale: {x: 20, y: 20, z: 10}
+  m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
+  m_LocalPosition: {x: 0.16, y: 0.53563637, z: -0.157}
+  m_LocalScale: {x: 0.88672745, y: 0.8867273, z: 0.44336373}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -3705,15 +3705,15 @@ ParticleSystem:
   LightsModule:
     enabled: 1
     ratio: 1
-    light: {fileID: 0}
+    light: {fileID: 8877664121821252020, guid: e2754dc88f5c3584badaabc4025ba6af, type: 3}
     randomDistribution: 0
-    color: 1
+    color: 0
     range: 0
     intensity: 0
     rangeCurve:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.5
+      scalar: 1
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -3766,7 +3766,7 @@ ParticleSystem:
     intensityCurve:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 4
+      scalar: 0.4
       minScalar: 1
       maxCurve:
         serializedVersion: 2

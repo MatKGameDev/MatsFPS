@@ -23,7 +23,7 @@ public class WeaponHitscan : MonoBehaviour
 
     [Header("Muzzle Flash")]
     [SerializeField] ParticleSystem muzzleFlashFPP;
-    [SerializeField] ParticleSystem muzzleFlashTPP;
+    [SerializeField] ParticleSystem muzzleFlashTPP = null;
 
     [Header("Animation")]
     [SerializeField] Animator animatorFPP;
@@ -65,7 +65,8 @@ public class WeaponHitscan : MonoBehaviour
         
         audioSource.PlayOneShot(firingSound, 0.5f);
 
-        muzzleFlashFPP.Play();
+        if (muzzleFlashFPP)
+            muzzleFlashFPP.Play();
 
         animatorFPP.Play("Fire");
         animatorTPP.Play("Fire");
