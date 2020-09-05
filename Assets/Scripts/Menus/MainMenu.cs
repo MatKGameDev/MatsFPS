@@ -79,4 +79,9 @@ public class MainMenu : Bolt.GlobalEventListener
 
         mainCanvas.enabled = true;
     }
+
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
 }

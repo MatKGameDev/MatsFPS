@@ -113,7 +113,17 @@ public class SettingsPopup : BoltSingletonPrefab<SettingsPopup>
         Screen.fullScreen = a_newFullscreen;
     }
 
-    private void OnApplicationQuit()
+    public void LoadDefaultSettings()
+    {
+        SetMouseSens  (UserSettings.DEFAULT_MOUSE_SENSITIVITY / SENS_SCALE_FACTOR);
+        SetFieldOfView(UserSettings.DEFAULT_FIELD_OF_VIEW);
+        SetVolume     (UserSettings.DEFAULT_VOLUME);
+        SetFullscreen (UserSettings.DEFAULT_IS_FULLSCREEN);
+
+        UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(null); //reset in case a button was previously selected
+    }
+
+    void OnApplicationQuit()
     {
         PlayerPrefs.SetFloat("MouseSensitivity", UserSettings.mouseSensitivity);
         PlayerPrefs.SetInt  ("FieldOfView",      UserSettings.fieldOfView);
