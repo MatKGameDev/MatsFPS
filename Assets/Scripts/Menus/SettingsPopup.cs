@@ -55,7 +55,6 @@ public class SettingsPopup : BoltSingletonPrefab<SettingsPopup>
         SetVolume(UserSettings.volume);
 
         SetFullscreen(Screen.fullScreen);
-
     }
 
     public void SetMouseSens(float a_newMouseSens)
@@ -112,5 +111,14 @@ public class SettingsPopup : BoltSingletonPrefab<SettingsPopup>
         fullscreenToggle.isOn     = a_newFullscreen;
 
         Screen.fullScreen = a_newFullscreen;
+    }
+
+    private void OnApplicationQuit()
+    {
+        PlayerPrefs.SetFloat("MouseSensitivity", UserSettings.mouseSensitivity);
+        PlayerPrefs.SetInt  ("FieldOfView",      UserSettings.fieldOfView);
+        PlayerPrefs.SetInt  ("Volume",           UserSettings.volume);
+        PlayerPrefs.SetInt  ("IsFullscreen",     UserSettings.isFullscreen ? 1 : 0);
+        PlayerPrefs.Save();
     }
 }
