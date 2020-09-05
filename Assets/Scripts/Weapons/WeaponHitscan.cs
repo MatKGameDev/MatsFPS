@@ -23,7 +23,7 @@ public class WeaponHitscan : MonoBehaviour
 
     [Header("Muzzle Flash")]
     [SerializeField] ParticleSystem muzzleFlashFPP;
-    [SerializeField] ParticleSystem muzzleFlashTPP = null;
+    [SerializeField] ParticleSystem muzzleFlashTPP;
 
     [Header("Animation")]
     [SerializeField] Animator animatorFPP;
@@ -160,10 +160,11 @@ public class WeaponHitscan : MonoBehaviour
     {
         var myEvent = PlayerHitscanFiredEvent.Create(a_playerFiringEntity, Bolt.EntityTargets.EveryoneExceptController);
 
-        myEvent.BulletStartPos      = a_startPos;
-        myEvent.BulletEndPos        = a_endPos;
-        myEvent.BulletTrailPrefabId = a_bulletTrailPrefabId;
-        myEvent.FiringSoundName     = firingSound.name;
+        myEvent.BulletStartPos        = a_startPos;
+        myEvent.BulletEndPos          = a_endPos;
+        myEvent.BulletTrailPrefabId   = a_bulletTrailPrefabId;
+        myEvent.FiringSoundName       = firingSound.name;
+        myEvent.MuzzleFlashEffectName = muzzleFlashTPP.name;
 
         myEvent.Send();
     }

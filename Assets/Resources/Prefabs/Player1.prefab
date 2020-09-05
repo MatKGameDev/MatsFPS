@@ -315,7 +315,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1246928342713593406}
-  - {fileID: 8386516302456956887}
+  - {fileID: 6021139082809570030}
   m_Father: {fileID: 7388789460014733985}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -876,10 +876,11 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 16384
   muzzleFlashFPP: {fileID: 4798715933881104740}
-  muzzleFlashTPP: {fileID: 0}
+  muzzleFlashTPP: {fileID: 8207568632250884767, guid: 920ce8efa5a23fc448351a51ff0e8569,
+    type: 3}
   animatorFPP: {fileID: 1246928343453185928}
   animatorTPP: {fileID: 1246928343324446932}
-  audioSource: {fileID: 8386516302456955985}
+  audioSource: {fileID: 2983010634468634441}
   firingSound: {fileID: 8300000, guid: 1df26bee71935934594c6e6faaa0d0ae, type: 3}
   bodyHitSound: {fileID: 8300000, guid: 8a43260e05407a743bdfe7e07e0f0820, type: 3}
   headshotSound: {fileID: 8300000, guid: c871b0fb33860fd4c9b9c1d9c8ca7ac0, type: 3}
@@ -1056,7 +1057,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _sceneGuid: 
   _serializerGuid: a52eef74-9d45-450b-9810-27c0c5bb04ae
-  _prefabId: 2
+  _prefabId: 1
   _updateRate: 1
   _autoFreezeProxyFrames: 0
   _clientPredicted: 1
@@ -1349,7 +1350,7 @@ PrefabInstance:
     - target: {fileID: 3011718115002440485, guid: 6e15c2d389275a74bb8d2687fe5ce461,
         type: 3}
       propertyPath: m_Name
-      value: MuzzleFlashFPP
+      value: MuzzleFlashPistolFPP
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6e15c2d389275a74bb8d2687fe5ce461, type: 3}
@@ -1475,13 +1476,13 @@ PrefabInstance:
         type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 61e2dfd78b5358e4692c7c0d6a44bbf7, type: 3}
---- !u!82 &8386516302456955985 stripped
+--- !u!82 &2983010634468634441 stripped
 AudioSource:
   m_CorrespondingSourceObject: {fileID: 6703375475987647835, guid: 61e2dfd78b5358e4692c7c0d6a44bbf7,
     type: 3}
   m_PrefabInstance: {fileID: 8386516302456955410}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &8386516302456956887 stripped
+--- !u!4 &6021139082809570030 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2877103331781497084, guid: 61e2dfd78b5358e4692c7c0d6a44bbf7,
     type: 3}

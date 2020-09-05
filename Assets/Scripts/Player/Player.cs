@@ -149,11 +149,20 @@ public class Player : Bolt.EntityEventListener<IPlayerStateFPS>
 
         BoltNetwork.Destroy(bulletTrail);
 
+        GameObject muzzleFlashResource = Resources.Load("Prefabs/VFX/" + evnt.MuzzleFlashEffectName) as GameObject;
+        GameObject muzzleFlashGO       = Instantiate(muzzleFlashResource);
+        if (muzzleFlashGO.TryGetComponent<ParticleSystem>(out var muzzleFlash))
+        {
+            muzzleFlashGO.transform.position = evnt.BulletStartPos;
+            muzzleFlash.Play();
+        }
+
         //firing sound effect
         m_dispondableAudioSource.transform.position = evnt.BulletStartPos;
 
         AudioClip clip = (AudioClip)Resources.Load("SoundFX/" + evnt.FiringSoundName);
-        m_dispondableAudioSource.PlayOneShot(clip);
+        if (clip)
+            m_dispondableAudioSource.PlayOneShot(clip);
     }
 
     public override void OnEvent(PlayerDamagedEvent evnt)
