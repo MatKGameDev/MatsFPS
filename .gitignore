@@ -65,5 +65,7 @@ crashlytics-build.properties
 /Bolt_DebugStart_Build/*
 /Assets/samples/*
 /Assets/Photon/*
+/Assets/ExampleAssets/*
+/Assets/EffectExamples/*
 /Assets/_TerrainAutoUpgrade/*
 /Assets/Plugins/*

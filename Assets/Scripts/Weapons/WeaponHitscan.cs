@@ -21,6 +21,10 @@ public class WeaponHitscan : MonoBehaviour
     [SerializeField] LineRenderer bulletTrailTPP;
     [SerializeField] LayerMask    bulletTrailLayerMaskTPP;
 
+    [Header("Muzzle Flash")]
+    [SerializeField] ParticleSystem muzzleFlashFPP;
+    [SerializeField] ParticleSystem muzzleFlashTPP;
+
     [Header("Animation")]
     [SerializeField] Animator animatorFPP;
     [SerializeField] Animator animatorTPP;
@@ -30,7 +34,6 @@ public class WeaponHitscan : MonoBehaviour
     [SerializeField] AudioClip   firingSound;
     [SerializeField] AudioClip   bodyHitSound;
     [SerializeField] AudioClip   headshotSound;
-
 
     [Header("Cameras")]
     [SerializeField] Camera mainCamera;
@@ -61,6 +64,8 @@ public class WeaponHitscan : MonoBehaviour
         m_lastTimeFired = Time.time;
         
         audioSource.PlayOneShot(firingSound, 0.5f);
+
+        muzzleFlashFPP.Play();
 
         animatorFPP.Play("Fire");
         animatorTPP.Play("Fire");
