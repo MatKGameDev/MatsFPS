@@ -2,6 +2,9 @@
 
 public class WeaponHitscan : MonoBehaviour
 {
+    [Header("Weapon Owner")]
+    [SerializeField] PlayerController weaponOwner;
+
     [Header("Gun")]
     [SerializeField] float firingCooldown;
 
@@ -26,8 +29,8 @@ public class WeaponHitscan : MonoBehaviour
     [SerializeField] ParticleSystem muzzleFlashTPP;
 
     [Header("Animation")]
-    [SerializeField] Animator animatorFPP;
-    [SerializeField] Animator animatorTPP;
+    public Animator animatorFPP;
+    public Animator animatorTPP;
 
     [Header("Sound")]
     [SerializeField] AudioSource audioSource;
@@ -56,10 +59,10 @@ public class WeaponHitscan : MonoBehaviour
         m_lastTimeFired = -100f;
     }
 
-    public void FireWeapon(BoltEntity a_playerFiringEntity)
+    public bool FireWeapon(BoltEntity a_playerFiringEntity)
     {
         if (m_lastTimeFired + firingCooldown > Time.time)
-            return;
+            return false;
 
         m_lastTimeFired = Time.time;
         
@@ -69,7 +72,6 @@ public class WeaponHitscan : MonoBehaviour
             muzzleFlashFPP.Play();
 
         animatorFPP.Play("Fire");
-        animatorTPP.Play("Fire");
 
         Vector3 bulletTrailEndPos;
         RaycastHit hit;
@@ -99,6 +101,8 @@ public class WeaponHitscan : MonoBehaviour
         //spawn third person bullet trail
         //if (bulletTrailTPP)
             //DrawBulletTrail(muzzleTransformTPP.position, bulletTrailEndPos, bulletTrailTPP.gameObject, m_bulletTrailLayerNumTPP);
+
+        return true;
     }
 
     void ProcessWeaponHit(GameObject a_hitObject)
@@ -160,6 +164,7 @@ public class WeaponHitscan : MonoBehaviour
     {
         var myEvent = PlayerHitscanFiredEvent.Create(a_playerFiringEntity, Bolt.EntityTargets.EveryoneExceptController);
 
+        myEvent.WeaponOwner           = weaponOwner.entity;
         myEvent.BulletStartPos        = a_startPos;
         myEvent.BulletEndPos          = a_endPos;
         myEvent.BulletTrailPrefabId   = a_bulletTrailPrefabId;

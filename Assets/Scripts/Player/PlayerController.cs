@@ -7,8 +7,7 @@ public class PlayerController : Bolt.EntityEventListener<IPlayerStateFPS>
 {
     public CameraControl cameraController;
 
-    [SerializeField]
-    WeaponHitscan activeWeapon;
+    public WeaponHitscan activeWeapon;
 
     bool m_forward;
     bool m_backward;

@@ -144,6 +144,14 @@ public class Player : Bolt.EntityEventListener<IPlayerStateFPS>
 
     public override void OnEvent(PlayerHitscanFiredEvent evnt)
     {
+        if (evnt.FromSelf)
+            return;
+
+        if (evnt.WeaponOwner.TryGetComponent<PlayerController>(out var senderController))
+        {
+            senderController.activeWeapon.animatorTPP.Play("Fire");
+        }
+
         var bulletTrail = BoltNetwork.Instantiate(evnt.BulletTrailPrefabId);
         WeaponHitscan.DrawBulletTrail(evnt.BulletStartPos, evnt.BulletEndPos, bulletTrail.gameObject);
 

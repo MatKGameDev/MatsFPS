@@ -856,6 +856,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7adf09cb293d7a4da17eab2bd7e2a5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  weaponOwner: {fileID: 6107893106306371107}
   firingCooldown: 0.65
   muzzleTransformFPP: {fileID: 1246928344224358074}
   muzzleTransformTPP: {fileID: 1246928344040350055}
