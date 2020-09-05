@@ -7,11 +7,13 @@ public class GameState : BoltSingletonPrefab<GameState>
     public enum State
     {
         mainMenu,
-        loadScreen,
         mainSettings,
+        mainControls,
+        loadScreen,
         gameplay,
         pauseMenu,
-        pauseSettings
+        pauseSettings,
+        pauseControls
     }
 
     State m_currentState;
@@ -53,6 +55,10 @@ public class GameState : BoltSingletonPrefab<GameState>
                 TransitionToMainMenu();
                 break;
 
+            case State.mainControls:
+                TransitionToMainMenu();
+                break;
+
             case State.gameplay:
                 if (!GameUI.instance.IsScoreboardOpen())
                     TransitionToPauseMenu();
@@ -65,12 +71,16 @@ public class GameState : BoltSingletonPrefab<GameState>
             case State.pauseSettings:
                 TransitionToPauseMenu();
                 break;
+
+            case State.pauseControls:
+                TransitionToPauseMenu();
+                break;
         }
     }
 
     public void TransitionToMainMenu()
     {
-        if (CurrentState == State.mainSettings)
+        if (CurrentState == State.mainSettings || CurrentState == State.mainControls)
         {
             MainMenu menu = GameObject.FindObjectOfType<MainMenu>();
             menu.ShowMainMenu();
@@ -83,6 +93,8 @@ public class GameState : BoltSingletonPrefab<GameState>
     {
         if (CurrentState == State.pauseSettings)
             SettingsPopup.instance.Hide();
+        else if (CurrentState == State.pauseControls)
+            ControlsPopup.instance.Hide();
         else if (CurrentState == State.gameplay)
         {
             PlayerMainCamera playerCam = FindObjectOfType<PlayerMainCamera>();

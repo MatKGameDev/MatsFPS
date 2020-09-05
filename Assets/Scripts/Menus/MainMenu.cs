@@ -61,11 +61,21 @@ public class MainMenu : Bolt.GlobalEventListener
         SettingsPopup.instance.Show();
     }
 
+    public void ShowControls()
+    {
+        GameState.instance.CurrentState = GameState.State.mainControls;
+
+        mainCanvas.enabled = false;
+
+        ControlsPopup.instance.Show();
+    }
+
     public void ShowMainMenu()
     {
-        UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(null); //reset in case settings button was previously selected
+        UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(null); //reset in case a button was previously selected
 
         SettingsPopup.instance.Hide();
+        ControlsPopup.instance.Hide();
 
         mainCanvas.enabled = true;
     }

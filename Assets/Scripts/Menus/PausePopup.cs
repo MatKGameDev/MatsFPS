@@ -29,6 +29,14 @@ public class PausePopup : BoltSingletonPrefab<PausePopup>
         GameState.instance.CurrentState = GameState.State.pauseSettings;
     }
 
+    public void ShowControls()
+    {
+        mainCanvas.enabled = false;
+        ControlsPopup.instance.Show();
+
+        GameState.instance.CurrentState = GameState.State.pauseControls;
+    }
+
     public void ResumeGameplay()
     {
         GameState.instance.TransitionToGameplay();
