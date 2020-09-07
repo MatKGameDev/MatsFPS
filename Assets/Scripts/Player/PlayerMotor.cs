@@ -39,6 +39,23 @@ public class PlayerMotor : MonoBehaviour
 
     public float dashCooldownCountdown { get; private set; }
 
+
+
+    bool isInputDisabled = false;
+    public bool IsInputDisabled
+    {
+        get
+        {
+            return isInputDisabled;
+        }
+
+        set
+        {
+            //if (entity.HasControl)
+                isInputDisabled = value;
+        }
+    }
+
     const float GROUND_CHECK_RADIUS = 0.5f;
 
     const float GROUNDED_VELOCITY_Y             = -2f;
@@ -111,7 +128,7 @@ public class PlayerMotor : MonoBehaviour
         m_characterController.Move(a_position - transform.localPosition);
     }
 
-    public MotorState Move(bool a_forward, bool a_backward, bool a_left, bool a_right, bool a_jump, bool a_dash, float a_yaw)
+    public MotorState Move(float a_deltaTime, bool a_forward, bool a_backward, bool a_left, bool a_right, bool a_jump, bool a_dash, float a_yaw)
     {
         m_velocity               = m_motorState.velocity;
         m_isGrounded             = m_motorState.isGrounded;
@@ -139,9 +156,9 @@ public class PlayerMotor : MonoBehaviour
         if (moveDir.sqrMagnitude > 1f)
             moveDir = Vector3.Normalize(moveDir);
 
-        ApplyBasicMovement(moveDir);
+        ApplyBasicMovement(moveDir, a_deltaTime);
 
-        ApplyDeceleration(verticalAxis, horizontalAxis);
+        ApplyDeceleration(verticalAxis, horizontalAxis, a_deltaTime);
 
         //clamp magnitude of velocity on the xz plane
         Vector3 velocityXZ = new Vector3(m_velocity.x, 0f, m_velocity.z);
@@ -154,7 +171,7 @@ public class PlayerMotor : MonoBehaviour
 
         m_isDoubleJumpAvailabile = m_isGrounded || m_isDoubleJumpAvailabile;
 
-        m_velocity.y -= gravityStrength * BoltNetwork.FrameDeltaTime; //apply gravity
+        m_velocity.y -= gravityStrength * a_deltaTime; //apply gravity
 
         //check if the player is grounded, in which case their downwards velocity should be reset
         if (m_isGrounded && m_velocity.y < 0f)
@@ -162,15 +179,15 @@ public class PlayerMotor : MonoBehaviour
 
         PerformJumpLogic(a_jump);
 
-        PerformDashLogic(a_dash, moveDir);
+        PerformDashLogic(a_dash, moveDir, a_deltaTime);
 
         m_velocity.y = Mathf.Max(m_velocity.y, -terminalVelocity); //clamp velocity if it's more than the terminal velocity
 
         //move the character based on the velocity after horizontal and vertical movement is applied
-        m_characterController.Move(m_velocity * BoltNetwork.FrameDeltaTime);
+        m_characterController.Move(m_velocity * a_deltaTime);
 
         //after standard movement stuff is done, check if the player should be glued to a slope
-        PerformOnSlopeLogic();
+        PerformOnSlopeLogic(a_deltaTime);
 
         m_motorState.position              = transform.localPosition;
         m_motorState.isGrounded            = m_isGrounded;
@@ -192,14 +209,14 @@ public class PlayerMotor : MonoBehaviour
             m_lastTimeGrounded = Time.time;
     }
 
-    void ApplyBasicMovement(Vector3 a_moveDir)
+    void ApplyBasicMovement(Vector3 a_moveDir, float a_deltaTime)
     {
-        m_velocity += a_moveDir * accelerationRate * BoltNetwork.FrameDeltaTime;
+        m_velocity += a_moveDir * accelerationRate * a_deltaTime;
     }
 
-    void ApplyDeceleration(int a_verticalAxis, int a_horizontalAxis)
+    void ApplyDeceleration(int a_verticalAxis, int a_horizontalAxis, float a_deltaTime)
     {
-        float   frameIndependantDeceleration = decelerationRate * BoltNetwork.FrameDeltaTime;
+        float   frameIndependantDeceleration = decelerationRate * a_deltaTime;
         Vector3 localVelocity                = transform.InverseTransformDirection(m_velocity);
 
         //apply deceleration if the axis isn't being moved on
@@ -249,7 +266,7 @@ public class PlayerMotor : MonoBehaviour
         }
     }
 
-    void PerformDashLogic(bool a_shouldDash, Vector3 a_moveDir)
+    void PerformDashLogic(bool a_shouldDash, Vector3 a_moveDir, float a_deltaTime)
     {
         if (a_shouldDash)
         {
@@ -271,12 +288,12 @@ public class PlayerMotor : MonoBehaviour
         }
 
         //reduce dash cooldown timer
-        dashCooldownCountdown -= BoltNetwork.FrameDeltaTime;
+        dashCooldownCountdown -= a_deltaTime;
 
         //check if player is dashing
         if (m_dashDurationCountdown > 0f)
         {
-            m_dashDurationCountdown -= BoltNetwork.FrameDeltaTime;
+            m_dashDurationCountdown -= a_deltaTime;
 
             m_velocity = m_dashDir * dashSpeed;
 
@@ -292,7 +309,7 @@ public class PlayerMotor : MonoBehaviour
     }
 
     //this function should be called AFTER standard movement is applied for the current update
-    void PerformOnSlopeLogic()
+    void PerformOnSlopeLogic(float a_deltaTime)
     {
         //calculate new isGrounded since player movement was just updated
         bool wasGrounded   = m_isGrounded;
@@ -305,7 +322,7 @@ public class PlayerMotor : MonoBehaviour
 
             RaycastHit hit;
             if (Physics.Raycast(pointAtBottomOfPlayer, Vector3.down, out hit, SLOPE_RIDE_DISTANCE_LIMIT))
-                m_characterController.Move(Vector3.down * SLOPE_RIDE_DOWNWARDS_FORCE_STRENGTH * BoltNetwork.FrameDeltaTime);
+                m_characterController.Move(Vector3.down * SLOPE_RIDE_DOWNWARDS_FORCE_STRENGTH * a_deltaTime);
         }
     }
 }

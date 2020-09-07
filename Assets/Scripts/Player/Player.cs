@@ -62,7 +62,7 @@ public class Player : Bolt.EntityEventListener<IPlayerStateFPS>
     public override void SimulateController()
     {
         if (BoltNetwork.IsConnected && BoltNetwork.IsClient)
-        { 
+        {
             int pingToDisplay = Mathf.RoundToInt(BoltNetwork.Server.PingNetwork * 1000f);
             GameUI.instance.SetPing(pingToDisplay);
         }

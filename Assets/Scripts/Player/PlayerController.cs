@@ -25,21 +25,6 @@ public class PlayerController : Bolt.EntityEventListener<IPlayerStateFPS>
 
     PlayerMotor m_playerMotor;
 
-    bool isInputDisabled = false;
-    public bool IsInputDisabled
-    {
-        get
-        {
-            return isInputDisabled;
-        }
-
-        set
-        {
-            if (entity.HasControl)
-                isInputDisabled = value;
-        }
-    }
-
     void Awake()
     {
         m_playerMotor = GetComponent<PlayerMotor>();
@@ -54,7 +39,7 @@ public class PlayerController : Bolt.EntityEventListener<IPlayerStateFPS>
     // Update is called once per frame
     void Update()
     {
-        if (IsInputDisabled)
+        if (m_playerMotor.IsInputDisabled)
             return;
 
         PollKeysAndButtons();
@@ -82,7 +67,7 @@ public class PlayerController : Bolt.EntityEventListener<IPlayerStateFPS>
         float axisX = Input.GetAxisRaw("Mouse X");
         float axisY = Input.GetAxisRaw("Mouse Y");
 
-        cameraController.UpdateMouseInput(axisX, axisY, ref m_yaw, ref m_pitch);
+        cameraController.UpdateMouseInput(Time.deltaTime, axisX, axisY, ref m_yaw, ref m_pitch);
     }
 
 	public override void SimulateController()
@@ -126,7 +111,7 @@ public class PlayerController : Bolt.EntityEventListener<IPlayerStateFPS>
         else
         {
             //apply movement (this runs on both server and client)
-            PlayerMotor.MotorState motorState = m_playerMotor.Move(cmd.Input.Forward, cmd.Input.Backward, cmd.Input.Left, cmd.Input.Right, cmd.Input.Jump, cmd.Input.Dash, cmd.Input.Yaw);
+            PlayerMotor.MotorState motorState = m_playerMotor.Move(BoltNetwork.FrameDeltaTime, cmd.Input.Forward, cmd.Input.Backward, cmd.Input.Left, cmd.Input.Right, cmd.Input.Jump, cmd.Input.Dash, cmd.Input.Yaw);
 
             //apply camera rotation
             cameraController.UpdateRotation(cmd.Input.Pitch);

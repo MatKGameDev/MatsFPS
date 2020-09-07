@@ -6,10 +6,10 @@ public class CameraControl : MonoBehaviour
 
     public Transform playerTransform;
 
-    public void UpdateMouseInput(float a_axisX, float a_axisY, ref float a_yaw, ref float a_pitch)
+    public void UpdateMouseInput(float a_deltaTime, float a_axisX, float a_axisY, ref float a_yaw, ref float a_pitch)
     {
-        float mouseX = a_axisX * mouseSensitivity * BoltNetwork.FrameDeltaTime;
-        float mouseY = a_axisY * mouseSensitivity * BoltNetwork.FrameDeltaTime;
+        float mouseX = a_axisX * mouseSensitivity * a_deltaTime;
+        float mouseY = a_axisY * mouseSensitivity * a_deltaTime;
 
         a_yaw += mouseX;
         a_yaw %= 360f;

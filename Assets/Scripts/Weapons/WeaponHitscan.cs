@@ -96,7 +96,8 @@ public class WeaponHitscan : MonoBehaviour
 
         var bulletTrailPrefabIdTPP = bulletTrailTPP.gameObject.GetComponent<BoltEntity>().ModifySettings().prefabId;
 
-        SendBulletFiredEvent(a_playerFiringEntity, muzzleTransformTPP.position, bulletTrailEndPos, bulletTrailPrefabIdTPP);
+        if (a_playerFiringEntity)
+            SendBulletFiredEvent(a_playerFiringEntity, muzzleTransformTPP.position, bulletTrailEndPos, bulletTrailPrefabIdTPP);
 
         //spawn third person bullet trail
         //if (bulletTrailTPP)
@@ -143,10 +144,8 @@ public class WeaponHitscan : MonoBehaviour
             return;
         }
 
-        Health objectHitHealth;
-
         //try to find a health component
-        if (a_hitObject.TryGetComponent<Health>(out objectHitHealth))
+        if (a_hitObject.TryGetComponent<Health>(out var objectHitHealth))
         {
             float damageToInflict = damagePerBullet;
 

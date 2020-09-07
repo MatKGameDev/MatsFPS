@@ -36,13 +36,13 @@ public class SettingsPopup : BoltSingletonPrefab<SettingsPopup>
 
     public void Show()
     {
-        mainCanvas.enabled = true;
+        mainCanvas.gameObject.SetActive(true);
         LoadCurrentSettings();
     }
 
     public void Hide()
     {
-        mainCanvas.enabled = false;
+        mainCanvas.gameObject.SetActive(false);
     }
 
     void LoadCurrentSettings()

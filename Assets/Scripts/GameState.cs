@@ -9,6 +9,7 @@ public class GameState : BoltSingletonPrefab<GameState>
         mainMenu,
         mainSettings,
         mainControls,
+        playMenu,
         loadScreen,
         gameplay,
         pauseMenu,
@@ -59,6 +60,10 @@ public class GameState : BoltSingletonPrefab<GameState>
                 TransitionToMainMenu();
                 break;
 
+            case State.playMenu:
+                TransitionToMainMenu();
+                break;
+
             case State.gameplay:
                 if (!GameUI.instance.IsScoreboardOpen())
                     TransitionToPauseMenu();
@@ -80,7 +85,7 @@ public class GameState : BoltSingletonPrefab<GameState>
 
     public void TransitionToMainMenu()
     {
-        if (CurrentState == State.mainSettings || CurrentState == State.mainControls)
+        if (CurrentState == State.mainSettings || CurrentState == State.mainControls || CurrentState == State.playMenu)
         {
             MainMenu menu = GameObject.FindObjectOfType<MainMenu>();
             menu.ShowMainMenu();
@@ -100,10 +105,10 @@ public class GameState : BoltSingletonPrefab<GameState>
             PlayerMainCamera playerCam = FindObjectOfType<PlayerMainCamera>();
             if (playerCam)
             {
-                GameObject       playerObject  = MyHelper.FindFirstParentWithComponent(playerCam.gameObject, typeof(PlayerMotor));
-                PlayerController playerControl = playerObject.GetComponent<PlayerController>();
+                GameObject  playerObject = MyHelper.FindFirstParentWithComponent(playerCam.gameObject, typeof(PlayerMotor));
+                PlayerMotor playerMotor  = playerObject.GetComponent<PlayerMotor>();
 
-                playerControl.IsInputDisabled = true;
+                playerMotor.IsInputDisabled = true;
             }
         }
 
@@ -121,10 +126,10 @@ public class GameState : BoltSingletonPrefab<GameState>
             PlayerMainCamera playerCam = FindObjectOfType<PlayerMainCamera>();
             if (playerCam)
             {
-                GameObject       playerObject  = MyHelper.FindFirstParentWithComponent(playerCam.gameObject, typeof(PlayerMotor));
-                PlayerController playerControl = playerObject.GetComponent<PlayerController>();
+                GameObject  playerObject  = MyHelper.FindFirstParentWithComponent(playerCam.gameObject, typeof(PlayerMotor));
+                PlayerMotor playerMotor = playerObject.GetComponent<PlayerMotor>();
 
-                playerControl.IsInputDisabled = false;
+                playerMotor.IsInputDisabled = false;
             }
         }
 

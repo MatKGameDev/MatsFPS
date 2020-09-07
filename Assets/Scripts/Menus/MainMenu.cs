@@ -8,8 +8,9 @@ using UnityEngine.SceneManagement;
 public class MainMenu : Bolt.GlobalEventListener
 {
     public Canvas mainCanvas;
+    public Canvas playCanvas;
 
-    private void Start()
+    void Start()
     {
         GameState.instance.CurrentState = GameState.State.mainMenu;
     }
@@ -22,6 +23,13 @@ public class MainMenu : Bolt.GlobalEventListener
     public void StartClient()
     {
         BoltLauncher.StartClient();
+    }
+
+    public void StartOfflineGame()
+    {
+        GameState.instance.CurrentState = GameState.State.gameplay;
+        Debug.Log("OFFLINE");
+        SceneManager.LoadScene("OfflinePractice");
     }
 
     public override void BoltStartDone()
@@ -47,6 +55,9 @@ public class MainMenu : Bolt.GlobalEventListener
 
             if (photonSession.Source == UdpSessionSource.Photon)
             {
+                if (photonSession.ConnectionsCurrent == photonSession.ConnectionsMax)
+                    continue;
+
                 BoltMatchmaking.JoinSession(photonSession);
             }
         }
@@ -56,7 +67,7 @@ public class MainMenu : Bolt.GlobalEventListener
     {
         GameState.instance.CurrentState = GameState.State.mainSettings;
 
-        mainCanvas.enabled = false;
+        mainCanvas.gameObject.SetActive(false);
 
         SettingsPopup.instance.Show();
     }
@@ -65,19 +76,32 @@ public class MainMenu : Bolt.GlobalEventListener
     {
         GameState.instance.CurrentState = GameState.State.mainControls;
 
-        mainCanvas.enabled = false;
+        mainCanvas.gameObject.SetActive(false);
 
         ControlsPopup.instance.Show();
     }
 
     public void ShowMainMenu()
     {
+        GameState.instance.CurrentState = GameState.State.mainMenu;
+
         UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(null); //reset in case a button was previously selected
 
         SettingsPopup.instance.Hide();
         ControlsPopup.instance.Hide();
 
-        mainCanvas.enabled = true;
+        playCanvas.gameObject.SetActive(false);
+        mainCanvas.gameObject.SetActive(true);
+    }
+
+    public void ShowPlayMenu()
+    {
+        GameState.instance.CurrentState = GameState.State.playMenu;
+
+        UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(null); //reset in case a button was previously selected
+
+        mainCanvas.gameObject.SetActive(false);
+        playCanvas.gameObject.SetActive(true);
     }
 
     public void QuitGame()

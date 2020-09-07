@@ -21,8 +21,7 @@ public class WeaponSway : MonoBehaviour
     [SerializeField] private float tiltSwayStrengthVertical;
     [SerializeField] private float maxTiltSwayAmount;
 
-    PlayerMotor      m_playerMotor;
-    PlayerController m_playerControl;
+    PlayerMotor m_playerMotor;
 
     Vector3    m_initialPos;
     Quaternion m_initialRot;
@@ -35,13 +34,12 @@ public class WeaponSway : MonoBehaviour
 
         GameObject playerObject = MyHelper.FindFirstParentWithComponent(gameObject, typeof(PlayerMotor));
         m_playerMotor   = playerObject.GetComponent<PlayerMotor>();
-        m_playerControl = playerObject.GetComponent<PlayerController>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (m_playerControl.IsInputDisabled)
+        if (m_playerMotor.IsInputDisabled)
             return;
 
         Vector3 realPlayerUnitVelocity = CalculateRealPlayerUnitVelocity();

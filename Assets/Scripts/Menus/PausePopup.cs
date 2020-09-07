@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PausePopup : BoltSingletonPrefab<PausePopup>
 {
@@ -44,6 +45,9 @@ public class PausePopup : BoltSingletonPrefab<PausePopup>
 
     public void LeaveGame()
     {
-        BoltNetwork.Shutdown();
+        if (BoltNetwork.IsConnected)
+            BoltNetwork.Shutdown();
+        else
+            SceneManager.LoadScene("MainMenu");
     }
 }
