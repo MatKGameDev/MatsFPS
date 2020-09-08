@@ -40,7 +40,7 @@ public class PlayerControllerOffline : MonoBehaviour
         GameUI.Instantiate();
         GameUI.instance.SetPlayer(m_playerMotor);
 
-        Debug.Log("OFFLINE PLAYER");
+        m_yaw = transform.eulerAngles.y; //set yaw from initial rotation
     }
 
     void Update()

@@ -32,8 +32,20 @@ public class Player : Bolt.EntityEventListener<IPlayerStateFPS>
     Color vignetteInitialColor;
     float vignetteFadeParam = 1f;
 
+    static List<Vector3> spawnPositions;
+    static List<Vector3> spawnRotations;
+
+    PlayerController m_playerController;
+
+    void Awake()
+    {
+        SetSpawnPositionsAndRotations();
+    }
+
     public override void Attached()
     {
+        m_playerController = GetComponent<PlayerController>();
+
         if (entity.IsOwner)
         {
             state.Health = maxHealth;
@@ -128,18 +140,12 @@ public class Player : Bolt.EntityEventListener<IPlayerStateFPS>
     {
         state.EnemyScore++;
 
-        RespawnPlayer();
+        Respawn();
     }
 
     public void OnEnemyKilled()
     {
         state.PlayerScore++;
-    }
-
-    void RespawnPlayer()
-    {
-        transform.position = new Vector3(0f, 1.7f, -3f);
-        state.Health = maxHealth;
     }
 
     public override void OnEvent(PlayerHitscanFiredEvent evnt)
@@ -176,5 +182,51 @@ public class Player : Bolt.EntityEventListener<IPlayerStateFPS>
     public override void OnEvent(PlayerDamagedEvent evnt)
     {
         OnDamaged(evnt.DamageTaken);
+    }
+
+    void SetSpawnPositionsAndRotations()
+    {
+        spawnPositions = new List<Vector3>();
+        spawnRotations = new List<Vector3>();
+
+        spawnPositions.Add(new Vector3(58f, 2.1f, 58f));
+        spawnRotations.Add(new Vector3(0f, -134.4f, 0f));
+
+        spawnPositions.Add(new Vector3(58f, 2.1f, -58f));
+        spawnRotations.Add(new Vector3(0f, -47f, 0f));
+
+        spawnPositions.Add(new Vector3(-58f, 2.1f, -58f));
+        spawnRotations.Add(new Vector3(0f, 44f, 0f));
+
+        spawnPositions.Add(new Vector3(-58f, 2.1f, 58f));
+        spawnRotations.Add(new Vector3(0f, 133f, 0f));
+    }
+
+    public void Respawn(int a_spawnIndex = -1)
+    {
+        state.Health = maxHealth;
+
+        if (a_spawnIndex != -1)
+        {
+            //spawn at the specified index
+            state.SetTeleport(state.PlayerTransform);
+            state.SetTeleport(state.CameraTransform);
+            transform.position = spawnPositions[a_spawnIndex];
+
+            state.Yaw   = spawnRotations[a_spawnIndex].y;
+            state.Pitch = 0f;
+        }
+        else
+        {
+            //spawn at a random index
+            int newSpawnIndex = Random.Range(0, spawnPositions.Count);
+
+            state.SetTeleport(state.PlayerTransform);
+            state.SetTeleport(state.CameraTransform);
+            transform.position = spawnPositions[newSpawnIndex];
+            
+            state.Yaw   = spawnRotations[newSpawnIndex].y;
+            state.Pitch = 0f;
+        }
     }
 }

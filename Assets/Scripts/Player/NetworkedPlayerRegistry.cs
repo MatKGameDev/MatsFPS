@@ -101,4 +101,16 @@ public static class NetworkedPlayerRegistry
 
         return null;
     }
+
+    public static void UpdateNetworkedPlayersList()
+    {
+        for (int i = 0; i < s_networkedPlayerList.Count; i++)
+        {
+            if (!s_networkedPlayerList[i].character)
+            {
+                s_networkedPlayerList.RemoveAt(i);
+                i--;
+            }
+        }
+    }
 }

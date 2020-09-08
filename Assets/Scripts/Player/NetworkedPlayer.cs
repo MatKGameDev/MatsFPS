@@ -21,17 +21,19 @@ public class NetworkedPlayer
         {
             if (IsServer)
             {
-                Vector3 spawnPos = new Vector3(10f, 1.7f, -10f);
-
-                character = BoltNetwork.Instantiate(BoltPrefabs.Player1, spawnPos, Quaternion.identity);
+                character = BoltNetwork.Instantiate(BoltPrefabs.Player1);
                 character.TakeControl();
+
+                Player newPlayer = character.GetComponent<Player>();
+                newPlayer.Respawn(0);
             }
             else
             {
-                Vector3 spawnPos = new Vector3(50f, 1.7f, -30f);
-
-                character = BoltNetwork.Instantiate(BoltPrefabs.Player2, spawnPos, Quaternion.identity);
+                character = BoltNetwork.Instantiate(BoltPrefabs.Player2);
                 character.AssignControl(connection);
+
+                Player newPlayer = character.GetComponent<Player>();
+                newPlayer.Respawn(1);
             }
         }
     }

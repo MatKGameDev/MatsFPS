@@ -28,12 +28,13 @@ public class MainMenu : Bolt.GlobalEventListener
     public void StartOfflineGame()
     {
         GameState.instance.CurrentState = GameState.State.gameplay;
-        Debug.Log("OFFLINE");
         SceneManager.LoadScene("OfflinePractice");
     }
 
     public override void BoltStartDone()
     {
+        NetworkedPlayerRegistry.UpdateNetworkedPlayersList();
+
         if (BoltNetwork.IsServer)
         {
             string matchName = Guid.NewGuid().ToString();

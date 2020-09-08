@@ -34,19 +34,43 @@ public class PlayerController : Bolt.EntityEventListener<IPlayerStateFPS>
     {
         state.SetTransforms(state.PlayerTransform, transform);
         state.SetTransforms(state.CameraTransform, cameraController.transform);
+
+        m_yaw = transform.eulerAngles.y; //set yaw from initial rotation
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (entity.HasControl)
+        {
+            m_yaw   = state.Yaw;
+            m_pitch = state.Pitch;
+        }
+
         if (m_playerMotor.IsInputDisabled)
             return;
 
         PollKeysAndButtons();
         PollMousePos();
+
+        if (entity.HasControl)
+        {
+            state.Yaw   = m_yaw;
+            state.Pitch = m_pitch;
+        }
     }
 
-	void PollKeysAndButtons()
+    public void SetYaw(float a_newYaw)
+    {
+        m_yaw = a_newYaw;
+    }
+
+    public void SetPitch(float a_newPitch)
+    {
+        m_pitch = a_newPitch;
+    }
+
+    void PollKeysAndButtons()
 	{
 		m_forward  = Input.GetKey(KeyCode.W);
 		m_backward = Input.GetKey(KeyCode.S);

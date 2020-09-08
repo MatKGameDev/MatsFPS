@@ -39,8 +39,6 @@ public class PlayerMotor : MonoBehaviour
 
     public float dashCooldownCountdown { get; private set; }
 
-
-
     bool isInputDisabled = false;
     public bool IsInputDisabled
     {
