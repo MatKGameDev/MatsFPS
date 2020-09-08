@@ -39,7 +39,7 @@ public static class NetworkedPlayerRegistry
         get { return s_networkedPlayerList; }
     }
 
-    public static int GetNumPlayers
+    public static int NumPlayers
     {
         get { return s_networkedPlayerList.Count; }
     }

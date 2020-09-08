@@ -34,8 +34,26 @@ public class GameUI : BoltSingletonPrefab<GameUI>
 
     [SerializeField] float hitmarkerDurationActive;
 
-    int playerScore;
-    int enemyScore;
+    [Header("Kill Popup")]
+    public GameObject skull;
+    [SerializeField] float killPopupFadeSpeed;
+
+    int m_playerScore;
+    int m_enemyScore;
+
+    UnityEngine.UI.Image m_skullImage;
+
+    float m_killPopupFadeParam;
+
+    void Start()
+    {
+        m_skullImage = skull.GetComponent<UnityEngine.UI.Image>();
+
+        skull         .SetActive(false);
+        hitmarkerWhite.SetActive(false);
+        hitmarkerRed  .SetActive(false);
+        DisableScoreboard();
+    }
 
     public bool IsScoreboardOpen()
     {
@@ -58,8 +76,8 @@ public class GameUI : BoltSingletonPrefab<GameUI>
         pingDisplayParent .SetActive(true);
         scoreDisplayParent.SetActive(true);
 
-        playerScoreDisplay.text = playerScore.ToString();
-        enemyScoreDisplay .text = enemyScore .ToString();
+        playerScoreDisplay.text = m_playerScore.ToString();
+        enemyScoreDisplay .text = m_enemyScore .ToString();
     }
 
     public void DisableScoreboard()
@@ -70,18 +88,18 @@ public class GameUI : BoltSingletonPrefab<GameUI>
 
     public void SetPlayerScore(int a_newScore)
     {
-        playerScore = a_newScore;
+        m_playerScore = a_newScore;
 
         if (playerScoreDisplay.IsActive())
-            playerScoreDisplay.text = playerScore.ToString();
+            playerScoreDisplay.text = m_playerScore.ToString();
     }
 
     public void SetEnemyScore(int a_newScore)
     {
-        enemyScore = a_newScore;
+        m_enemyScore = a_newScore;
 
         if (enemyScoreDisplay.IsActive())
-            enemyScoreDisplay.text = enemyScore.ToString();
+            enemyScoreDisplay.text = m_enemyScore.ToString();
     }
 
     public void SetPing(float a_ping)
@@ -100,6 +118,7 @@ public class GameUI : BoltSingletonPrefab<GameUI>
         StartCoroutine(DisableHitmarker(a_type));
     }
 
+
     IEnumerator DisableHitmarker(HitmarkerType a_type)
     {
         yield return new WaitForSeconds(hitmarkerDurationActive);
@@ -108,5 +127,30 @@ public class GameUI : BoltSingletonPrefab<GameUI>
             hitmarkerWhite.SetActive(false);
         else
             hitmarkerRed.SetActive(false);
+    }
+
+    public void ActivateKillPopup()
+    {
+        skull.SetActive(true);
+        m_killPopupFadeParam = 0f;
+        StartCoroutine(FadeOutKillPopup());
+    }
+
+    IEnumerator FadeOutKillPopup()
+    {
+        while (m_killPopupFadeParam < 1f)
+        {
+            m_killPopupFadeParam += killPopupFadeSpeed * BoltNetwork.FrameDeltaTime;
+            float newAlpha = Mathf.Lerp(1f, 0f, m_killPopupFadeParam);
+
+            Color newColor     = m_skullImage.color;
+            newColor.a         = newAlpha;
+            m_skullImage.color = newColor;
+
+            yield return null;
+        }
+
+        skull.SetActive(false);
+        Debug.Log("DEACTIVATED");
     }
 }

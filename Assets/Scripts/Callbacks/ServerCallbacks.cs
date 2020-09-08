@@ -14,6 +14,7 @@ public class ServerCallbacks : Bolt.GlobalEventListener
     public override void Connected(BoltConnection connection)
     {
         NetworkedPlayerRegistry.CreateClientPlayer(connection);
+        Debug.Log(NetworkedPlayerRegistry.NumPlayers + " PLAYERS");
     }
 
     public override void SceneLoadLocalDone(string map)

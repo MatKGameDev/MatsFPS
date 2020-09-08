@@ -7,6 +7,8 @@ using UnityEngine.Rendering.Universal;
 
 public class Player : Bolt.EntityEventListener<IPlayerStateFPS>
 {
+    public static List<BoltEntity> s_playerEntityList;
+
     [Header("General")]
     public int   playerNum;
     public float maxHealth;
@@ -39,6 +41,7 @@ public class Player : Bolt.EntityEventListener<IPlayerStateFPS>
 
     void Awake()
     {
+        s_playerEntityList = new List<BoltEntity>();
         SetSpawnPositionsAndRotations();
     }
 
@@ -138,7 +141,10 @@ public class Player : Bolt.EntityEventListener<IPlayerStateFPS>
 
     public void OnDie()
     {
-        state.EnemyScore++;
+        if (entity.IsOwner)
+        {
+            state.EnemyScore++;
+        }
 
         Respawn();
     }
@@ -147,6 +153,8 @@ public class Player : Bolt.EntityEventListener<IPlayerStateFPS>
     {
         state.PlayerScore++;
     }
+
+
 
     public override void OnEvent(PlayerHitscanFiredEvent evnt)
     {

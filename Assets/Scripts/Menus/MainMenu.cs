@@ -33,8 +33,6 @@ public class MainMenu : Bolt.GlobalEventListener
 
     public override void BoltStartDone()
     {
-        NetworkedPlayerRegistry.UpdateNetworkedPlayersList();
-
         if (BoltNetwork.IsServer)
         {
             string matchName = Guid.NewGuid().ToString();

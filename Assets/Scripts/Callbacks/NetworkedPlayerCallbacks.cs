@@ -12,6 +12,8 @@ public class NetworkedPlayerCallbacks : Bolt.GlobalEventListener
 
     public override void ControlOfEntityGained(BoltEntity entity)
     {
+        NetworkedPlayerRegistry.UpdateNetworkedPlayersList();
+
         if (entity.TryGetComponent<PlayerMotor>(out var playerMotor))
         {
             GameState.instance.CurrentState = GameState.State.gameplay;
@@ -53,8 +55,17 @@ public class NetworkedPlayerCallbacks : Bolt.GlobalEventListener
 
     public override void OnEvent(PlayerDiedEvent evnt)
     {
+        if (BoltNetwork.IsServer)
+            Debug.Log("BEFORE SERVER");
+        else
+            Debug.Log("BEFORE CLIENT");
         foreach (NetworkedPlayer networkedPlayer in NetworkedPlayerRegistry.AllPlayers)
         {
+            if (BoltNetwork.IsServer)
+                Debug.Log("DURING SERVER");
+            else
+                Debug.Log("DURING CLIENT");
+
             Player player = networkedPlayer.character.GetComponent<Player>();
 
             if (!player)
