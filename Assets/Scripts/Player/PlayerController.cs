@@ -91,7 +91,7 @@ public class PlayerController : Bolt.EntityEventListener<IPlayerStateFPS>
         float axisX = Input.GetAxisRaw("Mouse X");
         float axisY = Input.GetAxisRaw("Mouse Y");
 
-        cameraController.UpdateMouseInput(Time.deltaTime, axisX, axisY, ref m_yaw, ref m_pitch);
+        cameraController.UpdateMouseInput(BoltNetwork.FrameDeltaTime, axisX, axisY, ref m_yaw, ref m_pitch);
     }
 
 	public override void SimulateController()

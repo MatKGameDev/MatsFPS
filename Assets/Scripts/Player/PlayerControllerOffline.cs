@@ -62,7 +62,7 @@ public class PlayerControllerOffline : MonoBehaviour
         float axisX = Input.GetAxisRaw("Mouse X");
         float axisY = Input.GetAxisRaw("Mouse Y");
 
-        cameraController.UpdateMouseInput(Time.deltaTime, axisX, axisY, ref m_yaw, ref m_pitch);
+        cameraController.UpdateMouseInput(Time.fixedDeltaTime, axisX, axisY, ref m_yaw, ref m_pitch);
     }
 
     void FixedUpdate()

@@ -95,9 +95,10 @@ public class GameState : BoltSingletonPrefab<GameState>
             MainMenu menu = FindObjectOfType<MainMenu>();
             menu.ShowMainMenu();
         }
-        else if (CurrentState == State.matchmaking)
+        else
         {
-            BoltNetwork.Shutdown();
+            if (BoltNetwork.IsRunning)
+                BoltNetwork.Shutdown();
 
             SceneManager.LoadScene("MainMenu");
         }

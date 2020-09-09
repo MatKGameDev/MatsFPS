@@ -61,7 +61,6 @@ public class Player : Bolt.EntityEventListener<IPlayerStateFPS>
         return null;
     }
 
-
     void Awake()
     {
         m_playerMotor = GetComponent<PlayerMotor>();
@@ -181,6 +180,11 @@ public class Player : Bolt.EntityEventListener<IPlayerStateFPS>
         if (entity.IsOwner)
         {
             state.PlayerScore++;
+        }
+
+        if (entity.HasControl)
+        {
+            GameUI.instance.ActivateKillPopup();
         }
     }
 
