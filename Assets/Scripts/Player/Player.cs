@@ -7,7 +7,7 @@ using UnityEngine.Rendering.Universal;
 
 public class Player : Bolt.EntityEventListener<IPlayerStateFPS>
 {
-    public static List<BoltEntity> s_playerEntityList;
+    public static List<Player> s_playersList = new List<Player>();
 
     [Header("General")]
     public int   playerNum;
@@ -22,8 +22,6 @@ public class Player : Bolt.EntityEventListener<IPlayerStateFPS>
     [SerializeField] Color onHitVignetteColor;
     [SerializeField] float onHitVignetteFadeSpeed;
 
-    const float RESPAWN_TIME = 1f;
-
     AudioSource m_dispondableAudioSource;
 
     Volume   postProcessVolume;
@@ -37,18 +35,46 @@ public class Player : Bolt.EntityEventListener<IPlayerStateFPS>
     static List<Vector3> spawnPositions;
     static List<Vector3> spawnRotations;
 
-    PlayerController m_playerController;
+    PlayerMotor m_playerMotor;
+
+    public static void PopulatePlayersList()
+    {
+        s_playersList = new List<Player>();
+
+        var allPlayers = FindObjectsOfType<Player>();
+
+        foreach (Player player in allPlayers)
+            s_playersList.Add(player);
+    }
+
+    public static Player GetPlayerFromPlayerNum(int a_playerNum)
+    {
+        foreach (Player player in s_playersList)
+        {
+            if (!player)
+                continue;
+
+            if (player.playerNum == a_playerNum)
+                return player;
+        }
+
+        return null;
+    }
+
 
     void Awake()
     {
-        s_playerEntityList = new List<BoltEntity>();
+        m_playerMotor = GetComponent<PlayerMotor>();
+
         SetSpawnPositionsAndRotations();
+    }
+    public void EnablePlayerControl()
+    {
+        m_playerMotor.IsInputDisabled = false;
     }
 
     public override void Attached()
     {
-        m_playerController = GetComponent<PlayerController>();
-
         if (entity.IsOwner)
         {
             state.Health = maxHealth;
@@ -112,25 +138,26 @@ public class Player : Bolt.EntityEventListener<IPlayerStateFPS>
 
     public void TakeDamage(float a_damageAmount)
     {
-        state.Health -= a_damageAmount;
-        state.Health = Mathf.Clamp(state.Health, 0f, maxHealth);
-
-        var damagedEvent         = PlayerDamagedEvent.Create(entity);
-        damagedEvent.DamageTaken = a_damageAmount;
-        damagedEvent.Send();
-
-        if (state.Health <= 0f)
+        if (entity.IsOwner)
         {
-            var diedEvent           = PlayerDiedEvent.Create(GlobalTargets.Everyone, ReliabilityModes.ReliableOrdered);
-            diedEvent.DeadPlayerNum = playerNum;
-            diedEvent.Send();
+            state.Health -= a_damageAmount;
+            state.Health = Mathf.Clamp(state.Health, 0f, maxHealth);
+
+            if (state.Health <= 0f)
+            {
+                var diedEvent = PlayerDiedEvent.Create(GlobalTargets.Everyone, ReliabilityModes.ReliableOrdered);
+                diedEvent.DeadPlayerNum = playerNum;
+                diedEvent.Send();
+            }
         }
+
+        OnDamaged(a_damageAmount);
     }
 
     void OnDamaged(float a_damageAmount)
     {
         if (entity.HasControl)
-        {
+        { 
             vignette.intensity .value = onHitVignetteIntensity;
             vignette.smoothness.value = onHitVignetteSmoothness;
             vignette.color     .value = onHitVignetteColor;
@@ -151,10 +178,11 @@ public class Player : Bolt.EntityEventListener<IPlayerStateFPS>
 
     public void OnEnemyKilled()
     {
-        state.PlayerScore++;
+        if (entity.IsOwner)
+        {
+            state.PlayerScore++;
+        }
     }
-
-
 
     public override void OnEvent(PlayerHitscanFiredEvent evnt)
     {
@@ -187,32 +215,31 @@ public class Player : Bolt.EntityEventListener<IPlayerStateFPS>
             m_dispondableAudioSource.PlayOneShot(clip);
     }
 
-    public override void OnEvent(PlayerDamagedEvent evnt)
-    {
-        OnDamaged(evnt.DamageTaken);
-    }
-
     void SetSpawnPositionsAndRotations()
     {
         spawnPositions = new List<Vector3>();
         spawnRotations = new List<Vector3>();
 
-        spawnPositions.Add(new Vector3(58f, 2.1f, 58f));
-        spawnRotations.Add(new Vector3(0f, -134.4f, 0f));
-
         spawnPositions.Add(new Vector3(58f, 2.1f, -58f));
         spawnRotations.Add(new Vector3(0f, -47f, 0f));
 
-        spawnPositions.Add(new Vector3(-58f, 2.1f, -58f));
-        spawnRotations.Add(new Vector3(0f, 44f, 0f));
-
         spawnPositions.Add(new Vector3(-58f, 2.1f, 58f));
         spawnRotations.Add(new Vector3(0f, 133f, 0f));
+
+        spawnPositions.Add(new Vector3(58f, 2.1f, 58f));
+        spawnRotations.Add(new Vector3(0f, -134.4f, 0f));
+
+        spawnPositions.Add(new Vector3(-58f, 2.1f, -58f));
+        spawnRotations.Add(new Vector3(0f, 44f, 0f));
     }
 
     public void Respawn(int a_spawnIndex = -1)
     {
-        state.Health = maxHealth;
+        Debug.Log("RESPAWNED");
+        if (entity.IsOwner)
+        {
+            state.Health = maxHealth;
+        }
 
         if (a_spawnIndex != -1)
         {

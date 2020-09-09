@@ -1,5 +1,4 @@
 ﻿using Bolt.Matchmaking;
-using Bolt;
 using UnityEngine;
 using UdpKit;
 using System;
@@ -13,15 +12,21 @@ public class MainMenu : Bolt.GlobalEventListener
     void Start()
     {
         GameState.instance.CurrentState = GameState.State.mainMenu;
+
+        BoltNetwork.Shutdown(); //just in case bolt was running, shut it down
     }
 
     public void StartServer()
     {
+        MatchmakingPopup.instance.Show();
+
         BoltLauncher.StartServer();
     }
 
     public void StartClient()
     {
+        MatchmakingPopup.instance.Show();
+
         BoltLauncher.StartClient();
     }
 

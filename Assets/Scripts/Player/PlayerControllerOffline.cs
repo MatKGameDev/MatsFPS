@@ -37,8 +37,9 @@ public class PlayerControllerOffline : MonoBehaviour
         Camera playerCamera      = m_playerMotor.mainCamera;
         playerCamera.fieldOfView = Camera.HorizontalToVerticalFieldOfView(UserSettings.fieldOfView, playerCamera.aspect);
 
-        GameUI.Instantiate();
-        GameUI.instance.SetPlayer(m_playerMotor);
+        GameUI.instance.SetPlayer(m_playerMotor.GetComponent<Player>());
+
+        GameUI.instance.DisableCountdown();
 
         m_yaw = transform.eulerAngles.y; //set yaw from initial rotation
     }

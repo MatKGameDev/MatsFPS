@@ -315,7 +315,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1246928342713593406}
-  - {fileID: 6021139082809570030}
+  - {fileID: 8386516302456955920}
   m_Father: {fileID: 7388789460014733985}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -838,7 +838,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 4623275682156587118}
+  - {fileID: 7633409417139505546}
   - {fileID: 1246928343453185929}
   - {fileID: 1246928343324446933}
   m_Father: {fileID: 1246928343325238559}
@@ -876,12 +876,12 @@ MonoBehaviour:
   bulletTrailLayerMaskTPP:
     serializedVersion: 2
     m_Bits: 16384
-  muzzleFlashFPP: {fileID: 4798715933881104740}
+  muzzleFlashFPP: {fileID: 7633409417139505473}
   muzzleFlashTPP: {fileID: 8207568632250884767, guid: 920ce8efa5a23fc448351a51ff0e8569,
     type: 3}
   animatorFPP: {fileID: 1246928343453185928}
   animatorTPP: {fileID: 1246928343324446932}
-  audioSource: {fileID: 2983010634468634441}
+  audioSource: {fileID: 8386516302456956058}
   firingSound: {fileID: 8300000, guid: 1df26bee71935934594c6e6faaa0d0ae, type: 3}
   bodyHitSound: {fileID: 8300000, guid: 8a43260e05407a743bdfe7e07e0f0820, type: 3}
   headshotSound: {fileID: 8300000, guid: c871b0fb33860fd4c9b9c1d9c8ca7ac0, type: 3}
@@ -1355,13 +1355,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6e15c2d389275a74bb8d2687fe5ce461, type: 3}
---- !u!198 &4798715933881104740 stripped
+--- !u!198 &7633409417139505473 stripped
 ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 3132015892867954413, guid: 6e15c2d389275a74bb8d2687fe5ce461,
     type: 3}
   m_PrefabInstance: {fileID: 7633409417139507081}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &4623275682156587118 stripped
+--- !u!4 &7633409417139505546 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3010231763317155815, guid: 6e15c2d389275a74bb8d2687fe5ce461,
     type: 3}
@@ -1477,13 +1477,13 @@ PrefabInstance:
         type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 61e2dfd78b5358e4692c7c0d6a44bbf7, type: 3}
---- !u!82 &2983010634468634441 stripped
+--- !u!82 &8386516302456956058 stripped
 AudioSource:
   m_CorrespondingSourceObject: {fileID: 6703375475987647835, guid: 61e2dfd78b5358e4692c7c0d6a44bbf7,
     type: 3}
   m_PrefabInstance: {fileID: 8386516302456955410}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &6021139082809570030 stripped
+--- !u!4 &8386516302456955920 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2877103331781497084, guid: 61e2dfd78b5358e4692c7c0d6a44bbf7,
     type: 3}

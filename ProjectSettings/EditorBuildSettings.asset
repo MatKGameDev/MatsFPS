@@ -8,6 +8,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MainMenu.unity
     guid: 08d5668353afe054e8f71e42fe474b69
+  - enabled: 0
+    path: Assets/Scenes/Matchmaking.unity
+    guid: 41c6a79b168dbfd4992d3b9f74776e35
+  - enabled: 0
+    path: Assets/Scenes/ClientWaiting.unity
+    guid: 987ace79b493a58489cd53488f2606f2
   - enabled: 1
     path: Assets/Scenes/Gameplay.unity
     guid: cd128fd49f7f4ba4fb2a825a6ce59118

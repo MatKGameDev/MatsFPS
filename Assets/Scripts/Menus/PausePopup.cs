@@ -45,9 +45,6 @@ public class PausePopup : BoltSingletonPrefab<PausePopup>
 
     public void LeaveGame()
     {
-        if (BoltNetwork.IsConnected)
-            BoltNetwork.Shutdown();
-        else
-            SceneManager.LoadScene("MainMenu");
+        BoltNetwork.Shutdown();
     }
 }

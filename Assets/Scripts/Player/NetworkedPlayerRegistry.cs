@@ -86,22 +86,6 @@ public static class NetworkedPlayerRegistry
         s_networkedPlayerList.Remove(player);
     }
 
-    public static Player GetPlayerFromPlayerNum(int a_playerNum)
-    {
-        foreach (NetworkedPlayer networkedPlayer in s_networkedPlayerList)
-        {
-            Player player = networkedPlayer.character.GetComponent<Player>();
-
-            if (!player)
-                continue;
-
-            if (a_playerNum == player.playerNum)
-                return player;
-        }
-
-        return null;
-    }
-
     public static void UpdateNetworkedPlayersList()
     {
         for (int i = 0; i < s_networkedPlayerList.Count; i++)

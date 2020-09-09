@@ -13,6 +13,10 @@ public class GameUI : BoltSingletonPrefab<GameUI>
         headshot
     }
 
+    [Header("Game Start Countdown")]
+    public TMP_Text countdownDisplay;
+    public float    countdownDisplayFadeSpeed;
+
     [Header("Dash")]
     public DashIndicator dashIndicator;
 
@@ -38,12 +42,18 @@ public class GameUI : BoltSingletonPrefab<GameUI>
     public GameObject skull;
     [SerializeField] float killPopupFadeSpeed;
 
+    const float GAME_START_DELAY = 3f;
+
+    float m_gameStartCountdown;
+
     int m_playerScore;
     int m_enemyScore;
 
     UnityEngine.UI.Image m_skullImage;
 
     float m_killPopupFadeParam;
+
+    Player m_player;
 
     void Start()
     {
@@ -60,9 +70,10 @@ public class GameUI : BoltSingletonPrefab<GameUI>
         return scoreDisplayParent.activeSelf;
     }
 
-    public void SetPlayer(PlayerMotor a_player)
+    public void SetPlayer(Player a_player)
     {
-        dashIndicator.SetPlayer(a_player);
+        m_player = a_player;
+        dashIndicator.SetPlayer(a_player.GetComponent<PlayerMotor>());
     }
 
     public void SetHealth(float a_newHealth)
@@ -84,6 +95,43 @@ public class GameUI : BoltSingletonPrefab<GameUI>
     {
         pingDisplayParent .SetActive(false);
         scoreDisplayParent.SetActive(false);
+    }
+
+    public void OnGameStart()
+    {
+        m_gameStartCountdown = GAME_START_DELAY;
+
+        StartCoroutine(GameStartCountdown());
+    }
+
+    IEnumerator GameStartCountdown()
+    {
+        while (m_gameStartCountdown > 0f)
+        {
+            m_gameStartCountdown -= Time.deltaTime;
+            countdownDisplay.text = Mathf.CeilToInt(m_gameStartCountdown).ToString();
+
+            yield return null;
+        }
+
+        Player.PopulatePlayersList();
+        m_player.EnablePlayerControl();
+
+        countdownDisplay.text = "GO!";
+
+        while (countdownDisplay.alpha > 0f)
+        {
+            countdownDisplay.alpha -= Time.deltaTime * countdownDisplayFadeSpeed;
+
+            yield return null;
+        }
+
+        DisableCountdown();
+    }
+
+    public void DisableCountdown()
+    {
+        countdownDisplay.gameObject.SetActive(false);
     }
 
     public void SetPlayerScore(int a_newScore)
@@ -151,6 +199,5 @@ public class GameUI : BoltSingletonPrefab<GameUI>
         }
 
         skull.SetActive(false);
-        Debug.Log("DEACTIVATED");
     }
 }

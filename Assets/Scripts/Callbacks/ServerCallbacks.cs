@@ -14,16 +14,17 @@ public class ServerCallbacks : Bolt.GlobalEventListener
     public override void Connected(BoltConnection connection)
     {
         NetworkedPlayerRegistry.CreateClientPlayer(connection);
-        Debug.Log(NetworkedPlayerRegistry.NumPlayers + " PLAYERS");
     }
 
     public override void SceneLoadLocalDone(string map)
     {
+        MatchmakingPopup.instance.Show();
         NetworkedPlayerRegistry.ServerPlayer.Spawn();
     }
 
     public override void SceneLoadRemoteDone(BoltConnection connection)
     {
+        MatchmakingPopup.instance.Show();
         NetworkedPlayerRegistry.GetNetworkedPlayer(connection).Spawn();
     }
 }

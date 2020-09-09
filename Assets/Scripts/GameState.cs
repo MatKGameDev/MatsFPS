@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameState : BoltSingletonPrefab<GameState>
 {
@@ -10,7 +11,7 @@ public class GameState : BoltSingletonPrefab<GameState>
         mainSettings,
         mainControls,
         playMenu,
-        loadScreen,
+        matchmaking,
         gameplay,
         pauseMenu,
         pauseSettings,
@@ -64,6 +65,10 @@ public class GameState : BoltSingletonPrefab<GameState>
                 TransitionToMainMenu();
                 break;
 
+            case State.matchmaking:
+                TransitionToMainMenu();
+                break;
+
             case State.gameplay:
                 if (!GameUI.instance.IsScoreboardOpen())
                     TransitionToPauseMenu();
@@ -87,8 +92,14 @@ public class GameState : BoltSingletonPrefab<GameState>
     {
         if (CurrentState == State.mainSettings || CurrentState == State.mainControls || CurrentState == State.playMenu)
         {
-            MainMenu menu = GameObject.FindObjectOfType<MainMenu>();
+            MainMenu menu = FindObjectOfType<MainMenu>();
             menu.ShowMainMenu();
+        }
+        else if (CurrentState == State.matchmaking)
+        {
+            BoltNetwork.Shutdown();
+
+            SceneManager.LoadScene("MainMenu");
         }
 
         CurrentState = State.mainMenu;
