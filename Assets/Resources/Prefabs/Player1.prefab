@@ -1003,6 +1003,8 @@ MonoBehaviour:
   onHitVignetteSmoothness: 0.8
   onHitVignetteColor: {r: 0.1981132, g: 0.023156088, b: 0, a: 1}
   onHitVignetteFadeSpeed: 1
+  playerExplodeEffect: {fileID: 198000013440722320, guid: 02a509a7fa70ed740ba4197e20c5d32d,
+    type: 3}
 --- !u!114 &6107893106306371107
 MonoBehaviour:
   m_ObjectHideFlags: 0

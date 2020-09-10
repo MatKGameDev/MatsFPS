@@ -22,6 +22,9 @@ public class Player : Bolt.EntityEventListener<IPlayerStateFPS>
     [SerializeField] Color onHitVignetteColor;
     [SerializeField] float onHitVignetteFadeSpeed;
 
+    [Header("On Death Effect")]
+    [SerializeField] ParticleSystem playerExplodeEffect;
+
     AudioSource m_dispondableAudioSource;
 
     Volume m_postProcessVolume;
@@ -169,6 +172,7 @@ public class Player : Bolt.EntityEventListener<IPlayerStateFPS>
             {
                 var diedEvent = PlayerDiedEvent.Create(GlobalTargets.Everyone, ReliabilityModes.ReliableOrdered);
                 diedEvent.DeadPlayerNum = playerNum;
+                diedEvent.DeathPosition = transform.position;
                 diedEvent.Send();
             }
         }
@@ -198,8 +202,16 @@ public class Player : Bolt.EntityEventListener<IPlayerStateFPS>
         Respawn();
     }
 
-    public void OnEnemyKilled()
+    public void OnEnemyKilled(Vector3 a_deathPosition)
     {
+        m_dispondableAudioSource.Stop(); //stop any enemy sound effect
+
+        if (entity.HasControl)
+        {
+            GameObject deathEffectGO = Instantiate(playerExplodeEffect.gameObject, a_deathPosition, Quaternion.identity);
+            Destroy(deathEffectGO, 1.2f);
+        }
+
         if (entity.IsOwner)
         {
             state.PlayerScore++;
@@ -264,10 +276,8 @@ public class Player : Bolt.EntityEventListener<IPlayerStateFPS>
     {
         if (!entity.IsOwner)
             return;
-        if (entity.IsOwner)
-        {
-            state.Health = maxHealth;
-        }
+
+        state.Health = maxHealth;
 
         float newYaw = 0f;
         float newPitch = 0f;
@@ -294,14 +304,10 @@ public class Player : Bolt.EntityEventListener<IPlayerStateFPS>
             newYaw = s_spawnRotations[state.NextSpawnIndex].y;
         }
 
-        //if (entity.HasControl)
-        {
-            m_playerController.SetYaw(newYaw);
-            m_playerController.SetPitch(newPitch);
-        }
+        m_playerController.SetYaw(newYaw);
+        m_playerController.SetPitch(newPitch);
 
-        if (entity.IsOwner)
-            state.NextSpawnIndex = Random.Range(0, s_spawnPositions.Count);
+        state.NextSpawnIndex = Random.Range(0, s_spawnPositions.Count);
 
         m_numRespawnTeleportFrames = 130;
     }

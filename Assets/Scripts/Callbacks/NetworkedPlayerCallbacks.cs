@@ -73,7 +73,7 @@ public class NetworkedPlayerCallbacks : Bolt.GlobalEventListener
             if (evnt.DeadPlayerNum == player.playerNum)
                 player.OnDie();
             else
-                player.OnEnemyKilled();
+                player.OnEnemyKilled(evnt.DeathPosition);
         }
     }
 }
