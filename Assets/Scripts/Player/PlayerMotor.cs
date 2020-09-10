@@ -128,7 +128,10 @@ public class PlayerMotor : MonoBehaviour
 
     public void TeleportToPosition(Vector3 a_newPosition)
     {
-        transform.localPosition = a_newPosition;
+        m_characterController.enabled = false;
+        transform.position = a_newPosition;
+        m_characterController.enabled = true;
+
         m_motorState.position   = a_newPosition;
     }
 

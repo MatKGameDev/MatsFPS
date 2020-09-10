@@ -13,4 +13,9 @@ public class ControlsPopup : BoltSingletonPrefab<ControlsPopup>
     {
         mainCanvas.enabled = false;
     }
+
+    public void Back()
+    {
+        GameState.instance.HandleStateExit();
+    }
 }

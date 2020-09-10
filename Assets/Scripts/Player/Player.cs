@@ -10,7 +10,7 @@ public class Player : Bolt.EntityEventListener<IPlayerStateFPS>
     public static List<Player> s_playersList = new List<Player>();
 
     [Header("General")]
-    public int   playerNum;
+    public int playerNum;
     public float maxHealth;
 
     [Header("Audio")]
@@ -24,7 +24,7 @@ public class Player : Bolt.EntityEventListener<IPlayerStateFPS>
 
     AudioSource m_dispondableAudioSource;
 
-    Volume   m_postProcessVolume;
+    Volume m_postProcessVolume;
     Vignette m_vignette;
 
     float m_vignetteInitialIntensity;
@@ -36,7 +36,7 @@ public class Player : Bolt.EntityEventListener<IPlayerStateFPS>
     static List<Vector3> s_spawnRotations;
 
     PlayerController m_playerController;
-    PlayerMotor      m_playerMotor;
+    PlayerMotor m_playerMotor;
 
     int m_numRespawnTeleportFrames;
 
@@ -67,7 +67,7 @@ public class Player : Bolt.EntityEventListener<IPlayerStateFPS>
     void Awake()
     {
         m_playerController = GetComponent<PlayerController>();
-        m_playerMotor      = GetComponent<PlayerMotor>();
+        m_playerMotor = GetComponent<PlayerMotor>();
 
         SetSpawnPositionsAndRotations();
     }
@@ -84,13 +84,13 @@ public class Player : Bolt.EntityEventListener<IPlayerStateFPS>
         }
 
         GameObject audioSourceGO = Instantiate(mainAudioSourcePrefab);
-        audioSourceGO.name       = "DispondableAudioSource";
+        audioSourceGO.name = "DispondableAudioSource";
 
         m_dispondableAudioSource = audioSourceGO.GetComponent<AudioSource>();
 
-        state.AddCallback("Health",      HealthCallback);
+        state.AddCallback("Health", HealthCallback);
         state.AddCallback("PlayerScore", PlayerScoreCallback);
-        state.AddCallback("EnemyScore",  EnemyScoreCallback);
+        state.AddCallback("EnemyScore", EnemyScoreCallback);
 
         m_postProcessVolume = FindObjectOfType<Volume>();
         if (!m_postProcessVolume)
@@ -98,9 +98,9 @@ public class Player : Bolt.EntityEventListener<IPlayerStateFPS>
 
         m_postProcessVolume.profile.TryGet(out m_vignette);
 
-        m_vignetteInitialIntensity  = m_vignette.intensity.value;
+        m_vignetteInitialIntensity = m_vignette.intensity.value;
         m_vignetteInitialSmoothness = m_vignette.smoothness.value;
-        m_vignetteInitialColor      = m_vignette.color.value;
+        m_vignetteInitialColor = m_vignette.color.value;
     }
 
     public override void SimulateController()
@@ -115,9 +115,17 @@ public class Player : Bolt.EntityEventListener<IPlayerStateFPS>
         {
             m_vignetteFadeParam += onHitVignetteFadeSpeed * BoltNetwork.FrameDeltaTime;
 
-            m_vignette.intensity .value = Mathf.Lerp(onHitVignetteIntensity,  m_vignetteInitialIntensity,  m_vignetteFadeParam);
+            m_vignette.intensity.value = Mathf.Lerp(onHitVignetteIntensity, m_vignetteInitialIntensity, m_vignetteFadeParam);
             m_vignette.smoothness.value = Mathf.Lerp(onHitVignetteSmoothness, m_vignetteInitialSmoothness, m_vignetteFadeParam);
-            m_vignette.color     .value = Color.Lerp(onHitVignetteColor,      m_vignetteInitialColor,      m_vignetteFadeParam);
+            m_vignette.color.value = Color.Lerp(onHitVignetteColor, m_vignetteInitialColor, m_vignetteFadeParam);
+        }
+
+        if (m_numRespawnTeleportFrames > 0)
+        {
+            state.SetTeleport(state.PlayerTransform);
+            state.SetTeleport(state.CameraTransform);
+
+            m_numRespawnTeleportFrames--;
         }
     }
 
@@ -171,10 +179,10 @@ public class Player : Bolt.EntityEventListener<IPlayerStateFPS>
     void OnDamaged(float a_damageAmount)
     {
         if (entity.HasControl)
-        { 
-            m_vignette.intensity .value = onHitVignetteIntensity;
+        {
+            m_vignette.intensity.value = onHitVignetteIntensity;
             m_vignette.smoothness.value = onHitVignetteSmoothness;
-            m_vignette.color     .value = onHitVignetteColor;
+            m_vignette.color.value = onHitVignetteColor;
 
             m_vignetteFadeParam = 0f;
         }
@@ -219,7 +227,7 @@ public class Player : Bolt.EntityEventListener<IPlayerStateFPS>
         BoltNetwork.Destroy(bulletTrail);
 
         GameObject muzzleFlashResource = Resources.Load("Prefabs/VFX/" + evnt.MuzzleFlashEffectName) as GameObject;
-        GameObject muzzleFlashGO       = Instantiate(muzzleFlashResource);
+        GameObject muzzleFlashGO = Instantiate(muzzleFlashResource);
         if (muzzleFlashGO.TryGetComponent<ParticleSystem>(out var muzzleFlash))
         {
             muzzleFlashGO.transform.position = evnt.BulletStartPos;
@@ -254,12 +262,14 @@ public class Player : Bolt.EntityEventListener<IPlayerStateFPS>
 
     public void Respawn(int a_spawnIndex = -1)
     {
+        if (!entity.IsOwner)
+            return;
         if (entity.IsOwner)
         {
             state.Health = maxHealth;
         }
 
-        float newYaw   = 0f;
+        float newYaw = 0f;
         float newPitch = 0f;
 
         if (a_spawnIndex != -1)
@@ -286,15 +296,13 @@ public class Player : Bolt.EntityEventListener<IPlayerStateFPS>
 
         //if (entity.HasControl)
         {
-            m_playerController.SetYaw  (newYaw);
+            m_playerController.SetYaw(newYaw);
             m_playerController.SetPitch(newPitch);
         }
 
         if (entity.IsOwner)
-        {
             state.NextSpawnIndex = Random.Range(0, s_spawnPositions.Count);
-        }
 
-        m_numRespawnTeleportFrames = 70;
+        m_numRespawnTeleportFrames = 130;
     }
 }

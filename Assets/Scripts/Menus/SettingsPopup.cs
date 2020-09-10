@@ -45,6 +45,11 @@ public class SettingsPopup : BoltSingletonPrefab<SettingsPopup>
         mainCanvas.gameObject.SetActive(false);
     }
 
+    public void Back()
+    {
+        GameState.instance.HandleStateExit();
+    }
+
     void LoadCurrentSettings()
     {
         float displaySens = UserSettings.mouseSensitivity / SENS_SCALE_FACTOR;

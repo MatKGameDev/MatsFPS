@@ -46,10 +46,10 @@ public class GameState : BoltSingletonPrefab<GameState>
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
-            HandleEscapePress();
+            HandleStateExit();
     }
 
-    void HandleEscapePress()
+    public void HandleStateExit()
     {
         switch (CurrentState)
         {
