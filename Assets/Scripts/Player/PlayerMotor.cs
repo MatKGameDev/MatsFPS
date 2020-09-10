@@ -126,6 +126,12 @@ public class PlayerMotor : MonoBehaviour
         m_characterController.Move(a_position - transform.localPosition);
     }
 
+    public void TeleportToPosition(Vector3 a_newPosition)
+    {
+        transform.localPosition = a_newPosition;
+        m_motorState.position   = a_newPosition;
+    }
+
     public MotorState Move(float a_deltaTime, bool a_forward, bool a_backward, bool a_left, bool a_right, bool a_jump, bool a_dash, float a_yaw)
     {
         m_velocity               = m_motorState.velocity;

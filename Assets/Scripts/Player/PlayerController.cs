@@ -41,23 +41,11 @@ public class PlayerController : Bolt.EntityEventListener<IPlayerStateFPS>
     // Update is called once per frame
     void Update()
     {
-        //if (entity.HasControl)
-        //{
-        //    m_yaw   = state.Yaw;
-        //    m_pitch = state.Pitch;
-        //}
-
         if (m_playerMotor.IsInputDisabled)
             return;
 
         PollKeysAndButtons();
         PollMousePos();
-
-        //if (entity.HasControl)
-        //{
-        //    state.Yaw   = m_yaw;
-        //    state.Pitch = m_pitch;
-        //}
     }
 
     public void SetYaw(float a_newYaw)

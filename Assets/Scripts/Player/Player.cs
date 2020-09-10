@@ -24,18 +24,21 @@ public class Player : Bolt.EntityEventListener<IPlayerStateFPS>
 
     AudioSource m_dispondableAudioSource;
 
-    Volume   postProcessVolume;
-    Vignette vignette;
+    Volume   m_postProcessVolume;
+    Vignette m_vignette;
 
-    float vignetteInitialIntensity;
-    float vignetteInitialSmoothness;
-    Color vignetteInitialColor;
-    float vignetteFadeParam = 1f;
+    float m_vignetteInitialIntensity;
+    float m_vignetteInitialSmoothness;
+    Color m_vignetteInitialColor;
+    float m_vignetteFadeParam = 1f;
 
-    static List<Vector3> spawnPositions;
-    static List<Vector3> spawnRotations;
+    static List<Vector3> s_spawnPositions;
+    static List<Vector3> s_spawnRotations;
 
-    PlayerMotor m_playerMotor;
+    PlayerController m_playerController;
+    PlayerMotor      m_playerMotor;
+
+    int m_numRespawnTeleportFrames;
 
     public static void PopulatePlayersList()
     {
@@ -63,7 +66,8 @@ public class Player : Bolt.EntityEventListener<IPlayerStateFPS>
 
     void Awake()
     {
-        m_playerMotor = GetComponent<PlayerMotor>();
+        m_playerController = GetComponent<PlayerController>();
+        m_playerMotor      = GetComponent<PlayerMotor>();
 
         SetSpawnPositionsAndRotations();
     }
@@ -88,15 +92,15 @@ public class Player : Bolt.EntityEventListener<IPlayerStateFPS>
         state.AddCallback("PlayerScore", PlayerScoreCallback);
         state.AddCallback("EnemyScore",  EnemyScoreCallback);
 
-        postProcessVolume = FindObjectOfType<Volume>();
-        if (!postProcessVolume)
-            throw new System.NullReferenceException(nameof(postProcessVolume));
+        m_postProcessVolume = FindObjectOfType<Volume>();
+        if (!m_postProcessVolume)
+            throw new System.NullReferenceException(nameof(m_postProcessVolume));
 
-        postProcessVolume.profile.TryGet(out vignette);
+        m_postProcessVolume.profile.TryGet(out m_vignette);
 
-        vignetteInitialIntensity  = vignette.intensity.value;
-        vignetteInitialSmoothness = vignette.smoothness.value;
-        vignetteInitialColor      = vignette.color.value;
+        m_vignetteInitialIntensity  = m_vignette.intensity.value;
+        m_vignetteInitialSmoothness = m_vignette.smoothness.value;
+        m_vignetteInitialColor      = m_vignette.color.value;
     }
 
     public override void SimulateController()
@@ -107,13 +111,24 @@ public class Player : Bolt.EntityEventListener<IPlayerStateFPS>
             GameUI.instance.SetPing(pingToDisplay);
         }
 
-        if (vignetteFadeParam < 1f)
+        if (m_vignetteFadeParam < 1f)
         {
-            vignetteFadeParam += onHitVignetteFadeSpeed * BoltNetwork.FrameDeltaTime;
+            m_vignetteFadeParam += onHitVignetteFadeSpeed * BoltNetwork.FrameDeltaTime;
 
-            vignette.intensity .value = Mathf.Lerp(onHitVignetteIntensity,  vignetteInitialIntensity,  vignetteFadeParam);
-            vignette.smoothness.value = Mathf.Lerp(onHitVignetteSmoothness, vignetteInitialSmoothness, vignetteFadeParam);
-            vignette.color     .value = Color.Lerp(onHitVignetteColor,      vignetteInitialColor,      vignetteFadeParam);
+            m_vignette.intensity .value = Mathf.Lerp(onHitVignetteIntensity,  m_vignetteInitialIntensity,  m_vignetteFadeParam);
+            m_vignette.smoothness.value = Mathf.Lerp(onHitVignetteSmoothness, m_vignetteInitialSmoothness, m_vignetteFadeParam);
+            m_vignette.color     .value = Color.Lerp(onHitVignetteColor,      m_vignetteInitialColor,      m_vignetteFadeParam);
+        }
+    }
+
+    public override void SimulateOwner()
+    {
+        if (m_numRespawnTeleportFrames > 0)
+        {
+            state.SetTeleport(state.PlayerTransform);
+            state.SetTeleport(state.CameraTransform);
+
+            m_numRespawnTeleportFrames--;
         }
     }
 
@@ -157,11 +172,11 @@ public class Player : Bolt.EntityEventListener<IPlayerStateFPS>
     {
         if (entity.HasControl)
         { 
-            vignette.intensity .value = onHitVignetteIntensity;
-            vignette.smoothness.value = onHitVignetteSmoothness;
-            vignette.color     .value = onHitVignetteColor;
+            m_vignette.intensity .value = onHitVignetteIntensity;
+            m_vignette.smoothness.value = onHitVignetteSmoothness;
+            m_vignette.color     .value = onHitVignetteColor;
 
-            vignetteFadeParam = 0f;
+            m_vignetteFadeParam = 0f;
         }
     }
 
@@ -221,51 +236,65 @@ public class Player : Bolt.EntityEventListener<IPlayerStateFPS>
 
     void SetSpawnPositionsAndRotations()
     {
-        spawnPositions = new List<Vector3>();
-        spawnRotations = new List<Vector3>();
+        s_spawnPositions = new List<Vector3>();
+        s_spawnRotations = new List<Vector3>();
 
-        spawnPositions.Add(new Vector3(58f, 2.1f, -58f));
-        spawnRotations.Add(new Vector3(0f, -47f, 0f));
+        s_spawnPositions.Add(new Vector3(58f, 2.1f, -58f));
+        s_spawnRotations.Add(new Vector3(0f, -47f, 0f));
 
-        spawnPositions.Add(new Vector3(-58f, 2.1f, 58f));
-        spawnRotations.Add(new Vector3(0f, 133f, 0f));
+        s_spawnPositions.Add(new Vector3(-58f, 2.1f, 58f));
+        s_spawnRotations.Add(new Vector3(0f, 133f, 0f));
 
-        spawnPositions.Add(new Vector3(58f, 2.1f, 58f));
-        spawnRotations.Add(new Vector3(0f, -134.4f, 0f));
+        s_spawnPositions.Add(new Vector3(58f, 2.1f, 58f));
+        s_spawnRotations.Add(new Vector3(0f, -134.4f, 0f));
 
-        spawnPositions.Add(new Vector3(-58f, 2.1f, -58f));
-        spawnRotations.Add(new Vector3(0f, 44f, 0f));
+        s_spawnPositions.Add(new Vector3(-58f, 2.1f, -58f));
+        s_spawnRotations.Add(new Vector3(0f, 44f, 0f));
     }
 
     public void Respawn(int a_spawnIndex = -1)
     {
-        Debug.Log("RESPAWNED");
         if (entity.IsOwner)
         {
             state.Health = maxHealth;
         }
+
+        float newYaw   = 0f;
+        float newPitch = 0f;
 
         if (a_spawnIndex != -1)
         {
             //spawn at the specified index
             state.SetTeleport(state.PlayerTransform);
             state.SetTeleport(state.CameraTransform);
-            transform.position = spawnPositions[a_spawnIndex];
+            m_playerMotor.TeleportToPosition(s_spawnPositions[a_spawnIndex]);
 
-            state.Yaw   = spawnRotations[a_spawnIndex].y;
-            state.Pitch = 0f;
+            if (m_playerController)
+            {
+                newYaw = s_spawnRotations[a_spawnIndex].y;
+            }
         }
         else
         {
-            //spawn at a random index
-            int newSpawnIndex = Random.Range(0, spawnPositions.Count);
-
             state.SetTeleport(state.PlayerTransform);
             state.SetTeleport(state.CameraTransform);
-            transform.position = spawnPositions[newSpawnIndex];
-            
-            state.Yaw   = spawnRotations[newSpawnIndex].y;
-            state.Pitch = 0f;
+
+            m_playerMotor.TeleportToPosition(s_spawnPositions[state.NextSpawnIndex]);
+
+            newYaw = s_spawnRotations[state.NextSpawnIndex].y;
         }
+
+        //if (entity.HasControl)
+        {
+            m_playerController.SetYaw  (newYaw);
+            m_playerController.SetPitch(newPitch);
+        }
+
+        if (entity.IsOwner)
+        {
+            state.NextSpawnIndex = Random.Range(0, s_spawnPositions.Count);
+        }
+
+        m_numRespawnTeleportFrames = 70;
     }
 }

@@ -42,7 +42,7 @@ public class GameUI : BoltSingletonPrefab<GameUI>
     public GameObject skull;
     [SerializeField] float killPopupFadeSpeed;
 
-    const float GAME_START_DELAY = 3f;
+    const float GAME_START_DELAY = 5f;
 
     float m_gameStartCountdown;
 
@@ -188,7 +188,7 @@ public class GameUI : BoltSingletonPrefab<GameUI>
     {
         while (m_killPopupFadeParam < 1f)
         {
-            m_killPopupFadeParam += killPopupFadeSpeed * BoltNetwork.FrameDeltaTime;
+            m_killPopupFadeParam += killPopupFadeSpeed * Time.deltaTime;
             float newAlpha = Mathf.Lerp(1f, 0f, m_killPopupFadeParam);
 
             Color newColor     = m_skullImage.color;

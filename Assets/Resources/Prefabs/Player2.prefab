@@ -80,7 +80,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 3201449853983612034}
-  - {fileID: 4406098145742829217}
+  - {fileID: 1929824153803677791}
   m_Father: {fileID: 6605214723098028061}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -456,12 +456,12 @@ MonoBehaviour:
   swayStrengthHorizontal: 0.25
   swayStrengthVertical: 0.25
   maxSwayAmount: 0.4
-  positionSwayStrengthHorizontal: 0.12
+  positionSwayStrengthHorizontal: 0.17
   positionSwayStrengthVertical: 0.13
-  maxPositionSwayAmount: 0.25
-  tiltSwayStrengthHorizontal: 5
-  tiltSwayStrengthVertical: 7
-  maxTiltSwayAmount: 12
+  maxPositionSwayAmount: 0.34
+  tiltSwayStrengthHorizontal: 7
+  tiltSwayStrengthVertical: 6
+  maxTiltSwayAmount: 14
 --- !u!1 &3201449854512057423
 GameObject:
   m_ObjectHideFlags: 0
@@ -542,7 +542,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerNum: 2
   maxHealth: 100
-  mainAudioSourcePrefab: {fileID: 731754758084175026}
+  mainAudioSourcePrefab: {fileID: 1929824153803679074}
   onHitVignetteIntensity: 0.4
   onHitVignetteSmoothness: 0.8
   onHitVignetteColor: {r: 0.1981132, g: 0.023156088, b: 0, a: 1}
@@ -718,7 +718,7 @@ MonoBehaviour:
     type: 3}
   animatorFPP: {fileID: 3201449855390090548}
   animatorTPP: {fileID: 3201449855496774248}
-  audioSource: {fileID: 5174408018139343622}
+  audioSource: {fileID: 1929824153803677909}
   firingSound: {fileID: 8300000, guid: 1df26bee71935934594c6e6faaa0d0ae, type: 3}
   bodyHitSound: {fileID: 8300000, guid: 8a43260e05407a743bdfe7e07e0f0820, type: 3}
   headshotSound: {fileID: 8300000, guid: c871b0fb33860fd4c9b9c1d9c8ca7ac0, type: 3}
@@ -1224,19 +1224,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 61e2dfd78b5358e4692c7c0d6a44bbf7, type: 3}
---- !u!4 &4406098145742829217 stripped
+--- !u!4 &1929824153803677791 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2877103331781497084, guid: 61e2dfd78b5358e4692c7c0d6a44bbf7,
     type: 3}
   m_PrefabInstance: {fileID: 1929824153803679325}
   m_PrefabAsset: {fileID: 0}
---- !u!82 &5174408018139343622 stripped
+--- !u!82 &1929824153803677909 stripped
 AudioSource:
   m_CorrespondingSourceObject: {fileID: 6703375475987647835, guid: 61e2dfd78b5358e4692c7c0d6a44bbf7,
     type: 3}
   m_PrefabInstance: {fileID: 1929824153803679325}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &731754758084175026 stripped
+--- !u!1 &1929824153803679074 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1220382884693590767, guid: 61e2dfd78b5358e4692c7c0d6a44bbf7,
     type: 3}
@@ -1323,7 +1323,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 6b43d2c2f6945de4d910c26528554ef1, type: 2}
+      objectReference: {fileID: 2100000, guid: 856d91a0fdc052440b7358551a94006f, type: 2}
     - target: {fileID: -927199367670048503, guid: 70bc14062ea87e94d9e351dd1a97dc2c,
         type: 3}
       propertyPath: m_Name
@@ -1423,7 +1423,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 6b43d2c2f6945de4d910c26528554ef1, type: 2}
+      objectReference: {fileID: 2100000, guid: 856d91a0fdc052440b7358551a94006f, type: 2}
     - target: {fileID: -927199367670048503, guid: 70bc14062ea87e94d9e351dd1a97dc2c,
         type: 3}
       propertyPath: m_Name

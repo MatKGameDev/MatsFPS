@@ -48,7 +48,6 @@ public class MatchmakingPopup : BoltSingletonPrefab<MatchmakingPopup>
             {
                 BoltNetwork.Shutdown();
                 GameState.instance.TransitionToMainMenu();
-                return;
             }
         }
     }
