@@ -66,7 +66,7 @@ public class WeaponSway : MonoBehaviour
         float moveSwayY = a_playerUnitVelocity.y * positionSwayStrengthVertical   * -1f;
 
         //calculate the magnitude of the player look-based sway
-        float lookSwayX = Input.GetAxis("Mouse X") * swayStrengthHorizontal * -1f;
+        float lookSwayX = Input.GetAxis("Mouse X") * swayStrengthHorizontal;
         float lookSwayY = Input.GetAxis("Mouse Y") * swayStrengthVertical   * -1f;
 
         //clamp all sway values
@@ -87,9 +87,9 @@ public class WeaponSway : MonoBehaviour
 
     void ApplyRotationalSway(Vector3 a_playerUnitVelocity)
     {
-        float tiltY = a_playerUnitVelocity.x * tiltSwayStrengthHorizontal;
-        float tiltX = a_playerUnitVelocity.y * tiltSwayStrengthVertical;
-        float tiltZ = a_playerUnitVelocity.z * tiltSwayStrengthHorizontal * 0.5f;
+        float tiltY = -a_playerUnitVelocity.x * tiltSwayStrengthHorizontal;
+        float tiltX = -a_playerUnitVelocity.y * tiltSwayStrengthVertical;
+        float tiltZ = -a_playerUnitVelocity.z * tiltSwayStrengthHorizontal * 0.5f;
 
         Quaternion newRot = Quaternion.Euler(new Vector3(tiltY, 0f, tiltX + tiltZ)) * m_initialRot;
 
