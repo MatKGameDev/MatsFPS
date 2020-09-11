@@ -11,6 +11,8 @@ public class MainMenu : Bolt.GlobalEventListener
 
     void Start()
     {
+        SettingsPopup.instance.Hide();
+
         GameState.instance.CurrentState = GameState.State.mainMenu;
 
         BoltNetwork.Shutdown(); //just in case bolt was running, shut it down
