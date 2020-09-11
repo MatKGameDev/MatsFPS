@@ -50,12 +50,18 @@ public class PlayerController : Bolt.EntityEventListener<IPlayerStateFPS>
 
     public void SetYaw(float a_newYaw)
     {
-        m_yaw = a_newYaw;
+        transform.localRotation = Quaternion.Euler(0, a_newYaw, 0);
+
+        m_yaw     = a_newYaw;
+        state.Yaw = a_newYaw;
     }
 
     public void SetPitch(float a_newPitch)
     {
-        m_pitch = a_newPitch;
+        cameraController.UpdateRotation(a_newPitch);
+
+        m_pitch     = a_newPitch;
+        state.Pitch = a_newPitch;
     }
 
     void PollKeysAndButtons()
@@ -76,10 +82,19 @@ public class PlayerController : Bolt.EntityEventListener<IPlayerStateFPS>
 
     void PollMousePos()
     {
+        m_yaw   = state.Yaw;
+        m_pitch = state.Pitch;
+
         float axisX = Input.GetAxisRaw("Mouse X");
         float axisY = Input.GetAxisRaw("Mouse Y");
 
         cameraController.UpdateMouseInput(BoltNetwork.FrameDeltaTime, axisX, axisY, ref m_yaw, ref m_pitch);
+
+        if (entity.HasControl)
+        {
+            state.Yaw   = m_yaw;
+            state.Pitch = m_pitch;
+        }
     }
 
 	public override void SimulateController()
@@ -99,9 +114,9 @@ public class PlayerController : Bolt.EntityEventListener<IPlayerStateFPS>
 		entity.QueueInput(input);
 
         if (m_tabDown)
-            GameUI.instance.EnableScoreboard();
+            GameUI.instance.ShowScoreboard();
         else if (m_tabUp)
-            GameUI.instance.DisableScoreboard();
+            GameUI.instance.HideScoreboard();
 
         //reset one shot inputs
         m_jump = false;

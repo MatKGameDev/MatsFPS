@@ -97,10 +97,10 @@ public class GameState : BoltSingletonPrefab<GameState>
         }
         else
         {
+            SceneManager.LoadScene("MainMenu");
+
             if (BoltNetwork.IsRunning)
                 BoltNetwork.Shutdown();
-
-            SceneManager.LoadScene("MainMenu");
         }
 
         CurrentState = State.mainMenu;
@@ -138,11 +138,19 @@ public class GameState : BoltSingletonPrefab<GameState>
             PlayerMainCamera playerCam = FindObjectOfType<PlayerMainCamera>();
             if (playerCam)
             {
-                GameObject  playerObject  = MyHelper.FindFirstParentWithComponent(playerCam.gameObject, typeof(PlayerMotor));
+                GameObject playerObject = MyHelper.FindFirstParentWithComponent(playerCam.gameObject, typeof(PlayerMotor));
                 PlayerMotor playerMotor = playerObject.GetComponent<PlayerMotor>();
 
                 playerMotor.IsInputDisabled = false;
             }
+        }
+        else if (CurrentState == State.pauseControls)
+        {
+            ControlsPopup.instance.Hide();
+        }
+        else if (CurrentState == State.pauseSettings)
+        {
+            PausePopup.instance.Hide();
         }
 
         CurrentState = State.gameplay;

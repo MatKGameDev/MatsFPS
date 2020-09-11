@@ -62,7 +62,7 @@ public class GameUI : BoltSingletonPrefab<GameUI>
         skull         .SetActive(false);
         hitmarkerWhite.SetActive(false);
         hitmarkerRed  .SetActive(false);
-        DisableScoreboard();
+        HideScoreboard();
     }
 
     public bool IsScoreboardOpen()
@@ -82,7 +82,7 @@ public class GameUI : BoltSingletonPrefab<GameUI>
         healthDisplay.text     = healthDisplayValue.ToString();
     }
 
-    public void EnableScoreboard()
+    public void ShowScoreboard()
     {
         pingDisplayParent .SetActive(true);
         scoreDisplayParent.SetActive(true);
@@ -91,7 +91,7 @@ public class GameUI : BoltSingletonPrefab<GameUI>
         enemyScoreDisplay .text = m_enemyScore .ToString();
     }
 
-    public void DisableScoreboard()
+    public void HideScoreboard()
     {
         pingDisplayParent .SetActive(false);
         scoreDisplayParent.SetActive(false);

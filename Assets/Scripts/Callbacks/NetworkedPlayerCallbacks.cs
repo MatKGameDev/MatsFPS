@@ -38,6 +38,10 @@ public class NetworkedPlayerCallbacks : Bolt.GlobalEventListener
     public override void Disconnected(BoltConnection connection)
     {
         NetworkedPlayerRegistry.DestroyNetworkedPlayer(connection);
+
+        //check if it was the client that left and the server player is still in game
+        if (BoltNetwork.IsRunning && BoltNetwork.IsServer)
+            GameDisbandingPopup.instance.StartCountdown();
     }
 
     public override void BoltShutdownBegin(AddCallback registerDoneCallback)

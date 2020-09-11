@@ -79,6 +79,11 @@ public class Player : Bolt.EntityEventListener<IPlayerStateFPS>
         m_playerMotor.IsInputDisabled = false;
     }
 
+    public void DisablePlayerControl()
+    {
+        m_playerMotor.IsInputDisabled = true;
+    }
+
     public override void Attached()
     {
         if (entity.IsOwner)
@@ -118,9 +123,9 @@ public class Player : Bolt.EntityEventListener<IPlayerStateFPS>
         {
             m_vignetteFadeParam += onHitVignetteFadeSpeed * BoltNetwork.FrameDeltaTime;
 
-            m_vignette.intensity.value = Mathf.Lerp(onHitVignetteIntensity, m_vignetteInitialIntensity, m_vignetteFadeParam);
+            m_vignette.intensity.value  = Mathf.Lerp(onHitVignetteIntensity,  m_vignetteInitialIntensity,  m_vignetteFadeParam);
             m_vignette.smoothness.value = Mathf.Lerp(onHitVignetteSmoothness, m_vignetteInitialSmoothness, m_vignetteFadeParam);
-            m_vignette.color.value = Color.Lerp(onHitVignetteColor, m_vignetteInitialColor, m_vignetteFadeParam);
+            m_vignette.color.value      = Color.Lerp(onHitVignetteColor,      m_vignetteInitialColor,      m_vignetteFadeParam);
         }
 
         if (m_numRespawnTeleportFrames > 0)
@@ -197,6 +202,8 @@ public class Player : Bolt.EntityEventListener<IPlayerStateFPS>
         if (entity.IsOwner)
         {
             state.EnemyScore++;
+
+            state.Health = maxHealth;
         }
 
         Respawn();
@@ -239,12 +246,13 @@ public class Player : Bolt.EntityEventListener<IPlayerStateFPS>
         BoltNetwork.Destroy(bulletTrail);
 
         GameObject muzzleFlashResource = Resources.Load("Prefabs/VFX/" + evnt.MuzzleFlashEffectName) as GameObject;
-        GameObject muzzleFlashGO = Instantiate(muzzleFlashResource);
+        GameObject muzzleFlashGO       = Instantiate(muzzleFlashResource);
         if (muzzleFlashGO.TryGetComponent<ParticleSystem>(out var muzzleFlash))
         {
             muzzleFlashGO.transform.position = evnt.BulletStartPos;
             muzzleFlash.Play();
         }
+        Destroy(muzzleFlashGO, 1.2f);
 
         //firing sound effect
         m_dispondableAudioSource.transform.position = evnt.BulletStartPos;
@@ -259,28 +267,25 @@ public class Player : Bolt.EntityEventListener<IPlayerStateFPS>
         s_spawnPositions = new List<Vector3>();
         s_spawnRotations = new List<Vector3>();
 
-        s_spawnPositions.Add(new Vector3(58f, 2.1f, -58f));
+        s_spawnPositions.Add(new Vector3(58f, 2.5f, -58f));
         s_spawnRotations.Add(new Vector3(0f, -47f, 0f));
 
-        s_spawnPositions.Add(new Vector3(-58f, 2.1f, 58f));
+        s_spawnPositions.Add(new Vector3(-58f, 2.5f, 58f));
         s_spawnRotations.Add(new Vector3(0f, 133f, 0f));
 
-        s_spawnPositions.Add(new Vector3(58f, 2.1f, 58f));
+        s_spawnPositions.Add(new Vector3(58f, 2.5f, 58f));
         s_spawnRotations.Add(new Vector3(0f, -134.4f, 0f));
 
-        s_spawnPositions.Add(new Vector3(-58f, 2.1f, -58f));
+        s_spawnPositions.Add(new Vector3(-58f, 2.5f, -58f));
         s_spawnRotations.Add(new Vector3(0f, 44f, 0f));
     }
 
     public void Respawn(int a_spawnIndex = -1)
     {
+        m_playerController.SetPitch(0f);
+
         if (!entity.IsOwner)
             return;
-
-        state.Health = maxHealth;
-
-        float newYaw = 0f;
-        float newPitch = 0f;
 
         if (a_spawnIndex != -1)
         {
@@ -291,7 +296,8 @@ public class Player : Bolt.EntityEventListener<IPlayerStateFPS>
 
             if (m_playerController)
             {
-                newYaw = s_spawnRotations[a_spawnIndex].y;
+                m_playerController.SetPitch(0f);
+                m_playerController.SetYaw  (s_spawnRotations[a_spawnIndex].y);
             }
         }
         else
@@ -301,11 +307,9 @@ public class Player : Bolt.EntityEventListener<IPlayerStateFPS>
 
             m_playerMotor.TeleportToPosition(s_spawnPositions[state.NextSpawnIndex]);
 
-            newYaw = s_spawnRotations[state.NextSpawnIndex].y;
+            m_playerController.SetPitch(0f);
+            m_playerController.SetYaw  (s_spawnRotations[state.NextSpawnIndex].y);
         }
-
-        m_playerController.SetYaw(newYaw);
-        m_playerController.SetPitch(newPitch);
 
         state.NextSpawnIndex = Random.Range(0, s_spawnPositions.Count);
 
