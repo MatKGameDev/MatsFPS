@@ -115,6 +115,20 @@ public class PlayerMotor : MonoBehaviour
     public void SetState(Vector3 a_position, Vector3 a_velocity, bool a_isGrounded, bool a_isDoubleJumpAvailable, float a_dashDurationCountdown, float a_dashCooldownCountdown)
     {
         //assign new state
+        m_motorState.position = a_position;
+        m_motorState.velocity = a_velocity;
+        m_motorState.isGrounded = a_isGrounded;
+        m_motorState.isDoubleJumpAvailable = a_isDoubleJumpAvailable;
+        m_motorState.dashDurationCountdown = a_dashDurationCountdown;
+        m_motorState.dashCooldownCountdown = a_dashCooldownCountdown;
+
+        //assign local position
+        m_characterController.Move(a_position - transform.localPosition);
+    }
+
+    public void SetStateTeleport(Vector3 a_position, Vector3 a_velocity, bool a_isGrounded, bool a_isDoubleJumpAvailable, float a_dashDurationCountdown, float a_dashCooldownCountdown)
+    {
+        //assign new state
         m_motorState.position              = a_position;
         m_motorState.velocity              = a_velocity;
         m_motorState.isGrounded            = a_isGrounded;

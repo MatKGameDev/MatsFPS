@@ -9,6 +9,9 @@ public class PlayerController : Bolt.EntityEventListener<IPlayerStateFPS>
 
     public WeaponHitscan activeWeapon;
 
+    PlayerMotor m_playerMotor;
+    Player      m_player;
+
     bool m_forward;
     bool m_backward;
     bool m_left;
@@ -23,11 +26,10 @@ public class PlayerController : Bolt.EntityEventListener<IPlayerStateFPS>
     bool m_tabDown;
     bool m_tabUp;
 
-    PlayerMotor m_playerMotor;
-
     void Awake()
     {
         m_playerMotor = GetComponent<PlayerMotor>();
+        m_player      = GetComponent<Player>();
     }
 
     public override void Attached()
@@ -136,7 +138,10 @@ public class PlayerController : Bolt.EntityEventListener<IPlayerStateFPS>
         if (resetState)
         {
             //we got a correction from the server, reset (this only runs on the client)
-            m_playerMotor.SetState(cmd.Result.Position, cmd.Result.Velocity, cmd.Result.IsGrounded, cmd.Result.IsDoubleJumpAvailable, cmd.Result.DashDurationCountdown, cmd.Result.DashCooldownCountdown);
+            if (m_player.numRespawnTeleportFrames > 0)
+                m_playerMotor.SetStateTeleport(cmd.Result.Position, cmd.Result.Velocity, cmd.Result.IsGrounded, cmd.Result.IsDoubleJumpAvailable, cmd.Result.DashDurationCountdown, cmd.Result.DashCooldownCountdown);
+            else
+                m_playerMotor.SetState(cmd.Result.Position, cmd.Result.Velocity, cmd.Result.IsGrounded, cmd.Result.IsDoubleJumpAvailable, cmd.Result.DashDurationCountdown, cmd.Result.DashCooldownCountdown);
         }
         else
         {

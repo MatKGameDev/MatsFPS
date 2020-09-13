@@ -25,6 +25,8 @@ public class Player : Bolt.EntityEventListener<IPlayerStateFPS>
     [Header("On Death Effect")]
     [SerializeField] ParticleSystem playerExplodeEffect;
 
+    [HideInInspector] public int numRespawnTeleportFrames;
+
     AudioSource m_dispondableAudioSource;
 
     Volume m_postProcessVolume;
@@ -41,7 +43,6 @@ public class Player : Bolt.EntityEventListener<IPlayerStateFPS>
     PlayerController m_playerController;
     PlayerMotor m_playerMotor;
 
-    int m_numRespawnTeleportFrames;
 
     public static void PopulatePlayersList()
     {
@@ -128,23 +129,23 @@ public class Player : Bolt.EntityEventListener<IPlayerStateFPS>
             m_vignette.color.value      = Color.Lerp(onHitVignetteColor,      m_vignetteInitialColor,      m_vignetteFadeParam);
         }
 
-        if (m_numRespawnTeleportFrames > 0)
+        if (numRespawnTeleportFrames > 0)
         {
             state.SetTeleport(state.PlayerTransform);
             state.SetTeleport(state.CameraTransform);
 
-            m_numRespawnTeleportFrames--;
+            numRespawnTeleportFrames--;
         }
     }
 
     public override void SimulateOwner()
     {
-        if (m_numRespawnTeleportFrames > 0)
+        if (numRespawnTeleportFrames > 0)
         {
             state.SetTeleport(state.PlayerTransform);
             state.SetTeleport(state.CameraTransform);
 
-            m_numRespawnTeleportFrames--;
+            numRespawnTeleportFrames--;
         }
     }
 
@@ -284,6 +285,8 @@ public class Player : Bolt.EntityEventListener<IPlayerStateFPS>
     {
         m_playerController.SetPitch(0f);
 
+        numRespawnTeleportFrames = 130;
+
         if (!entity.IsOwner)
             return;
 
@@ -312,7 +315,5 @@ public class Player : Bolt.EntityEventListener<IPlayerStateFPS>
         }
 
         state.NextSpawnIndex = Random.Range(0, s_spawnPositions.Count);
-
-        m_numRespawnTeleportFrames = 130;
     }
 }
