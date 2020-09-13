@@ -113,6 +113,9 @@ public class PlayerController : Bolt.EntityEventListener<IPlayerStateFPS>
 
 		entity.QueueInput(input);
 
+        //apply camera rotation
+        cameraController.UpdateRotation(m_pitch);
+
         if (m_tabDown)
             GameUI.instance.ShowScoreboard();
         else if (m_tabUp)
@@ -139,9 +142,6 @@ public class PlayerController : Bolt.EntityEventListener<IPlayerStateFPS>
         {
             //apply movement (this runs on both server and client)
             PlayerMotor.MotorState motorState = m_playerMotor.Move(BoltNetwork.FrameDeltaTime, cmd.Input.Forward, cmd.Input.Backward, cmd.Input.Left, cmd.Input.Right, cmd.Input.Jump, cmd.Input.Dash, cmd.Input.Yaw);
-
-            //apply camera rotation
-            cameraController.UpdateRotation(cmd.Input.Pitch);
 
             //copy the motor state to the commands result (this gets sent back to the client)
             cmd.Result.Position              = motorState.position;

@@ -123,7 +123,9 @@ public class PlayerMotor : MonoBehaviour
         m_motorState.dashCooldownCountdown = a_dashCooldownCountdown;
 
         //assign local position
-        m_characterController.Move(a_position - transform.localPosition);
+        m_characterController.enabled = false;
+        transform.position = a_position;
+        m_characterController.enabled = true;
     }
 
     public void TeleportToPosition(Vector3 a_newPosition)
