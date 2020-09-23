@@ -4,13 +4,12 @@ using UnityEngine.Events;
 public class Health : MonoBehaviour
 {
     public float maxHealth;
-    public float currentHealth;
+    [HideInInspector] public float currentHealth;
 
     public UnityAction<float> onDamaged;
     public UnityAction        onDie;
 
-    // Start is called before the first frame update
-    void Start()
+    public void Awake()
     {
         currentHealth = maxHealth;
     }

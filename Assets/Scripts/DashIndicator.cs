@@ -3,15 +3,20 @@ using UnityEngine.UI;
 
 public class DashIndicator : MonoBehaviour
 {
-    public PlayerControl player;
-
     [SerializeField] 
     Sprite activeSprite;
 
     [SerializeField] 
     Sprite notActiveSprite;
 
-    private Image m_image;
+    PlayerMotor m_player;
+
+    Image m_image;
+
+    public void SetPlayer(PlayerMotor a_player)
+    {
+        m_player = a_player;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -22,9 +27,12 @@ public class DashIndicator : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (player.dashCooldownCountdown < 0f)
-            m_image.sprite = activeSprite;
-        else
-            m_image.sprite = notActiveSprite;
+        if (m_player)
+        {
+            if (m_player.dashCooldownCountdown < 0f)
+                m_image.sprite = activeSprite;
+            else
+                m_image.sprite = notActiveSprite;
+        }
     }
 }
