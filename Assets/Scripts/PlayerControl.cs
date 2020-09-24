@@ -24,15 +24,13 @@ public class PlayerControl : MonoBehaviour
 
     public float dashCooldownCountdown { get; private set; }
 
-    const float GROUND_CHECK_RADIUS = 0.5f;
-
     const float GROUNDED_VELOCITY_Y             = -2f;
     const float POST_UPWARDS_DASH_VELOCITY_Y    = 4.5f;
     const float POST_HORIZONTAL_DASH_VELOCITY_Y = 1f;
 
     const float COYOTE_TIME = 0.1f;
 
-    const float SLOPE_RIDE_DISTANCE_LIMIT           = 5f;  //the max distance above a slope where the player can be considered to be "on" it
+    const float SLOPE_RIDE_DISTANCE_LIMIT           = 1f;  //the max distance above a slope where the player can be considered to be "on" it
     const float SLOPE_RIDE_DOWNWARDS_FORCE_STRENGTH = 20f; //the strength of the downwards force applied to pull the player onto a slope that they're going down
 
     Vector3 m_velocity;
@@ -46,7 +44,7 @@ public class PlayerControl : MonoBehaviour
 
     float m_lastTimeGrounded;
     bool  m_isGrounded;
-    bool  m_isDoubleJumpAvailabile;
+    bool  m_isDoubleJumpAvailable;
 
     public Vector3 GetVelocity()
     {
@@ -63,16 +61,14 @@ public class PlayerControl : MonoBehaviour
         return GROUNDED_VELOCITY_Y;
     }
 
-    // Start is called before the first frame update
     void Start()
     {
         m_characterController = GetComponent<CharacterController>();
         m_initialSlopeLimit   = m_characterController.slopeLimit;
 
-        m_isDoubleJumpAvailabile = true;
+        m_isDoubleJumpAvailable = true;
     }
 
-    // Update is called once per frame
     void Update()
     {
         PerformGroundCheck();
@@ -94,21 +90,20 @@ public class PlayerControl : MonoBehaviour
         //if the player is moving upwards, increase slope limit so they dont get caught on objects
         m_characterController.slopeLimit = m_velocity.y > 0f ? 90f : m_initialSlopeLimit;
 
-        m_isDoubleJumpAvailabile = m_isGrounded || m_isDoubleJumpAvailabile;
+        m_isDoubleJumpAvailable = m_isGrounded || m_isDoubleJumpAvailable;
 
         m_velocity.y -= gravityStrength * Time.deltaTime; //apply gravity
 
-        //check if the player is grounded, in which case their downwards velocity should be reset
+        //if the player is grounded, downwards velocity should be reset
         if (m_isGrounded && m_velocity.y < 0f)
-            m_velocity.y = GROUNDED_VELOCITY_Y; //don't set it to 0 else the player might float above the ground a bit
+            m_velocity.y = GROUNDED_VELOCITY_Y; //don't set it to 0 or else the player might float above the ground a bit
 
         PerformJumpLogic();
 
         PerformDashLogic(moveDir);
 
-        m_velocity.y = Mathf.Max(m_velocity.y, -terminalVelocity); //clamp velocity if it's more than the terminal velocity
+        m_velocity.y = Mathf.Max(m_velocity.y, -terminalVelocity); //clamp velocity to downwards terminal velocity
 
-        //move the character based on the velocity after horizontal and vertical movement is applied
         m_characterController.Move(m_velocity * Time.deltaTime);
 
         //after standard movement stuff is done, check if the player should be glued to a slope
@@ -117,8 +112,7 @@ public class PlayerControl : MonoBehaviour
 
     void PerformGroundCheck()
     {
-        //grounded check
-        m_isGrounded = Physics.CheckSphere(groundCheck.position, GROUND_CHECK_RADIUS, groundMask);
+        m_isGrounded = m_characterController.isGrounded;
 
         if (m_isGrounded)
             m_lastTimeGrounded = Time.time;
@@ -126,7 +120,7 @@ public class PlayerControl : MonoBehaviour
 
     void ProcessBasicMovement(out int a_verticalAxis, out int a_horizontalAxis, out Vector3 a_moveDir)
     {
-        //movement direction
+        //movement axis
         a_horizontalAxis = 0;
         a_verticalAxis   = 0;
 
@@ -154,22 +148,22 @@ public class PlayerControl : MonoBehaviour
 
     void ApplyDeceleration(int a_verticalAxis, int a_horizontalAxis)
     {
-        //apply deceleration if the axis isn't being moved on
-        float   frameIndependantDeceleration = decelerationRate * Time.deltaTime;
+        float   frameIndependentDeceleration = decelerationRate * Time.deltaTime;
         Vector3 localVelocity                = transform.InverseTransformDirection(m_velocity);
 
+        //apply deceleration if the axis isn't being moved on
         if (a_verticalAxis == 0)
         {
-            if (Mathf.Abs(localVelocity.z) > frameIndependantDeceleration)
-                m_velocity -= transform.forward * Mathf.Sign(localVelocity.z) * frameIndependantDeceleration;
+            if (Mathf.Abs(localVelocity.z) > frameIndependentDeceleration)
+                m_velocity -= transform.forward * Mathf.Sign(localVelocity.z) * frameIndependentDeceleration;
             else
                 m_velocity -= transform.forward * localVelocity.z;
         }
 
         if (a_horizontalAxis == 0)
         {
-            if (Mathf.Abs(localVelocity.x) > frameIndependantDeceleration)
-                m_velocity -= transform.right * Mathf.Sign(localVelocity.x) * frameIndependantDeceleration;
+            if (Mathf.Abs(localVelocity.x) > frameIndependentDeceleration)
+                m_velocity -= transform.right * Mathf.Sign(localVelocity.x) * frameIndependentDeceleration;
             else
                 m_velocity -= transform.right * localVelocity.x;
         }
@@ -179,27 +173,27 @@ public class PlayerControl : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            //first jump
             if (m_lastTimeGrounded + COYOTE_TIME >= Time.time)
-                m_velocity.y = Mathf.Sqrt(jumpHeight * -2f * -gravityStrength); //formula to calculate velocity needed in order to reach desired jump height
+                m_velocity.y = Mathf.Sqrt(jumpHeight * -2f * -gravityStrength); //calculate velocity needed in order to reach desired jump height
 
             //double jump
-            else if (m_isDoubleJumpAvailabile)
+            else if (m_isDoubleJumpAvailable)
             {
+                m_isDoubleJumpAvailable = false;
+
                 float jumpStrength = Mathf.Sqrt(doubleJumpHeight * -2f * -gravityStrength); //formula to calculate velocity needed in order to reach desired jump height
 
                 //if the player is moving down, replace the current downwards velocity with the double jump velocity
                 if (m_velocity.y < 0f)
+                {
                     m_velocity.y = jumpStrength;
-
+                }
                 //player is moving up, take a fraction of the current y velocity and add the jump strength to it
                 else
                 {
                     m_velocity.y *= 0.3f;
                     m_velocity.y += jumpStrength;
                 }
-
-                m_isDoubleJumpAvailabile = false;
             }
         }
     }
@@ -251,7 +245,7 @@ public class PlayerControl : MonoBehaviour
     {
         //calculate new isGrounded since player movement was just updated
         bool wasGrounded   = m_isGrounded;
-        bool newIsGrounded = Physics.CheckSphere(groundCheck.position, GROUND_CHECK_RADIUS, groundMask);
+        bool newIsGrounded = m_characterController.isGrounded;
 
         //glue the player to the slope if they're moving down one (fixes bouncing when going down slopes)
         if (!newIsGrounded && wasGrounded && m_velocity.y < 0f)
@@ -260,7 +254,9 @@ public class PlayerControl : MonoBehaviour
 
             RaycastHit hit;
             if (Physics.Raycast(pointAtBottomOfPlayer, Vector3.down, out hit, SLOPE_RIDE_DISTANCE_LIMIT))
+            {
                 m_characterController.Move(Vector3.down * SLOPE_RIDE_DOWNWARDS_FORCE_STRENGTH * Time.deltaTime);
+            }
         }
     }
 }
