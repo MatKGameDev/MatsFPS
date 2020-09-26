@@ -2,10 +2,6 @@
 
 public class PlayerControl : MonoBehaviour
 {
-    [Header("Ground Check")]
-    [SerializeField] private Transform groundCheck;
-    [SerializeField] private LayerMask groundMask;
-
     [Header("Dashing")]
     [SerializeField] private float dashSpeed    = 30f;
     [SerializeField] private float dashDuration = 0.12f;
